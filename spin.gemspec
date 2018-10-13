@@ -6,7 +6,7 @@
 Gem::Specification.new do |s|
   s.name        = "spin"
   s.version     = "0.0.1"
-  s.date        = "2017-10-13"
+  s.date        = "2018-10-13"
   s.summary     = "Web app based on Sinatra"
   s.description = "Basic web app based on Sinatra"
 
@@ -32,13 +32,11 @@ Gem::Specification.new do |s|
    .flatten
    .push(*s.executables.map { |f| [s.bindir, f].join("/") })
 
-  s.add_runtime_dependency("sinatra", [">= 0"])
-  s.add_runtime_dependency("bcrypt", [">= 0"])
-  s.add_runtime_dependency("kamaze-version", [">= 0"])
-  s.add_runtime_dependency("shotgun", [">= 0"])
-  s.add_runtime_dependency("sqlite3", [">= 0"])
-  s.add_runtime_dependency("thin", [">= 0"])
-  s.add_runtime_dependency("tux", [">= 0"])
+  s.add_runtime_dependency("bcrypt", ["~> 3.1"])
+  s.add_runtime_dependency("kamaze-version", ["~> 1.0"])
+  s.add_runtime_dependency("sinatra", ["~> 2.0"])
+  s.add_runtime_dependency("sqlite3", ["~> 1.3"])
+  s.add_runtime_dependency("tty-config", ["~> 0.2"])
 end
 
 # Local Variables:
