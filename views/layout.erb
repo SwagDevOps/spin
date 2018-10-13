@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>App</title>
+        <link rel="stylesheet" href="/css/app.css" />
+    </head>
+    <body>
+        <div class="wrapper">
+            <%= yield %>
+            <footer class="branding">
+                <small>
+                    &copy;
+                    <%= Spin::VERSION.date.split('-')[0] %>
+                    -
+                    <%= Spin::VERSION.authors.join(', ') %>
+                </small>
+            </footer>
+        </div>
+    </body>
+</html>

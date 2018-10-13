@@ -1,0 +1,17 @@
+# vim: ft=sh
+
+lib/**/*.rb                                   \
+    --no-progress                             \
+    --markup-provider 'redcarpet'             \
+    --plugin coderay                          \
+    --markup 'markdown'                       \
+    --charset 'utf-8'                         \
+    --protected --private --embed-mixins      \
+    --tag type:'type' --hide-tag 'type'       \
+    --readme README.md                        \
+    --exclude '_flymake\\.rb$'                \
+    --exclude '/\\.#'
+
+# Local Variables:
+# mode: sh
+# End:
