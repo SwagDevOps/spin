@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require_relative '../mount'
-require 'sinatra/custom_logger'
+
+require 'fileutils'
 require 'logger'
+require 'pathname'
+require 'sinatra/custom_logger'
 
 # This library provides an interface for ``SemanticLogger``
 #
@@ -44,8 +47,23 @@ class Spin::Mount::Logger < Spin::Mount
   def logger
     return if false == config['logging']
 
-    ::Logger.new(config['filename']).tap do |logger|
-      logger.level = config['level']
+    config.fetch('filename').tap do |filename|
+      prepare_logdir(filename)
+
+      ::Logger.new(filename).tap do |logger|
+        logger.level = config['level']
+      end
+    end
+  end
+
+  protected
+
+  # @return [Pathname]
+  def prepare_logdir(filename = nil)
+    filename ||= config.fetch('filename')
+
+    Pathname.new(filename).dirname.tap do |logdir|
+      FileUtils.mkdir_p(logdir)
     end
   end
 end
