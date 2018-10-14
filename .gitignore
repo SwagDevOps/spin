@@ -6,6 +6,7 @@
 /build/
 /cache/
 /doc/
+/log/
 /tmp/
 /vagrant/*.override.yml
 /Vagrantfile
