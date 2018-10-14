@@ -7,7 +7,8 @@ source 'https://rubygems.org'
 group :default do
   gem 'bcrypt', '~> 3.1'
   gem 'kamaze-version', '~> 1.0'
-  gem 'sinatra', '~> 2.0'
+  gem 'sinatra-contrib', '~> 2.0'
+  gem 'sinatra-logger', '~> 0.2'
   gem 'sqlite3', '~> 1.3'
   gem 'tty-config', '~> 0.2'
 end
@@ -30,7 +31,6 @@ group :development do
   # server -------------------------------
   gem 'puma', '~> 3.12'
   gem 'shotgun', '~> 0.9'
-  gem 'thin', '~> 1.7'
 end
 
 group :test do

@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(__dir__)
 
 require 'sinatra/base'
 require 'dry/inflector'
+
 require_relative 'spin/bundled'
 
 # Base class
@@ -18,50 +19,44 @@ require_relative 'spin/bundled'
 #
 # run Spin.mount
 # ```
-class Spin < Sinatra::Base
+class Spin
   {
     VERSION: :version,
+    Autoloadable: :autoloadable,
+    Base: :base,
+    Config: :config,
     Controller: :controller,
+    Mount: :mount,
   }.each { |k, v| autoload k, "#{__dir__}/spin/#{v}" }
 
   class << self
-    def controllers
-      [:home]
+    # Get mountables.
+    #
+    # @return [Array<Symbol>]
+    def mountables
+      [:config, :logger]
     end
 
-    def configuration
-      {
-        public_folder: 'public',
-        views: 'views'
-      }
-    end
-
+    # @return [Controller]
     def mount
-      self.tap do
-        apply_configuration!
-        mount_controllers!
-      end
+      mountables.each { |name| mount!(name) }
+
+      return Controller.mount!
     end
 
     protected
 
-    def apply_configuration!
-      configuration = self.configuration
-
-      Sinatra::Base.instance_eval do
-        configuration.tap do |c|
-          configure do
-            c.each { |k, v| set(k, v) }
-          end
-        end
-      end
+    # @return [Config]
+    def config(name = :config)
+      Config.new(name)
     end
 
-    def mount_controllers!
-      Dry::Inflector.new.tap do |inf|
-        self.controllers.each do |name|
-          self.instance_eval do
-            use self.const_get("Controller::#{inf.camelize(name)}")
+    # @return [Base|Spin]
+    def mount!(name)
+      Base.tap do |base_class|
+        Dry::Inflector.new.tap do |inf|
+          self.const_get("Mount::#{inf.camelize(name)}").tap do |klass|
+            klass.new(base_class, config(name)).call
           end
         end
       end

@@ -34,7 +34,8 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency("bcrypt", ["~> 3.1"])
   s.add_runtime_dependency("kamaze-version", ["~> 1.0"])
-  s.add_runtime_dependency("sinatra", ["~> 2.0"])
+  s.add_runtime_dependency("sinatra-contrib", ["~> 2.0"])
+  s.add_runtime_dependency("sinatra-logger", ["~> 0.2"])
   s.add_runtime_dependency("sqlite3", ["~> 1.3"])
   s.add_runtime_dependency("tty-config", ["~> 0.2"])
 end
