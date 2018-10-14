@@ -1,7 +1,20 @@
 # frozen_string_literal: true
 # vim: ai ts=2 sts=2 et sw=2 ft=ruby
 
-require_relative 'lib/spin'
+# rubocop:disable Style/ParallelAssignment
+begin
+  # @see https://github.com/sinatra/sinatra/issues/1476
+  # @see https://github.com/sinatra/sinatra/pull/1477
+  original_stdout, original_stderr = $stdout.clone, $stderr.clone
+  $stdout.reopen File.new('/dev/null', 'w')
+  $stdout.reopen File.new('/dev/null', 'w')
+
+  require_relative 'lib/spin'
+ensure
+  $stdout.reopen original_stdout
+  $stderr.reopen original_stderr
+end
+# rubocop:enable Style/ParallelAssignment
 
 if Gem::Specification.find_all_by_name('sys-proc').any?
   require 'sys/proc'
