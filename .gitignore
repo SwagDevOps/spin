@@ -5,6 +5,7 @@
 /.*
 /build/
 /cache/
+/config/*.yml
 /doc/
 /log/
 /tmp/

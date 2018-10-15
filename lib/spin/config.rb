@@ -54,7 +54,7 @@ class Spin::Config < TTY::Config
     def paths
       [
         "#{Dir.pwd}/config",
-        Pathname.new(__dir__).join('..', '..', 'config').realpath.to_path
+        Pathname.new(__dir__).join('config').realpath.to_path
       ]
     end
   end
