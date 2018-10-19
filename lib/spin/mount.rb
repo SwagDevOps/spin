@@ -16,6 +16,13 @@ class Spin::Mount
     @config = config
   end
 
+  # Get settings
+  #
+  # @return [Hash{Symbol => Object}]
+  def settings
+    Hash[config.to_h.fetch('settings', {}).map { |(k, v)| [k.to_sym, v] }]
+  end
+
   # @!method call
   #    Mount something, based on config.
 
