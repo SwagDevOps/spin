@@ -8,7 +8,14 @@
 
 require_relative '../spin'
 
-# Config reader
+# Initializers loader
+#
+# After it loads the framework plus any gems and plugins,
+# ``Spin`` turns to loading initializers.
+# An initializer is any file of ruby code stored under ``initializers``
+# in your application.
+# You can use initializers to hold configuration settings
+# that should be made after all of the frameworks and plugins are loaded.
 class Spin::Initializer < Array
   autoload :Pathname, 'pathname'
 
@@ -32,15 +39,17 @@ class Spin::Initializer < Array
 
   # Get items (initializers).
   #
-  # @return [Array{String => Pathname}]
+  # Get paths indexed
+  #
+  # @return [Hash{Symbol => Pathname}]
   def items
     {}.tap do |items|
       files.each do |fp|
-        unless items.key?(k = fp.basename.to_s)
+        unless items.key?(k = fp.basename('.*').to_s.to_sym)
           items[k] = fp
         end
       end
-    end
+    end.sort.to_h
   end
 
   # Require all items
