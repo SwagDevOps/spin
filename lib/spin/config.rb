@@ -8,7 +8,8 @@
 
 require_relative '../spin'
 require 'tty/config'
-require 'forwardable'
+require 'erb'
+require 'pathname'
 
 # Config reader
 class Spin::Config < TTY::Config
@@ -16,6 +17,7 @@ class Spin::Config < TTY::Config
     super(settings)
     @read_count = 0
     self.filename = filename.to_s
+    self.prepare_env
 
     self.class.paths.each do |path|
       self.append_path(path)
@@ -48,6 +50,34 @@ class Spin::Config < TTY::Config
 
   def each(&block)
     to_h.each(&block)
+  end
+
+  # @api private
+  def unmarshal(file, format: :auto)
+    erb(super)
+  end
+
+  protected
+
+  # @param [Object] input
+  # @return [Object]
+  def erb(input)
+    input.tap do
+      return ERB.new(input).result if input.is_a?(String)
+
+      if input.is_a?(Hash)
+        return input.map { |k, v| [k, __send__(__callee__, v)] }.to_h
+      end
+
+      if input.is_a?(Array)
+        return input.map { |v| __send__(__callee__, v) }
+      end
+    end
+  end
+
+  def prepare_env
+    # ``LIBDIR`` absolute path inside current ``lib``
+    ENV['LIBDIR'] = Pathname.new(__FILE__).realpath.dirname.to_path
   end
 
   class << self
