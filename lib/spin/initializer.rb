@@ -18,9 +18,12 @@ require_relative '../spin'
 # that should be made after all of the frameworks and plugins are loaded.
 class Spin::Initializer < Array
   autoload :Pathname, 'pathname'
+  autoload :Loader, "#{__dir__}/initializer/loader"
 
   # @param [Array<String|Pathname>] paths
   def initialize(paths = [])
+    @loader = Loader.new
+
     # rubocop:disable Lint/ShadowingOuterLocalVariable
     paths.to_a.map { |fp| Pathname.new(fp) }.tap do |paths|
       self.push(*paths)
@@ -56,6 +59,29 @@ class Spin::Initializer < Array
   #
   # @return [Array<Pathname>]
   def call
-    items.values.each { |fp| require(fp) }
+    self.tap do
+      self.files.each { |fp| self.load(fp) }
+
+      loader.each { |c| c.call(loader) }
+    end
+  end
+
+  protected
+
+  # @return [Loader]
+  attr_reader :loader
+
+  # @param [String] file
+  def load(file)
+    pp self
+    pp file
+
+    content = Pathname.new(file).realpath.read
+
+    self.loader.tap do |loader|
+      loader.instance_eval(content, file.to_s, 1)
+
+      loader.freeze
+    end
   end
 end
