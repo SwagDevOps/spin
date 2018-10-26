@@ -55,12 +55,12 @@ class Spin::Initializer < Array
     end.sort.to_h
   end
 
-  # Require all items
+  # Load all items
   #
   # @return [Array<Pathname>]
   def call
     self.tap do
-      self.files.each { |fp| self.load(fp) }
+      self.items.values.each { |fp| self.load(fp) }
 
       loader.each { |c| c.call(loader) }
     end
@@ -71,11 +71,11 @@ class Spin::Initializer < Array
   # @return [Loader]
   attr_reader :loader
 
+  # Load given file.
+  #
   # @param [String] file
+  # @return [Loader]
   def load(file)
-    pp self
-    pp file
-
     content = Pathname.new(file).realpath.read
 
     self.loader.tap do |loader|
