@@ -9,5 +9,14 @@
 require_relative '../initializer'
 
 # Loader
+#
+# @see https://guides.rubyonrails.org/v2.3/configuring.html#using-initializers
 class Spin::Initializer::Loader < Array
+  # Adds a block which will be executed after been fully initialized.
+  #
+  # Useful for per-environment configuration which depends on
+  # the framework being fully initialized.
+  def after_initialize(&block)
+    self.push(block)
+  end
 end
