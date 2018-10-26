@@ -57,6 +57,8 @@ class Spin::Initializer < Array
 
   # Load all items
   #
+  # @see Loader#after_initialize
+  #
   # @return [Array<Pathname>]
   def call
     self.tap do
