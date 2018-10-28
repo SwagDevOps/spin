@@ -12,7 +12,7 @@
 /vagrant/*.override.yml
 /Vagrantfile
 /vendor/
-!/.env
+!/.env.dist
 !/.gitignore
 !/.rspec
 !/.rubocop.yml
