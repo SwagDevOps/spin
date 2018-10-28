@@ -32,11 +32,11 @@ group :development do
   gem 'shotgun', '~> 0.9'
   # optional support ---------------------
   gem 'dotenv', '~> 2.5'
-  gem 'erubi'
-  gem 'hanami-helpers'
-  gem 'rack_csrf'
+  gem 'erubi', '~> 1.7'
+  gem 'hanami-helpers', '~> 1.3'
+  gem 'rack_csrf', '~> 2.6'
   gem 'sinatra-contrib', '= 2.0.2'
-  gem 'sinatra-flash'
+  gem 'sinatra-flash', '~> 0.3'
   gem 'sinatra-logger', '~> 0.2'
   gem 'warden'
 end
