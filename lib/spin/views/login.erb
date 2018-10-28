@@ -1,0 +1,28 @@
+<div class="container">
+    <%= erb :'partials/banner' %>
+
+    <div class="col-md-8 col-md-offset-2">
+        <h2>Login Page</h2>
+
+        <div class="content">
+            <form method="POST" action="/login">
+                <p>
+                    <input type="text"
+                           name="username"
+                           placeholder="Username"
+                    />
+                </p>
+                <%= csrf_tag %>
+                <p>
+                    <input type="password"
+                           name="password"
+                           placeholder="Password"
+                    />
+                </p>
+                <p>
+                    <input type="submit" value="Submit" />
+                </p>
+            </form>
+        </div>
+    </div>
+</div>

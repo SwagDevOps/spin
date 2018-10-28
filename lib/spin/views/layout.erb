@@ -4,9 +4,17 @@
         <meta charset="utf-8" />
         <title>App</title>
         <link rel="stylesheet" href="/css/app.css" />
+        <meta name="csrf-token" content="<%= csrf_token %>" />
     </head>
     <body>
         <div class="wrapper">
+            <% flash.keys.each do |type| %>
+                <div data-alert class="flash <%= type %> alert-box radius">
+                    <%= flash[type] %>
+                    <a href="#" class="close">&times;</a>
+                </div>
+            <% end %>
+
             <%= yield %>
             <footer class="branding">
                 <small>
