@@ -31,6 +31,8 @@ group :development do
   gem 'puma', '~> 3.12'
   gem 'shotgun', '~> 0.9'
   # optional support ---------------------
+  gem 'dotenv', '~> 2.5'
+  gem 'erubi'
   gem 'hanami-helpers'
   gem 'rack_csrf'
   gem 'sinatra-contrib', '= 2.0.2'
