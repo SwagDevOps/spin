@@ -42,7 +42,7 @@ class Spin::Controller::Auth < Spin::Controller::Base
     erb :protected
   end
 
-  before %r{^/protected} do
+  before %r{/protected} do
     authenticate!
   end
 end
