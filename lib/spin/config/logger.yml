@@ -1,6 +1,0 @@
-# @see http://sinatrarb.com/contrib/custom_logger
-# @see https://ruby-doc.org/stdlib-2.1.0/libdoc/logger/rdoc/Logger.html
-# ----
-logging: true
-path:    log
-level:   DEBUG

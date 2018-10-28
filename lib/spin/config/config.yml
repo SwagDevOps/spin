@@ -1,2 +1,0 @@
-public_folder: '%<pwd>s/public'
-views: '%<libdir>s/views'
