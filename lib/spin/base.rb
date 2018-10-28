@@ -5,6 +5,10 @@ require 'sinatra/base'
 
 # @abstract
 class Spin::Base < Sinatra::Base
+  def authenticate!
+    env.fetch('warden').authenticate!
+  end
+
   class << self
     protected
 

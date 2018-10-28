@@ -4,4 +4,4 @@ ENV['SINATRA_ENV'] ||= 'development'
 
 require_relative 'lib/spin'
 
-run Spin.mount
+run(Spin.controller)

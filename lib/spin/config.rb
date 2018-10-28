@@ -13,10 +13,10 @@ require 'pathname'
 
 # Config reader
 class Spin::Config < TTY::Config
-  def initialize(filename = :config, settings = {})
+  def initialize(settings = {})
     super(settings)
     @read_count = 0
-    self.filename = filename.to_s
+    self.filename = :config
     self.prepare_env
 
     self.class.paths.each do |path|
@@ -82,10 +82,7 @@ class Spin::Config < TTY::Config
 
   class << self
     def paths
-      [
-        "#{Dir.pwd}/config",
-        Pathname.new(__dir__).join('config').realpath.to_path
-      ]
+      [Dir.pwd, Pathname.new(__dir__).to_path]
     end
   end
 end

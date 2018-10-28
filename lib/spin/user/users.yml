@@ -1,0 +1,4 @@
+# require 'bcrypt'
+# BCrypt::Password.create(password)
+---
+demo: "$2a$10$a3hDboTft.viPFNzlcBfouD/GXrqnn8S8sQxQu4COjlj4nOXRiSSa"

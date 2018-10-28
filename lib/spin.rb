@@ -17,49 +17,62 @@ require_relative 'spin/bundled'
 #
 # require 'spin'
 #
-# run Spin.mount
+# run(Spin.controller)
 # ```
 class Spin
+  autoload(:Dotenv, 'dotenv')
+
   {
     VERSION: :version,
     Autoloadable: :autoloadable,
     Base: :base,
     Config: :config,
     Controller: :controller,
-    Mount: :mount,
+    Initializer: :initializer,
+    Setup: :setup,
+    User: :user,
   }.each { |k, v| autoload k, "#{__dir__}/spin/#{v}" }
 
+  # Paths where ``setup`` file are resolved.
+  #
+  # @type [Array<Pathname>]
+  @paths = [
+    Pathname.new(Dir.pwd).freeze,
+    Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze,
+  ]
+
   class << self
-    # Get mountables.
-    #
-    # @return [Array<Symbol>]
-    def mountables
-      [:config, :logger]
-    end
+    attr_accessor :paths
 
-    # @return [Controller]
-    def mount
-      mountables.each { |name| mount!(name) }
-
-      return Controller.mount!
-    end
-
-    protected
-
-    # @return [Config]
-    def config(name = :config)
-      Config.new(name)
-    end
-
-    # @return [Base|Spin]
-    def mount!(name)
-      Base.tap do |base_class|
-        Dry::Inflector.new.tap do |inf|
-          self.const_get("Mount::#{inf.camelize(name)}").tap do |klass|
-            klass.new(base_class, config(name)).call
-          end
-        end
+    # @return [self]
+    def setup!
+      self.tap do
+        Dotenv.load
+        Setup.new(base_class, 'base', paths).call
+        Initializer.new(paths).call
       end
+    end
+
+    # Get an instance of main controller.
+    #
+    # @return [Controller]
+    def controller
+      setup!
+      Controller.mount!
+    end
+
+    # Resolve base class ``Base``
+    #
+    # @return [Class]
+    def base_class
+      Object.const_get("#{self.name}::Base")
+    end
+
+    # Get config.
+    #
+    # @return [Config]
+    def config
+      Config.new
     end
   end
 end
