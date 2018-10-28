@@ -35,14 +35,14 @@ class Spin::Initializer < Array
 
   # @return [Array<Pathname>]
   def files
-    self.map { |path| Dir.glob("#{path}/*.rb") }
+    self.map { |path| Dir.glob("#{path}/setup/initializers/*.rb") }
         .flatten
         .map { |path| Pathname.new(path) }
   end
 
   # Get items (initializers).
   #
-  # Get paths indexed
+  # Get indexed filepath for initializer files.
   #
   # @return [Hash{Symbol => Pathname}]
   def items
@@ -82,8 +82,6 @@ class Spin::Initializer < Array
 
     self.loader.tap do |loader|
       loader.instance_eval(content, file.to_s, 1)
-
-      loader.freeze
     end
   end
 end
