@@ -2,8 +2,10 @@
 
 require 'warden'
 use Warden::Manager do |config|
-  config.serialize_into_session(&:username)
-  config.serialize_from_session { |username| Spin::User.fetch(username) }
+  # rubocop:disable Style/SymbolProc
+  config.serialize_into_session { |user| user.username }
+  # rubocop:enable Style/SymbolProc
+  config.serialize_from_session { |username| Spin.user_class.fetch(username) }
 
   config.failure_app = Spin::Controller::Auth
   config.scope_defaults(:default,
