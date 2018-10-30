@@ -5,7 +5,10 @@ use Warden::Manager do |config|
   # rubocop:disable Style/SymbolProc
   config.serialize_into_session { |user| user.username }
   # rubocop:enable Style/SymbolProc
-  config.serialize_from_session { |username| Spin.user_class.fetch(username) }
+  config.serialize_from_session do |username|
+    # @todo use dependency injection
+    Spin::ENTRY_CLASS::User.fetch(username)
+  end
 
   config.failure_app = Spin::Controller::Auth
   config.scope_defaults(:default,
