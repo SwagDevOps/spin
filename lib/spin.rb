@@ -22,6 +22,8 @@ require_relative 'spin/bundled'
 class Spin
   autoload(:Dotenv, 'dotenv')
 
+  ENTRY_CLASS = self
+
   {
     VERSION: :version,
     Autoloadable: :autoloadable,
@@ -47,6 +49,8 @@ class Spin
     # @return [self]
     def setup!
       self.tap do
+        self.class.const_set(:ENTRY_CLASS, Object.const_get(self.name))
+
         Dotenv.load
         Setup.new(base_class, 'base', paths).call
         Initializer.new(paths).call
@@ -58,6 +62,7 @@ class Spin
     # @return [Controller]
     def controller
       setup!
+
       Controller.mount!
     end
 
