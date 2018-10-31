@@ -22,8 +22,6 @@ require_relative 'spin/bundled'
 class Spin
   autoload(:Dotenv, 'dotenv')
 
-  ENTRY_CLASS = self
-
   {
     VERSION: :version,
     Autoloadable: :autoloadable,
@@ -49,7 +47,7 @@ class Spin
     # @return [self]
     def setup!
       self.tap do
-        self.class.const_set(:ENTRY_CLASS, Object.const_get(self.name))
+        self.setup_entry_class!
 
         Dotenv.load
         Setup.new(base_class, 'base', paths).call
@@ -70,7 +68,27 @@ class Spin
     #
     # @return [Class]
     def base_class
-      Object.const_get("#{self.name}::Base")
+      Object.const_get("::#{self.name}::Base")
+    end
+
+    def entry_class
+      @@entry_class || self
+    end
+
+    def const_missing(name)
+      if self.const_defined?(name)
+        return self.public_send(name.to_s.downcase)
+      end
+
+      super
+    end
+
+    def const_defined?(name)
+      if [:ENTRY_CLASS].include?(name)
+        return true
+      end
+
+      super
     end
 
     # Get config.
@@ -78,6 +96,15 @@ class Spin
     # @return [Config]
     def config
       Config.new
+    end
+
+    protected
+
+    # @return [Class]
+    def setup_entry_class!
+      # rubocop:disable Style/ClassVars
+      @@entry_class = Object.const_get("::#{self.name}")
+      # rubocop:enable Style/ClassVars
     end
   end
 end
