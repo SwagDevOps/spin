@@ -28,6 +28,7 @@ class Spin
     Base: :base,
     Config: :config,
     Controller: :controller,
+    EntryClass: :entry_class,
     Initializer: :initializer,
     Setup: :setup,
     User: :user,
@@ -40,6 +41,9 @@ class Spin
     Pathname.new(Dir.pwd).freeze,
     Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze,
   ]
+
+  # extend EntryClass
+  extend(EntryClass)
 
   class << self
     attr_accessor :paths
@@ -71,40 +75,11 @@ class Spin
       Object.const_get("::#{self.name}::Base")
     end
 
-    def entry_class
-      @@entry_class || self
-    end
-
-    def const_missing(name)
-      if self.const_defined?(name)
-        return self.public_send(name.to_s.downcase)
-      end
-
-      super
-    end
-
-    def const_defined?(name)
-      if [:ENTRY_CLASS].include?(name)
-        return true
-      end
-
-      super
-    end
-
     # Get config.
     #
     # @return [Config]
     def config
       Config.new
-    end
-
-    protected
-
-    # @return [Class]
-    def setup_entry_class!
-      # rubocop:disable Style/ClassVars
-      @@entry_class = Object.const_get("::#{self.name}")
-      # rubocop:enable Style/ClassVars
     end
   end
 end
