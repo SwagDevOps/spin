@@ -1,4 +1,4 @@
 # require 'bcrypt'
-# BCrypt::Password.create(password)
+# BCrypt::Engine.hash_secret(password, ENV.fetch('BCRYPT_SALT'))
 ---
 demo: "$2a$10$a3hDboTft.viPFNzlcBfouD/GXrqnn8S8sQxQu4COjlj4nOXRiSSa"
