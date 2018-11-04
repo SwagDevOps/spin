@@ -17,7 +17,7 @@ class Spin::User
   # def password=(password)
   #   salt = ENV.fetch('BCRYPT_SALT')
   #
-  #   BCrypt::Engine.hash_secret(password, hash).tap do |hashed_password|
+  #   BCrypt::Engine.hash_secret(password, salt).tap do |hashed_password|
   #     @password = hashed_password
   #     self.hashed_password = @password
   #   end
