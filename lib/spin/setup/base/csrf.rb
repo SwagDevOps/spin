@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# @see https://github.com/baldowl/rack_csrf
 require 'rack/csrf'
 
 configure do
