@@ -10,10 +10,25 @@ require_relative '../spin'
 # class ParentClass
 #   extend(EntryClass)
 # end
+#
+# class SubClass < ParentClass
+# end
+#
+# pp ParentClass::ENTRY_CLASS # SubClass
 # ```
 module Spin::EntryClass
+  class << self
+    def extended(mod)
+      mod.__send__(:setup_entry_class!)
+    end
+  end
+
+  def inherited(subclass)
+    subclass.__send__(:setup_entry_class!)
+  end
+
   def entry_class
-    @@entry_class || self
+    @@entry_class
   end
 
   def const_missing(name)
@@ -37,7 +52,7 @@ module Spin::EntryClass
   # @return [Class]
   def setup_entry_class!
     # rubocop:disable Style/ClassVars
-    @@entry_class ||= Object.const_get("::#{self.name}")
+    @@entry_class = Object.const_get("::#{self.name}")
     # rubocop:enable Style/ClassVars
   end
 end
