@@ -8,10 +8,14 @@
 /config/*.yml
 /doc/
 /log/
+/mix-manifest.json
+/node_modules/*
+/public/*
 /tmp/
 /vagrant/*.override.yml
 /Vagrantfile
 /vendor/
+/yarn-error.log
 !/.env.dist
 !/.gitignore
 !/.rspec
