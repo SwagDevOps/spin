@@ -1,7 +1,9 @@
 {
+    "name": "spin-assets",
+    "version": "0.0.1",
     "private": true,
     "scripts": {
-        "dev": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/webpack-mix/setup/webpack.config.js",
+        "development": "NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/webpack-mix/setup/webpack.config.js",
         "hot": "NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/webpack-mix/setup/webpack.config.js",
         "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/webpack-mix/setup/webpack.config.js",
         "watch": "NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/webpack-mix/setup/webpack.config.js"
@@ -11,11 +13,13 @@
         "clean-webpack-plugin": "^0.1.19",
         "cross-env": "^5.0.1",
         "crypto-js": "^3.1.9-1",
+        "dotenv": "^6.1.0",
         "ejs": "^2.6.1",
         "font-awesome": "^4.7.0",
         "jquery": "~3.3.1",
         "lodash": "^4.17.4",
-        "popper.js": "^1.14.4"
+        "popper.js": "^1.14.4",
+        "webpack-version-file-plugin": "~0.3.3"
     },
     "devDependencies": {
         "imports-loader": "~0.8.0",

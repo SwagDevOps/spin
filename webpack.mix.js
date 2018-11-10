@@ -2,6 +2,7 @@
 
 const Mix = require('webpack-mix');
 const Clean = require('clean-webpack-plugin');
+const VersionFile = require('webpack-version-file-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -44,7 +45,12 @@ const copiables = [
 const config = {
     devtool: 'source-map',
     plugins: [
-        new Clean(copiables.map(x => x[1]), {verbose: true})
+        new Clean(copiables.map(x => x[1]), {verbose: true}),
+        new VersionFile({
+            packageFile: path.join(__dirname, 'package.json'),
+            template: path.join(__dirname, 'assets', 'version.ejs'),
+            outputFile:  path.join(__dirname, 'public', 'version.json')
+        })
     ],
     node: {
         fs: 'empty'
