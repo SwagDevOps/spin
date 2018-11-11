@@ -31,3 +31,4 @@ if Gem::Specification.find_all_by_name('kamaze-project').any?
 end
 
 require_relative 'rake/assets'
+require_relative 'rake/serve'
