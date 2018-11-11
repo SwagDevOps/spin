@@ -17,8 +17,8 @@ const VersionFile = require('webpack-version-file-plugin');
 const mix = function () {
     let mix = Mix.webpackConfig(config);
 
-    mix.js('assets/js/app.js', paths.js);
-    mix.sass('assets/sass/app.scss', paths.css, {
+    mix.js(path.join(sourcePath, 'js/app.js'), paths.js);
+    mix.sass(path.join(sourcePath, 'sass/app.scss'), paths.css, {
         sourceComments: !mix.config.production,
     });
 
@@ -29,16 +29,20 @@ const mix = function () {
     mix.sourceMaps();
 };
 
+const sourcePath = path.join(__dirname, 'assets');
+
+const publicPath = path.join(__dirname, 'public');
+
 const paths = {
-    js: 'public/js',
-    css: 'public/css',
-    fonts: 'public/fonts/',
-    images: 'public/images/',
+    js: path.join(publicPath, 'js'),
+    css: path.join(publicPath, 'css'),
+    fonts: path.join(publicPath, 'fonts'),
+    images: path.join(publicPath, 'images'),
 };
 
 const copiables = [
-    ['assets/images/favicon.png', 'public/favicon.ico'],
-    ['assets/images/', paths.images],
+    [path.join(sourcePath, 'images/favicon.png'), path.join(publicPath, 'favicon.ico')],
+    [path.join(sourcePath, 'images'), paths.images],
     ['node_modules/font-awesome/fonts/', paths.fonts],
 ];
 
@@ -48,8 +52,8 @@ const config = {
         new Clean(copiables.map(x => x[1]), {verbose: true}),
         new VersionFile({
             packageFile: path.join(__dirname, 'package.json'),
-            template: path.join(__dirname, 'assets', 'version.ejs'),
-            outputFile:  path.join(__dirname, 'public', 'version.json')
+            template: path.join(sourcePath, 'version.ejs'),
+            outputFile: path.join(publicPath, 'version.json')
         })
     ],
     node: {
