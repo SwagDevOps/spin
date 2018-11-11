@@ -4,12 +4,12 @@
 bundle install --path vendor/bundle --clean
 ```
 
-## Start server
-
 ```
-bundle exec shotgun --port=9393
+yarn install
 ```
 
+## Compile assets and start server
+
 ```
-bundle exec puma --port=9393
+bundle exec rake assets serve
 ```
