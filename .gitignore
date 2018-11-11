@@ -17,6 +17,7 @@
 /vendor/
 /yarn-error.log
 !/.env.dist
+!/.eslintrc.json
 !/.gitignore
 !/.rspec
 !/.rubocop.yml
