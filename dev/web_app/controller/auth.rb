@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'base'
+require 'spin/controller/base'
+require_relative '../controller'
 
 # Auth controller
-class Spin::Controller::Auth < Spin::Controller::Base
+class WebApp::Controller::Auth < WebApp::Base
   get '/login' do
     session[:return_to] = nil if session[:return_to] == '/login'
     redirect(session[:return_to] || '/protected') if current_user

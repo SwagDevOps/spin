@@ -15,6 +15,8 @@ require 'pathname'
 class Spin::Config < TTY::Config
   def initialize(settings = {})
     super(settings)
+
+    # @paths = paths.map { |path| Pathname.new(path).freeze }.freeze
     @read_count = 0
     self.filename = :config
     self.prepare_env
@@ -82,7 +84,7 @@ class Spin::Config < TTY::Config
 
   class << self
     def paths
-      [Dir.pwd, Pathname.new(__dir__).to_path]
+      Spin::ENTRY_CLASS.paths
     end
   end
 end

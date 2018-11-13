@@ -14,7 +14,7 @@ class Spin::Base < Sinatra::Base
 
     # @return [Spin::Config]
     def config(*args)
-      Spin.__send__(:config, *args)
+      Spin::ENTRY_CLASS.__send__(:config, *args)
     end
   end
 end

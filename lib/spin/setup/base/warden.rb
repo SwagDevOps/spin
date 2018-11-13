@@ -10,7 +10,7 @@ use Warden::Manager do |config|
     Spin::ENTRY_CLASS::User.fetch(username)
   end
 
-  config.failure_app = Spin::Controller::Auth
+  config.failure_app = Spin::ENTRY_CLASS::Controller::Auth
   config.scope_defaults(:default,
                         strategies: [:password],
                         action: '/unauthenticated')

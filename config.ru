@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 lambda do
-  require_relative 'lib/spin'
+  require_relative 'dev/web_app'
 
-  Spin.controller
+  WebApp.controller
 end.tap { |handler| run(handler.call) }

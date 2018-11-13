@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../spin'
+require 'spin'
 require 'dry/inflector'
 
 # Base controller
@@ -14,11 +14,6 @@ class Spin::Controller < Spin::Base
   autoload_self
 
   class << self
-    # @raise [RuntimeError]
-    def inherited(*)
-      raise "Do not inherit #{self}, use #{Spin::Base} instead"
-    end
-
     # Mount controllers.
     #
     # @return [self]

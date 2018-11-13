@@ -34,28 +34,34 @@ class Spin
     User: :user,
   }.each { |k, v| autoload k, "#{__dir__}/spin/#{v}" }
 
-  # Paths where ``setup`` file are resolved.
-  #
-  # @type [Array<Pathname>]
-  @paths = [
-    Pathname.new(Dir.pwd).freeze,
-    Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze,
-  ]
-
   # extend EntryClass
   extend(EntryClass)
 
+  # rubocop:disable Style/ClassVars
+  @@loaded = false
+  # rubocop:enable Style/ClassVars
+
   class << self
-    attr_accessor :paths
+    # Paths where ``setup`` file are resolved.
+    #
+    # @type [Array<Pathname>]
+    def paths
+      [Pathname.new(Dir.pwd).freeze,
+       Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze].freeze
+    end
 
     # @return [self]
     def setup!
+      return self if @@loaded
+
       self.tap do
         self.setup_entry_class!
-
         Dotenv.load
         Setup.new(base_class, 'base', paths).call
         Initializer.new(paths).call
+        # rubocop:disable Style/ClassVars
+        @@loaded = true
+        # rubocop:enable Style/ClassVars
       end
     end
 
@@ -65,7 +71,7 @@ class Spin
     def controller
       setup!
 
-      Controller.mount!
+      Object.const_get("::#{self.name}::Controller").mount!
     end
 
     # Resolve base class ``Base``
@@ -79,7 +85,7 @@ class Spin
     #
     # @return [Config]
     def config
-      Config.new
+      Object.const_get("::#{self.name}::Config").new
     end
   end
 end

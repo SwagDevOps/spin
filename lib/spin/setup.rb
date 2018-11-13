@@ -62,7 +62,11 @@ class Spin::Setup < Array
   # @return [self]
   def call
     self.tap do
-      files.each { |file| self.load(file) }
+      files.each do |file|
+        puts "* Loading: #{file}"
+
+        self.load(file)
+      end
     end
   end
 
