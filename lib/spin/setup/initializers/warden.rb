@@ -23,7 +23,7 @@ Warden::Strategies.add(:password) do
   end
 
   def authenticate!
-    Spin::User.fetch(params['username'], nil).tap do |user|
+    Spin::ENTRY_CLASS::User.fetch(params['username'], nil).tap do |user|
       # rubocop:disable Style/GuardClause
       if user&.authenticate(params['password'])
         return success!(user)
