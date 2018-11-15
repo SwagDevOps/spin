@@ -10,7 +10,7 @@
 
 require_relative '../spin'
 
-class Spin < Sinatra::Base
+class Spin
   class << self
     # Denote use of ``Bundler`` (vendoring).
     #

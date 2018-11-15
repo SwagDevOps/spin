@@ -9,7 +9,7 @@
 require_relative '../spin'
 require 'kamaze/version'
 
-class Spin < Sinatra::Base
+class Spin
   # Version.
   VERSION = Kamaze::Version.new.freeze
 end

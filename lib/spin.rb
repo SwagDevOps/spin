@@ -5,8 +5,6 @@ $LOAD_PATH.unshift(__dir__)
 require 'sinatra/base'
 require 'dry/inflector'
 
-require_relative 'spin/bundled'
-
 # Base class
 #
 # Sample of use:
@@ -20,6 +18,7 @@ require_relative 'spin/bundled'
 # run(Spin.controller)
 # ```
 class Spin
+  require_relative 'spin/bundled'
   autoload(:Dotenv, 'dotenv')
 
   {
