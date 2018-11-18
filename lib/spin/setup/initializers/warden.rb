@@ -23,7 +23,9 @@ Warden::Strategies.add(:password) do
   end
 
   def authenticate!
-    Spin::ENTRY_CLASS::User.fetch(params['username'], nil).tap do |user|
+    # rubocop:disable Style/GlobalVars
+    $ENTRY_CLASS::User.fetch(params['username'], nil).tap do |user|
+      # rubocop:enable Style/GlobalVars
       # rubocop:disable Style/GuardClause
       if user&.authenticate(params['password'])
         return success!(user)

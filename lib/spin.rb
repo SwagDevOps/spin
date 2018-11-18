@@ -4,6 +4,7 @@ $LOAD_PATH.unshift(__dir__)
 
 require 'sinatra/base'
 require 'dry/inflector'
+require 'dry/auto_inject'
 
 # Base class
 #
@@ -26,21 +27,65 @@ class Spin
     Autoloadable: :autoloadable,
     Base: :base,
     Config: :config,
+    Container: :container,
     Controller: :controller,
-    EntryClass: :entry_class,
     Initializer: :initializer,
     Setup: :setup,
     User: :user,
   }.each { |k, v| autoload k, "#{__dir__}/spin/#{v}" }
 
-  # extend EntryClass
-  extend(EntryClass)
-
   # rubocop:disable Style/ClassVars
+
   @@loaded = false
   # rubocop:enable Style/ClassVars
 
+  attr_reader :container
+
+  def initialize
+    # rubocop:disable Style/GlobalVars
+
+    $ENTRY_CLASS = self.class
+    # rubocop:enable Style/GlobalVars
+
+    container_builder.call.tap do |container|
+      @container = container
+
+      self.class.const_set(:Import, Dry::AutoInject(container))
+    end
+
+    setup!
+  end
+
+  # @return [self]
+  def setup!
+    self.tap do
+      Dotenv.load
+      Setup.new(container[:base_class], 'base', self.class.paths).call
+      Initializer.new(self.class.paths).call
+    end
+  end
+
+  protected
+
+  # @return [Spin::Container]
+  def container_builder
+    lambda do
+      self.class.const(:Container).new.tap do |c|
+        c.register(:entry_class, self)
+        c.register(:base_class, self.class.const(:Base))
+        c.register(:config, self.class.const(:Config).new)
+        c.register(:controller_class, self.class.const(:Controller))
+      end
+    end
+  end
+
   class << self
+    def const(const_name)
+      const_name.to_s.gsub(/^::/, '').tap do |name|
+        return Object.const_get("::#{self.name}::#{name}")
+      end
+    end
+
     # Paths where ``setup`` file are resolved.
     #
     # @type [Array<Pathname>]
@@ -54,7 +99,10 @@ class Spin
       return self if @@loaded
 
       self.tap do
-        self.setup_entry_class!
+        # rubocop:disable Style/GlobalVars
+        $ENTRY_CLASS = self
+        # rubocop:enable Style/GlobalVars
+
         Dotenv.load
         Setup.new(base_class, 'base', paths).call
         Initializer.new(paths).call
@@ -85,6 +133,14 @@ class Spin
     # @return [Config]
     def config
       Object.const_get("::#{self.name}::Config").new
+    end
+
+    def setup_entry_class!
+      (self.ancestors - Object.ancestors).last.tap do |entry_class|
+        unless entry_class.const_defined?(:ENTRY_CLASS, false)
+          entry_class.const_set(:ENTRY_CLASS, self)
+        end
+      end
     end
   end
 end

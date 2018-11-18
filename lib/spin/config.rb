@@ -84,7 +84,9 @@ class Spin::Config < TTY::Config
 
   class << self
     def paths
-      Spin::ENTRY_CLASS.paths
+      # rubocop:disable Style/GlobalVars
+      $ENTRY_CLASS.paths
+      # rubocop:enable Style/GlobalVars
     end
   end
 end
