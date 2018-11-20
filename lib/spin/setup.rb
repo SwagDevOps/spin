@@ -15,12 +15,15 @@ class Spin::Setup < Array
   # @return [String]
   attr_reader :target
 
+  attr_reader :container
+
   # @param [Class] loader
   # @param [String] target
   # @param [Array<String|Pathname>] paths
-  def initialize(loader, target, paths = [])
+  def initialize(loader, target, paths, container = nil)
     @loader = loader
     @target = target
+    @container = container
 
     # rubocop:disable Lint/ShadowingOuterLocalVariable
     paths.to_a.map { |fp| Pathname.new(fp) }.tap do |paths|
@@ -61,6 +64,8 @@ class Spin::Setup < Array
   #
   # @return [self]
   def call
+    self.loader.__send__('container=', self.container)
+
     self.tap do
       files.each do |file|
         puts "* Loading: #{file}"
