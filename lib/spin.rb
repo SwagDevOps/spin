@@ -32,7 +32,7 @@ class Spin
     Initializer: :initializer,
     Setup: :setup,
     User: :user,
-  }.each { |k, v| autoload k, "#{__dir__}/spin/#{v}" }
+  }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
 
   attr_reader :container
 
