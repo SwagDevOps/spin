@@ -17,19 +17,16 @@ class Spin::Setup < Array
 
   attr_reader :container
 
-  # @param [Class] loader
+  # @param [Spin::Container] container
   # @param [String] target
-  # @param [Array<String|Pathname>] paths
-  def initialize(loader, target, paths, container = nil)
-    @loader = loader
-    @target = target
+  def initialize(container, target)
     @container = container
+    @loader = container[target.to_sym]
+    @target = target.to_s.gsub(/_class$/, '')
 
-    # rubocop:disable Lint/ShadowingOuterLocalVariable
-    paths.to_a.map { |fp| Pathname.new(fp) }.tap do |paths|
+    container[:paths].to_a.map { |fp| Pathname.new(fp) }.tap do |paths|
       self.push(*paths)
     end
-    # rubocop:enable Lint/ShadowingOuterLocalVariable
 
     freeze
   end

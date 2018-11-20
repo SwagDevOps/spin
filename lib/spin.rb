@@ -54,7 +54,7 @@ class Spin
   def setup!
     self.tap do
       Dotenv.load
-      Setup.new(container[:base_class], 'base', self.class.paths, container).call
+      Setup.new(container, :base_class).call
       Initializer.new(self.class.paths).call
     end
   end
@@ -70,6 +70,7 @@ class Spin
     def container_builder
       lambda do
         self.const(:Container).new.tap do |c|
+          c.register(:paths, self.paths)
           c.register(:entry_class, self)
           c.register(:base_class, self.const(:Base))
           c.register(:config, self.const(:Config).new)
