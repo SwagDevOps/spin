@@ -34,11 +34,6 @@ class Spin
     User: :user,
   }.each { |k, v| autoload k, "#{__dir__}/spin/#{v}" }
 
-  # rubocop:disable Style/ClassVars
-
-  @@loaded = false
-  # rubocop:enable Style/ClassVars
-
   attr_reader :container
 
   def initialize
@@ -97,55 +92,6 @@ class Spin
     def paths
       [Pathname.new(Dir.pwd).freeze,
        Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze].freeze
-    end
-
-    # @return [self]
-    def setup!
-      return self if @@loaded
-
-      self.tap do
-        # rubocop:disable Style/GlobalVars
-        $ENTRY_CLASS = self
-        # rubocop:enable Style/GlobalVars
-
-        Dotenv.load
-        Setup.new(base_class, 'base', paths).call
-        Initializer.new(paths).call
-        # rubocop:disable Style/ClassVars
-        @@loaded = true
-        # rubocop:enable Style/ClassVars
-      end
-    end
-
-    # Get an instance of main controller.
-    #
-    # @return [Controller]
-    def controller
-      setup!
-
-      Object.const_get("::#{self.name}::Controller").mount!
-    end
-
-    # Resolve base class ``Base``
-    #
-    # @return [Class]
-    def base_class
-      Object.const_get("::#{self.name}::Base")
-    end
-
-    # Get config.
-    #
-    # @return [Config]
-    def config
-      Object.const_get("::#{self.name}::Config").new
-    end
-
-    def setup_entry_class!
-      (self.ancestors - Object.ancestors).last.tap do |entry_class|
-        unless entry_class.const_defined?(:ENTRY_CLASS, false)
-          entry_class.const_set(:ENTRY_CLASS, self)
-        end
-      end
     end
   end
 end
