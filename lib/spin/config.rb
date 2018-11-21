@@ -21,7 +21,7 @@ class Spin::Config < TTY::Config
     self.filename = :config
     self.prepare_env
 
-    self.class.paths.each do |path|
+    self.class.__send__(:paths).each do |path|
       self.append_path(path)
     end
   end
@@ -83,10 +83,11 @@ class Spin::Config < TTY::Config
   end
 
   class << self
-    def paths
-      # rubocop:disable Style/GlobalVars
-      $ENTRY_CLASS.paths
-      # rubocop:enable Style/GlobalVars
-    end
+    @paths = []
+
+    protected
+
+    # @return [Array<String|Pathname>]
+    attr_accessor :paths
   end
 end

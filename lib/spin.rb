@@ -34,12 +34,10 @@ class Spin
     User: :user,
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
 
+  # @return [Spin::Container]
   attr_reader :container
 
   def initialize
-    # rubocop:disable Style/GlobalVars
-    $ENTRY_CLASS = self.class
-    # rubocop:enable Style/GlobalVars
     @container = self.class.const(:Import).container
 
     setup!
@@ -50,7 +48,7 @@ class Spin
     self.tap do
       Dotenv.load
       Setup.new(container, :base_class).call
-      Initializer.new(self.class.paths).call
+      Initializer.new(container).call
     end
   end
 
@@ -61,15 +59,26 @@ class Spin
       end
     end
 
-    # @return [Spin::Container]
+    # @return [Proc]
     def container_builder
       lambda do
         self.const(:Container).new.tap do |c|
           c.register(:paths, self.paths)
           c.register(:entry_class, self)
           c.register(:base_class, self.const(:Base))
-          c.register(:config, self.const(:Config).new)
+          c.register(:config, config_builder.call)
           c.register(:controller_class, self.const(:Controller))
+        end
+      end
+    end
+
+    # @return [Proc]
+    def config_builder
+      lambda do
+        self.const(:Config).tap do |config_class|
+          config_class.__send__('paths=', self.paths)
+
+          config_class.new
         end
       end
     end

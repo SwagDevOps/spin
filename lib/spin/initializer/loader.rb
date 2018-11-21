@@ -12,6 +12,13 @@ require_relative '../initializer'
 #
 # @see https://guides.rubyonrails.org/v2.3/configuring.html#using-initializers
 class Spin::Initializer::Loader < Array
+  # @param [Spin::Container] container
+  def initialize(container)
+    @container = container
+
+    super([])
+  end
+
   # Adds a block which will be executed after been fully initialized.
   #
   # Useful for per-environment configuration which depends on
@@ -19,4 +26,9 @@ class Spin::Initializer::Loader < Array
   def after_initialize(&block)
     self.push(block)
   end
+
+  protected
+
+  # @return [Spin::Container]
+  attr_reader :container
 end
