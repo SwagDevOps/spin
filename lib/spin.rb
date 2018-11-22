@@ -52,6 +52,20 @@ class Spin
     end
   end
 
+  # Use ``container`` to respond to missing nethods.
+  #
+  # @param [Symbol] method
+  # @param [Array] args
+  #
+  # @return [Mixed]
+  def method_missing(method, *args, &block)
+    respond_to_missing?(method) ? self.container[method.to_sym] : super
+  end
+
+  def respond_to_missing?(method, include_private = false)
+    container.key?(method.to_sym) || super(method, include_private)
+  end
+
   class << self
     def const(const_name)
       const_name.to_s.gsub(/^::/, '').tap do |name|
