@@ -14,25 +14,33 @@ Warden::Manager.before_failure do |env, opts|
   end.call
 end
 
-Warden::Strategies.add(:password) do
-  # Denote request validity.
-  #
-  # @return Boolean
-  def valid?
-    params['username'] && params['password']
-  end
+container[:entry_class].tap do |entry_class|
+  Warden::Strategies.add(:password) do
+    @entry_class = entry_class
 
-  def authenticate!
-    users = container[:entry_class]::User
+    class << self
+      attr_reader :entry_class
+    end
 
-    users.fetch(params['username'], nil).tap do |user|
-      # rubocop:disable Style/GuardClause
-      if user&.authenticate(params['password'])
-        return success!(user)
-      else
-        return fail!('Could not log in')
+    # Denote request validity.
+    #
+    # @return Boolean
+    def valid?
+      params['username'] && params['password']
+    end
+
+    def authenticate!
+      user_class = self.class.entry_class::User
+
+      user_class.fetch(params['username'], nil).tap do |user|
+        # rubocop:disable Style/GuardClause
+        if user&.authenticate(params['password'])
+          return success!(user)
+        else
+          return fail!('Could not log in')
+        end
+        # rubocop:enable Style/GuardClause
       end
-      # rubocop:enable Style/GuardClause
     end
   end
 end

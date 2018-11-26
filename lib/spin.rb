@@ -39,6 +39,9 @@ class Spin
 
   def initialize
     @container = self.class.const(:Import).container
+    if container.nil?
+      raise 'Container must be set'
+    end
 
     setup!
   end
@@ -49,6 +52,8 @@ class Spin
       Dotenv.load
       Setup.new(container, :base_class).call
       Initializer.new(container).call
+
+      container[:controller_class].__send__('config=', container[:config])
     end
   end
 
@@ -92,7 +97,7 @@ class Spin
         self.const(:Config).tap do |config_class|
           config_class.__send__('paths=', self.paths)
 
-          config_class.new
+          return config_class.new
         end
       end
     end

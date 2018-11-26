@@ -20,7 +20,7 @@ class Spin::Base < Sinatra::Base
     # @return [Spin:;Container]
     attr_accessor :container
 
-    # @return [Spin::Config]
+    # @return [Object]
     def config(*args)
       container[:entry_class].__send__(:config, *args)
     end

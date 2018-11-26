@@ -2,18 +2,20 @@
 
 require 'warden'
 
-use Warden::Manager do |config|
-  # rubocop:disable Style/SymbolProc
-  config.serialize_into_session { |user| user.username }
-  # rubocop:enable Style/SymbolProc
-  config.serialize_from_session do |username|
-    container[:entry_class]::User.fetch(username)
-  end
+container[:entry_class].tap do |entry_class|
+  use Warden::Manager do |config|
+    # rubocop:disable Style/SymbolProc
+    config.serialize_into_session { |user| user.username }
+    # rubocop:enable Style/SymbolProc
+    config.serialize_from_session do |username|
+      entry_class::User.fetch(username)
+    end
 
-  config.failure_app = container[:entry_class]::Controller::Auth
-  config.scope_defaults(:default,
-                        strategies: [:password],
-                        action: '/unauthenticated')
+    config.failure_app = container[:entry_class]::Controller::Auth
+    config.scope_defaults(:default,
+                          strategies: [:password],
+                          action: '/unauthenticated')
+  end
 end
 
 before do
