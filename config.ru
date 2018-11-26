@@ -3,5 +3,5 @@
 lambda do
   require_relative 'dev/web_app'
 
-  WebApp.controller
+  WebApp.new.controller_class.mount!
 end.tap { |handler| run(handler.call) }

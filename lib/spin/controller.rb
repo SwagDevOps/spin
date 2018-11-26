@@ -13,6 +13,9 @@ class Spin::Controller < Spin::Base
 
   autoload_self
 
+  # @type [Spin::Config]
+  @config = nil
+
   class << self
     # Mount controllers.
     #
@@ -28,5 +31,10 @@ class Spin::Controller < Spin::Base
 
       self
     end
+
+    protected
+
+    # @type [Spin:;Config]
+    attr_accessor :config
   end
 end

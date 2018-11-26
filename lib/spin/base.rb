@@ -11,14 +11,18 @@ class Spin::Base < Sinatra::Base
     env.fetch('warden').authenticate!
   end
 
+  # @type [Spin::Container]
+  @container = nil
+
   class << self
     protected
 
-    # @return [Spin::Config]
+    # @return [Spin:;Container]
+    attr_accessor :container
+
+    # @return [Object]
     def config(*args)
-      # rubocop:disable Style/GlobalVars
-      $ENTRY_CLASS.__send__(:config, *args)
-      # rubocop:enable Style/GlobalVars
+      container[:entry_class].__send__(:config, *args)
     end
   end
 end

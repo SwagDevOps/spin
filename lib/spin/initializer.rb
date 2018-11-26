@@ -20,15 +20,13 @@ class Spin::Initializer < Array
   autoload :Pathname, 'pathname'
   autoload :Loader, "#{__dir__}/initializer/loader"
 
-  # @param [Array<String|Pathname>] paths
-  def initialize(paths = [])
-    @loader = Loader.new
+  # @param [Spin::Container] container
+  def initialize(container)
+    @loader = Loader.new(container)
 
-    # rubocop:disable Lint/ShadowingOuterLocalVariable
-    paths.to_a.map { |fp| Pathname.new(fp) }.tap do |paths|
+    container[:paths].to_a.map { |fp| Pathname.new(fp) }.tap do |paths|
       self.push(*paths)
     end
-    # rubocop:enable Lint/ShadowingOuterLocalVariable
 
     freeze
   end

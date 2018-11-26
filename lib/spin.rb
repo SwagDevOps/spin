@@ -32,25 +32,15 @@ class Spin
     Initializer: :initializer,
     Setup: :setup,
     User: :user,
-  }.each { |k, v| autoload k, "#{__dir__}/spin/#{v}" }
+  }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
 
-  # rubocop:disable Style/ClassVars
-
-  @@loaded = false
-  # rubocop:enable Style/ClassVars
-
+  # @return [Spin::Container]
   attr_reader :container
 
   def initialize
-    # rubocop:disable Style/GlobalVars
-
-    $ENTRY_CLASS = self.class
-    # rubocop:enable Style/GlobalVars
-
-    container_builder.call.tap do |container|
-      @container = container
-
-      self.class.const_set(:Import, Dry::AutoInject(container))
+    @container = self.class.const(:Import).container
+    if container.nil?
+      raise 'Container must be set'
     end
 
     setup!
@@ -60,23 +50,25 @@ class Spin
   def setup!
     self.tap do
       Dotenv.load
-      Setup.new(container[:base_class], 'base', self.class.paths).call
-      Initializer.new(self.class.paths).call
+      Setup.new(container, :base_class).call
+      Initializer.new(container).call
+
+      container[:controller_class].__send__('config=', container[:config])
     end
   end
 
-  protected
+  # Use ``container`` to respond to missing nethods.
+  #
+  # @param [Symbol] method
+  # @param [Array] args
+  #
+  # @return [Mixed]
+  def method_missing(method, *args, &block)
+    respond_to_missing?(method) ? self.container[method.to_sym] : super
+  end
 
-  # @return [Spin::Container]
-  def container_builder
-    lambda do
-      self.class.const(:Container).new.tap do |c|
-        c.register(:entry_class, self)
-        c.register(:base_class, self.class.const(:Base))
-        c.register(:config, self.class.const(:Config).new)
-        c.register(:controller_class, self.class.const(:Controller))
-      end
-    end
+  def respond_to_missing?(method, include_private = false)
+    container.key?(method.to_sym) || super(method, include_private)
   end
 
   class << self
@@ -86,61 +78,48 @@ class Spin
       end
     end
 
+    # @return [Proc]
+    def container_builder
+      lambda do
+        self.const(:Container).new.tap do |c|
+          c.register(:paths, self.paths)
+          c.register(:entry_class, self)
+          c.register(:base_class, self.const(:Base))
+          c.register(:config, config_builder.call)
+          c.register(:controller_class, self.const(:Controller))
+        end
+      end
+    end
+
+    # @return [Proc]
+    def config_builder
+      lambda do
+        self.const(:Config).tap do |config_class|
+          config_class.__send__('paths=', self.paths)
+
+          return config_class.new
+        end
+      end
+    end
+
+    def const_missing(name)
+      if name.to_sym == :Import
+        self.container_builder.call.tap do |container|
+          self.const_set(name, Dry::AutoInject(container))
+
+          return self.const_get(name)
+        end
+      end
+
+      super
+    end
+
     # Paths where ``setup`` file are resolved.
     #
     # @type [Array<Pathname>]
     def paths
       [Pathname.new(Dir.pwd).freeze,
        Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze].freeze
-    end
-
-    # @return [self]
-    def setup!
-      return self if @@loaded
-
-      self.tap do
-        # rubocop:disable Style/GlobalVars
-        $ENTRY_CLASS = self
-        # rubocop:enable Style/GlobalVars
-
-        Dotenv.load
-        Setup.new(base_class, 'base', paths).call
-        Initializer.new(paths).call
-        # rubocop:disable Style/ClassVars
-        @@loaded = true
-        # rubocop:enable Style/ClassVars
-      end
-    end
-
-    # Get an instance of main controller.
-    #
-    # @return [Controller]
-    def controller
-      setup!
-
-      Object.const_get("::#{self.name}::Controller").mount!
-    end
-
-    # Resolve base class ``Base``
-    #
-    # @return [Class]
-    def base_class
-      Object.const_get("::#{self.name}::Base")
-    end
-
-    # Get config.
-    #
-    # @return [Config]
-    def config
-      Object.const_get("::#{self.name}::Config").new
-    end
-
-    def setup_entry_class!
-      (self.ancestors - Object.ancestors).last.tap do |entry_class|
-        unless entry_class.const_defined?(:ENTRY_CLASS, false)
-          entry_class.const_set(:ENTRY_CLASS, self)
-        end
-      end
     end
   end
 end
