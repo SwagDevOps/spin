@@ -38,7 +38,7 @@ class Spin
   attr_reader :container
 
   def initialize
-    @container = self.class.const(:Import).container
+    @container = self.class.const(:DI).container
     if container.nil?
       raise 'Container must be set'
     end
@@ -103,7 +103,7 @@ class Spin
     end
 
     def const_missing(name)
-      if name.to_sym == :Import
+      if name.to_sym == :DI
         self.container_builder.call.tap do |container|
           self.const_set(name, Dry::AutoInject(container))
 
