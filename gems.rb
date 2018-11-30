@@ -10,7 +10,6 @@ group :default do
   gem 'dry-container', '~> 0.6'
   gem 'kamaze-version', '~> 1.0'
   gem 'sqlite3', '~> 1.3'
-  gem 'tenjin', '~> 0.7'
   gem 'tty-config', '~> 0.2'
 end
 

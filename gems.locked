@@ -209,7 +209,6 @@ DEPENDENCIES
   sinatra-logger (~> 0.2)
   sqlite3 (~> 1.3)
   sys-proc (~> 1.1, >= 1.1.2)
-  tenjin (~> 0.7)
   tty-config (~> 0.2)
   tux (~> 0.3)
   warden
