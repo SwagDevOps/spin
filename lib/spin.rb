@@ -50,6 +50,7 @@ class Spin
   def setup!
     self.tap do
       Dotenv.load
+      Setup.new(container).call
       Setup.new(container, :base_class).call
       Initializer.new(container).call
 
