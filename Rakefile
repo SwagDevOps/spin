@@ -18,6 +18,7 @@ if Gem::Specification.find_all_by_name('kamaze-project').any?
       project.name    = 'spin'
       project.tasks   = [
         'cs:correct', 'cs:control', 'cs:pre-commit',
+        'doc', 'doc:watch',
         'gem',
         'misc:gitignore',
         'shell',
