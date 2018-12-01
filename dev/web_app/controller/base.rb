@@ -13,7 +13,7 @@ require_relative '../controller'
 #
 # ```ruby
 # class WebApp::Controller::Sample < WebApp::Controller::Base
-#   include WebApp::DI.kwargs[:sample_service]
+#   send(:include, WebApp::DI.kwargs[:sample_service])
 #
 #   def initialize(app = nil, **options)
 #     @service = options[:sample_service]
@@ -22,6 +22,9 @@ require_relative '../controller'
 #   end
 # end
 class WebApp::Controller::Base < WebApp::Base
+  # A new instance of Base.
+  #
+  # @param [WebApp::Controller|nil] app
   def initialize(app = nil, **)
     super(app)
   end
