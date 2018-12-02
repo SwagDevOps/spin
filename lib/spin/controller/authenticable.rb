@@ -12,23 +12,37 @@ module Spin::Controller::Authenticable
     '/'
   end
 
+  # Class methods
+  module ClassMethods
+    def login_get(controller)
+      controller.tap do |c|
+        c.session[:return_to] = nil if c.session[:return_to] == '/login'
+        if c.current_user
+          c.redirect(c.session[:return_to] || c.success_login_url)
+        end
+
+        return c.erb(:login)
+      end
+    end
+
+    def login_post(controller)
+      controller.tap do |c|
+        c.authenticate!
+
+        c.flash[:success] = 'Logged in!'
+        c.redirect(c.session[:return_to] || c.success_login_url)
+      end
+    end
+  end
+
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   class << self
     def included(base)
-      base.get '/login' do
-        session[:return_to] = nil if session[:return_to] == '/login'
-        redirect(session[:return_to] || success_login_url) if current_user
+      base.extend(ClassMethods)
 
-        erb :login
-      end
-
-      base.post '/login' do
-        self.authenticate!
-
-        flash[:success] = 'Logged in!'
-        redirect(session[:return_to] || success_login_url)
-      end
+      base.get('/login') { self.class.login_get(self) }
+      base.post('/login') { self.class.login_post(self) }
 
       base.get '/logout' do
         env['warden'].logout
