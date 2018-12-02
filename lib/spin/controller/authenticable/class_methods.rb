@@ -5,7 +5,7 @@ module Spin::Controller::Authenticable
   module ClassMethods
     protected
 
-    def login_show(controller)
+    def login_view(controller)
       controller.tap do |c|
         c.session[:return_to] = nil if c.session[:return_to] == '/login'
         if c.current_user
@@ -45,6 +45,7 @@ module Spin::Controller::Authenticable
         c.session[:return_to] = c.env['warden.options'][:attempted_path]
 
         c.flash[:error] = c.env['warden'].message || 'You must log in'
+
         c.redirect('/login')
       end
     end
