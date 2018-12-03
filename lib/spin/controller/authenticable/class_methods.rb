@@ -1,15 +1,33 @@
 # frozen_string_literal: true
 
+require_relative '../authenticable'
+
 module Spin::Controller::Authenticable
   # Class methods
   module ClassMethods
+    # Get urls.
+    #
+    # @return [Hash{Symbol => String}]
+    def urls
+      {
+        logout: '/logout',
+        login: '/login',
+        after_logout: '/',
+        success_login: '/',
+        unauthenticated: '/unauthenticated',
+      }
+    end
+
     protected
 
     def login_view(controller)
       controller.tap do |c|
-        c.session[:return_to] = nil if c.session[:return_to] == '/login'
+        if c.session[:return_to] == urls.fetch(:login)
+          c.session[:return_to] = nil
+        end
+
         if c.current_user
-          c.redirect(c.session[:return_to] || c.success_login_url)
+          c.redirect(c.session[:return_to] || urls.fetch(:success_login))
         end
 
         return c.erb(:login)
@@ -21,7 +39,7 @@ module Spin::Controller::Authenticable
         c.authenticate!
 
         c.flash[:success] = 'Logged in!'
-        c.redirect(c.session[:return_to] || c.success_login_url)
+        c.redirect(c.session[:return_to] || urls.fetch(:success_login))
       end
     end
 
@@ -34,19 +52,19 @@ module Spin::Controller::Authenticable
           c.logger.info(msg)
         end
 
-        c.redirect(c.after_logout_url)
+        c.redirect(urls.fetch(:after_logout))
       end
     end
 
     def unauthenticated(controller)
       controller.tap do |c|
-        c.redirect(c.after_logout_url) unless c.env['warden.options']
+        c.redirect(urls.fetch(:after_logout)) unless c.env['warden.options']
 
         c.session[:return_to] = c.env['warden.options'][:attempted_path]
 
         c.flash[:error] = c.env['warden'].message || 'You must log in'
 
-        c.redirect('/login')
+        c.redirect(urls.fetch(:login))
       end
     end
   end

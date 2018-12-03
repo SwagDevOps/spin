@@ -1,30 +1,29 @@
 # frozen_string_literal: true
 
-require_relative './base'
+require 'forwardable'
+require_relative '../controller'
+require_relative './authenticable/class_methods'
 
 # Authenticable behavior
 module Spin::Controller::Authenticable
-  autoload(:ClassMethods, "#{__dir__}/authenticable/class_methods")
+  extend(ClassMethods)
+  extend(Forwardable)
 
-  def after_logout_url
-    '/'
-  end
+  def_delegators(self, :urls)
 
-  def success_login_url
-    '/'
-  end
-
+  # rubocop:disable Metrics/AbcSize
   class << self
     def included(base)
       base.extend(ClassMethods)
 
-      base.get('/login') { self.class.__send__(:login_view, self) }
-      base.post('/login') { self.class.__send__(:login, self) }
-      base.get('/logout') { self.class.__send__(:logout, self) }
+      base.get(urls.fetch(:login)) { self.class.__send__(:login_view, self) }
+      base.post(urls.fetch(:login)) { self.class.__send__(:login, self) }
+      base.get(urls.fetch(:logout)) { self.class.__send__(:logout, self) }
 
-      base.post('/unauthenticated') do
+      base.post(urls.fetch(:unauthenticated)) do
         self.class.__send__(:unauthenticated, self)
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 end

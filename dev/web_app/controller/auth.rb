@@ -7,15 +7,16 @@ require 'spin/controller/authenticable'
 class WebApp::Controller::Auth < WebApp::Controller::Base
   include Spin::Controller::Authenticable
 
-  def success_login_url
-    '/protected'
+  class << self
+    def urls
+      super.merge(
+        protected: '/protected',
+        success_login: '/protected'
+      )
+    end
   end
 
-  get '/protected' do
-    erb :protected
-  end
+  get(urls.fetch(:protected)) { erb :protected }
 
-  before %r{/protected} do
-    authenticate!
-  end
+  before(/#{urls.fetch(:protected)}/) { authenticate! }
 end
