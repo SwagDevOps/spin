@@ -20,6 +20,27 @@ module Spin::Controller::Authenticable
 
     protected
 
+    # rubocop:disable Metrics/AbcSize
+
+    # Register actions on given ``Class``.
+    #
+    # @param [Class] base
+    # @see Spin::Controller::Authenticable.included
+    #
+    # @return [Class]
+    def register_on(base)
+      base.tap do |c|
+        c.get(urls.fetch(:login)) { self.class.__send__(:login_view, self) }
+        c.post(urls.fetch(:login)) { self.class.__send__(:login, self) }
+        c.get(urls.fetch(:logout)) { self.class.__send__(:logout, self) }
+        c.post(urls.fetch(:unauthenticated)) do
+          self.class.__send__(:unauthenticated, self)
+        end
+      end
+    end
+
+    # rubocop:enable Metrics/AbcSize
+
     def login_view(controller)
       controller.tap do |c|
         if c.session[:return_to] == urls.fetch(:login)
@@ -48,7 +69,7 @@ module Spin::Controller::Authenticable
         c.env['warden'].logout
 
         'Successfully logged out'.tap do |msg|
-          c.flash[:success] = 'Successfully logged out'
+          c.flash[:success] = msg
           c.logger.info(msg)
         end
 
@@ -58,9 +79,10 @@ module Spin::Controller::Authenticable
 
     def unauthenticated(controller)
       controller.tap do |c|
-        c.redirect(urls.fetch(:after_logout)) unless c.env['warden.options']
-
-        c.session[:return_to] = c.env['warden.options'][:attempted_path]
+        c.env['warden.options'].tap do |options|
+          c.redirect(urls.fetch(:after_logout)) unless options
+          c.session[:return_to] = options[:attempted_path]
+        end
 
         c.flash[:error] = c.env['warden'].message || 'You must log in'
 

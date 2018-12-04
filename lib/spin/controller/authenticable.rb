@@ -11,19 +11,11 @@ module Spin::Controller::Authenticable
 
   def_delegators(self, :urls)
 
-  # rubocop:disable Metrics/AbcSize
   class << self
     def included(base)
       base.extend(ClassMethods)
 
-      base.get(urls.fetch(:login)) { self.class.__send__(:login_view, self) }
-      base.post(urls.fetch(:login)) { self.class.__send__(:login, self) }
-      base.get(urls.fetch(:logout)) { self.class.__send__(:logout, self) }
-
-      base.post(urls.fetch(:unauthenticated)) do
-        self.class.__send__(:unauthenticated, self)
-      end
+      pp register_on(base)
     end
   end
-  # rubocop:enable Metrics/AbcSize
 end
