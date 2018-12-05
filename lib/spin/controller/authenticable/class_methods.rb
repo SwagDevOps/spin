@@ -20,7 +20,19 @@ module Spin::Controller::Authenticable
 
     protected
 
-    # rubocop:disable Metrics/AbcSize
+    # Get actions as ``[url, method, action]``.
+    #
+    # @return [Array<Array>]
+    def actions
+      [
+        [:login, :get, :login_view],
+        [:login, :post, :login],
+        [:logout, :get, :logout],
+        [:unauthenticated, :post, :unauthenticated]
+      ].map do |url_name, method, action|
+        [urls.fetch(url_name), method, action]
+      end
+    end
 
     # Register actions on given ``Class``.
     #
@@ -30,16 +42,11 @@ module Spin::Controller::Authenticable
     # @return [Class]
     def register_on(base)
       base.tap do |c|
-        c.get(urls.fetch(:login)) { self.class.__send__(:login_view, self) }
-        c.post(urls.fetch(:login)) { self.class.__send__(:login, self) }
-        c.get(urls.fetch(:logout)) { self.class.__send__(:logout, self) }
-        c.post(urls.fetch(:unauthenticated)) do
-          self.class.__send__(:unauthenticated, self)
+        actions.each do |url, method, action|
+          c.public_send(method, url) { self.class.__send__(action, self) }
         end
       end
     end
-
-    # rubocop:enable Metrics/AbcSize
 
     def login_view(controller)
       controller.tap do |c|
