@@ -15,7 +15,7 @@ module Spin::Controller::Authenticable
     def included(base)
       base.extend(ClassMethods)
 
-      pp register_on(base)
+      register_on(base)
     end
   end
 end
