@@ -16,7 +16,7 @@ end
 group :development do
   gem 'kamaze-project', '~> 1.0', '>= 1.0.3'
   gem 'listen', '~> 3.1'
-  gem 'rubocop', '~> 0.60'
+  gem 'rubocop', '~> 0.61'
   gem 'sys-proc', '~> 1.1', '>= 1.1.2'
   gem 'tux', '~> 0.3'
   # repl ---------------------------------
@@ -38,7 +38,6 @@ group :development do
   gem 'rack_csrf', '~> 2.6'
   gem 'sinatra-contrib', '= 2.0.2'
   gem 'sinatra-flash', '~> 0.3'
-  gem 'sinatra-logger', '~> 0.2'
   gem 'warden'
 end
 
