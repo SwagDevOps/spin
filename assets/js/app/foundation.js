@@ -8,13 +8,10 @@
 import $ from 'jquery'
 import { Foundation } from 'foundation-sites/js/foundation.core'
 
-let load = function () {
-  window.$ = window.jQuery = $
-  Foundation.addToJquery($)
-}
+// window.$ = window.jQuery = $
 
 export default function () {
-  load()
+  Foundation.addToJquery($)
 
   $(function () {
     $(document).foundation()
