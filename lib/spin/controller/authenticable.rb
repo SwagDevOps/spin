@@ -5,17 +5,25 @@ require_relative '../controller'
 require_relative './authenticable/class_methods'
 
 # Authenticable behavior
+#
+# Sample of use:
+#
+# ```ruby
+# class WebApp::Controller::Auth < WebApp::Controller::Base
+#   include Spin::Controller::Authenticable
+#   # add your own stuff
+#   authenticable!
+# end
+# ```
 module Spin::Controller::Authenticable
   extend(ClassMethods)
   extend(Forwardable)
-
-  def_delegators(self, :urls)
 
   class << self
     def included(base)
       base.extend(ClassMethods)
 
-      register_on(base)
+      def_delegators(self, :urls)
     end
   end
 end

@@ -36,12 +36,13 @@ module Spin::Controller::Authenticable
 
     # Register actions on given ``Class``.
     #
-    # @param [Class] base
-    # @see Spin::Controller::Authenticable.included
+    # @param [Array<Array>] actions
     #
     # @return [Class]
-    def register_on(base)
-      base.tap do |c|
+    #
+    # @see .actions
+    def authenticable!(actions = self.actions)
+      self.tap do |c|
         actions.each do |url, method, action|
           c.public_send(method, url) { self.class.__send__(action, self) }
         end

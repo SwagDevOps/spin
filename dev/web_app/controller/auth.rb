@@ -16,6 +16,8 @@ class WebApp::Controller::Auth < WebApp::Controller::Base
     end
   end
 
+  authenticable!
+
   get(urls.fetch(:protected)) { erb :protected }
 
   before(/#{urls.fetch(:protected)}/) { authenticate! }
