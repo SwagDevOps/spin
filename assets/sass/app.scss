@@ -1,13 +1,20 @@
 /* Variables
-/* -------------------------- */
+ * -------------------------- */
 $fa-font-path: '/fonts';
 $fa-css-prefix: 'fa';
+$global-flexbox: true;
 
 /* Modules
-/* -------------------------- */
-@import '~foundation-sites/scss/foundation';
+ * -------------------------- */
 @import '~font-awesome/scss/font-awesome';
 
+/* Foundation
+ * -------------------------- */
+@import '~foundation-sites/scss/foundation';
+@include foundation-everything;
+@include foundation-flex-grid;
+@include foundation-flex-classes;
+
 /* App
-/* -------------------------- */
-@import 'app/main';
+ * -------------------------- */
+@import 'app/breakpoint';
