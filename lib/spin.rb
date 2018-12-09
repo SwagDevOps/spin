@@ -29,6 +29,7 @@ class Spin
     Config: :config,
     Container: :container,
     Controller: :controller,
+    Helpers: :helpers,
     Initializer: :initializer,
     Setup: :setup,
     User: :user,
