@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
-        <title>App</title>
-        <link rel="stylesheet" href="/css/app.css" />
-        <script src="/js/app.js"></script>
-        <meta name="csrf-token" content="<%= csrf_token %>" />
+        <%= html.meta(charset: 'utf-8') %>
+        <%= html.meta(name: 'viewport', content: 'width=device-width, initial-scale=1.0') %>
+        <%= html.title(['Unicorn Agency', self.page_title].compact.join(' - ')) %>
+        <%= html.link(href: asset_url('/css/app.css'), rel: 'stylesheet') %>
+        <%= html.script(src: asset_url('/js/app.js')) %>
+        <%= html.meta(name: 'csrf-token', content: csrf_token) %>
     </head>
     <body>
-        <div class="wrapper">
-            <% flash.keys.each do |type| %>
-                <div data-alert class="flash <%= type %> alert-box radius">
-                    <%= flash[type] %>
-                    <a href="#" class="close">&times;</a>
-                </div>
-            <% end %>
-
-            <%= yield %>
-            <footer class="branding">
-                <small>
-                    &copy;
-                    <%= Spin::VERSION.date.split('-')[0] %>
-                    -
-                    <%= Spin::VERSION.authors.join(', ') %>
-                </small>
-            </footer>
+        <%= erb(:'layout/top-bar') %>
+        <div class="callout large primary">
+            <div class="row column text-center">
+                <h1>Our Blog</h1>
+            </div>
         </div>
+        <section class="row">
+            <div class="columns">
+                <%= erb(:'layout/flash') %>
+            </div>
+        </section>
+        <section class="row" id="content">
+            <div class="medium-9 columns">
+                <section>
+                    <%= yield %>
+                </section>
+            </div>
+            <%= erb(:'layout/sidebar') %>
+        </section>
+        <%= erb(:'layout/footer') %>
     </body>
 </html>
