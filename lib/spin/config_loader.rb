@@ -21,10 +21,9 @@ class Spin::ConfigLoader < TTY::Config
 
     @read_count = 0
     self.filename = filename
-    self.prepare_env
 
-    @paths = paths
-    paths.each { |path| self.append_path(path) }
+    @paths = paths.map { |path| Pathname.new(path) }
+    self.paths.each { |path| self.append_path(path) }
   end
 
   def read(*)
@@ -38,7 +37,7 @@ class Spin::ConfigLoader < TTY::Config
   end
 
   def to_h
-    read unless read?
+    read unless self.read?
 
     super
   end
@@ -76,10 +75,5 @@ class Spin::ConfigLoader < TTY::Config
         return input.map { |v| __send__(__callee__, v) }
       end
     end
-  end
-
-  def prepare_env
-    # ``LIBDIR`` absolute path inside current ``lib``
-    ENV['LIBDIR'] = Pathname.new(__FILE__).realpath.dirname.to_path
   end
 end
