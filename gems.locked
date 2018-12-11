@@ -32,7 +32,7 @@ GEM
     hanami-utils (1.3.0)
       concurrent-ruby (~> 1.0)
       transproc (~> 1.0)
-    i18n (1.1.1)
+    i18n (1.2.0)
       concurrent-ruby (~> 1.0)
     interesting_methods (0.1.2)
     jaro_winkler (1.5.1)
