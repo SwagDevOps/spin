@@ -12,6 +12,7 @@ require 'tty/config'
 # Config reader
 class Spin::ConfigLoader < TTY::Config
   autoload(:Erb, 'erb')
+  autoload(:OpenStruct, 'ostruct')
   autoload(:Pathname, 'pathname')
 
   attr_reader :paths
@@ -40,6 +41,11 @@ class Spin::ConfigLoader < TTY::Config
     read unless self.read?
 
     super
+  end
+
+  # @return [OpenStruct]
+  def to_recursive_ostruct(frozen: true)
+    self.class.__send__(:to_recursive_ostruct, self.to_h, frozen: frozen)
   end
 
   def fetch(*args)
@@ -74,6 +80,23 @@ class Spin::ConfigLoader < TTY::Config
       if input.is_a?(Array)
         return input.map { |v| __send__(__callee__, v) }
       end
+    end
+  end
+
+  class << self
+    protected
+
+    # Transform given ``Hash`` to ``OpenStruct`` recursively.
+    #
+    # @param [Hash] input
+    # @return [OpenStruc]
+    def to_recursive_ostruct(input, frozen: true)
+      input = input.to_h
+
+      OpenStruct.new(input.each_with_object({}) do |(key, val), h|
+        h[key.to_sym] = val.is_a?(Hash) ? __send__(__callee__, val) : val
+        h[key.to_sym].freeze if frozen
+      end).freeze
     end
   end
 end
