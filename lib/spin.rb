@@ -20,7 +20,9 @@ require 'dry/auto_inject'
 # ```
 class Spin
   require_relative 'spin/bundled'
+
   autoload(:Dotenv, 'dotenv')
+  autoload(:Pathname, 'pathname')
 
   {
     VERSION: :version,
