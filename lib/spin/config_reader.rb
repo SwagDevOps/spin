@@ -11,8 +11,8 @@ require_relative '../spin'
 # Reader for config
 class Spin::ConfigReader < Array
   # @param [Array<String>]
-  def initialize(*paths)
-    paths.each { |path| self.push(Pathname.new(path)) }
+  def initialize(paths)
+    paths.to_a.each { |path| self.push(Pathname.new(path)) }
   end
 
   # Get value for given key.
