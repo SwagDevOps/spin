@@ -7,12 +7,21 @@
 # There is NO WARRANTY, to the extent permitted by law.
 
 require_relative '../spin'
+require 'tty/config'
 
 # Reader for config
 class Spin::ConfigReader < Array
-  # @param [Array<String>]
+  # @formatter:off
+  {
+    Cache: :cache,
+  }.each { |k, v| autoload(k, "#{__dir__}/config_reader/#{v}") }
+  # @formatter:on
+
+  # @param [Array<String>] paths
   def initialize(paths)
     paths.to_a.each { |path| self.push(Pathname.new(path)) }
+
+    self.cache = Cache.new
   end
 
   # Get value for given key.
@@ -33,12 +42,25 @@ class Spin::ConfigReader < Array
 
   protected
 
+  # @type [Cache]
+  # @return [Cache]
+  attr_accessor :cache
+
   # @param [String] base
   #
   # @return [Spin::ConfigLoader]
   def read(base)
-    Spin::ConfigLoader.new(self, base)&.to_recursive_ostruct
+    self.load_as(base).to_recursive_ostruct
   rescue TTY::Config::ReadError
     nil
+  end
+
+  # @return [Spin::ConfigLoader]
+  def load_as(base)
+    unless cache.key?(base)
+      cache[base] = Spin::ConfigLoader.new(self, base)
+    end
+
+    cache.fetch(base)
   end
 end
