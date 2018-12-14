@@ -49,19 +49,28 @@ class Spin::ConfigReader < Array
 
   # @param [String] base
   #
-  # @return [Spin::ConfigLoader]
+  # @return [Spin::ConfigReader::Loader|nil]
   def read(base)
     self.load_as(base).to_recursive_ostruct
   rescue TTY::Config::ReadError
     nil
   end
 
-  # @return [Spin::ConfigLoader]
-  def load_as(base)
-    unless cache.key?(base)
-      cache[base] = Loader.new(self, base)
+  # Load given filename.
+  #
+  # @raise [ArgumentError]
+  # @param [String|Symbol] filename
+  #
+  # @return [Spin::ConfigReader::Loader]
+  def load_as(filename)
+    unless Pathname.new(filename).basename.to_s == filename
+      raise ArgumentError, filename
     end
 
-    cache.fetch(base)
+    unless cache.key?(filename)
+      cache[filename] = Loader.new(self, filename)
+    end
+
+    cache.fetch(filename)
   end
 end
