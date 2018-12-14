@@ -6,11 +6,11 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../spin'
+require_relative '../config_reader'
 require 'tty/config'
 
 # Config reader
-class Spin::ConfigLoader < TTY::Config
+class Spin::ConfigReader::Loader < TTY::Config
   autoload(:Erb, 'erb')
   autoload(:OpenStruct, 'ostruct')
   autoload(:Pathname, 'pathname')

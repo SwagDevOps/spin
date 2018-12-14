@@ -14,6 +14,7 @@ class Spin::ConfigReader < Array
   # @formatter:off
   {
     Cache: :cache,
+    Loader: :loader,
   }.each { |k, v| autoload(k, "#{__dir__}/config_reader/#{v}") }
   # @formatter:on
 
@@ -58,7 +59,7 @@ class Spin::ConfigReader < Array
   # @return [Spin::ConfigLoader]
   def load_as(base)
     unless cache.key?(base)
-      cache[base] = Spin::ConfigLoader.new(self, base)
+      cache[base] = Loader.new(self, base)
     end
 
     cache.fetch(base)
