@@ -24,6 +24,7 @@ class Spin
   autoload(:Dotenv, 'dotenv')
   autoload(:Pathname, 'pathname')
 
+  # @formatter:off
   {
     VERSION: :version,
     Autoloadable: :autoloadable,
@@ -36,6 +37,7 @@ class Spin
     Setup: :setup,
     User: :user,
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
+  # @formatter:on
 
   # @return [Spin::Container]
   attr_reader :container
@@ -114,6 +116,16 @@ class Spin
           return self.const_get(name)
         end
       end
+
+      super
+    end
+
+    def constants
+      super.push(:DI)
+    end
+
+    def const_defined?(sym, inherit = true)
+      const_missing(sym) if sym == :DI
 
       super
     end
