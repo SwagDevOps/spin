@@ -8,6 +8,7 @@ if Gem::Specification.find_all_by_name('sys-proc').any?
   Sys::Proc.progname = 'rspec'
 end
 
+# @formmatter:off
 [
   :constants,
   :configure,
@@ -17,5 +18,6 @@ end
     req: req.to_s,
   }
 end
+# @formmatter:on
 
 require 'spin'
