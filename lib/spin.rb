@@ -125,7 +125,7 @@ class Spin
     end
 
     def const_defined?(sym, inherit = true)
-      const_missing(sym) if sym == :DI
+      const_missing(sym) if sym == :DI and !super
 
       super
     end
