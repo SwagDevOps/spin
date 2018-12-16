@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("dry-container", ["~> 0.6"])
   s.add_runtime_dependency("kamaze-version", ["~> 1.0"])
   s.add_runtime_dependency("sqlite3", ["~> 1.3"])
-  s.add_runtime_dependency("tty-config", ["~> 0.2"])
+  s.add_runtime_dependency("tty-config", ["~> 0.3"])
 end
 
 # Local Variables:
