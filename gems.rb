@@ -45,4 +45,5 @@ group :test do
   gem 'faker', '~> 1.9'
   gem 'rspec', '~> 3.8'
   gem 'sham', '~> 2.0'
+  gem 'simplecov', '~> 0.16'
 end
