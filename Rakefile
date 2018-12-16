@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 # vim: ai ts=2 sts=2 et sw=2 ft=ruby
 
+if ENV['coverage'] and Gem::Specification.find_all_by_name('simplecov').any?
+  require 'simplecov'
+
+  SimpleCov.start do
+    add_filter 'rake/'
+    add_filter 'spec/'
+  end
+end
+
 require_relative 'lib/spin'
 
 if Gem::Specification.find_all_by_name('sys-proc').any?
