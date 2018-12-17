@@ -44,9 +44,7 @@ class Spin
 
   def initialize
     @container = self.class.const(:DI).container
-    if container.nil?
-      raise 'Container must be set'
-    end
+    raise 'Container must be set' if container.nil?
 
     setup!
   end
