@@ -30,6 +30,7 @@ class Spin
     Autoloadable: :autoloadable,
     Base: :base,
     Config: :config,
+    ConfigReader: :config_reader,
     Container: :container,
     Controller: :controller,
     Helpers: :helpers,
