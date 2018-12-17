@@ -120,10 +120,11 @@ class Spin
       super
     end
 
+    # Returns an array of the names of accessible constants.
+    #
+    # @return [Array<Symbol>]
     def constants
-      super.tap do |c|
-        c.push(:DI) unless c.include?(:DI)
-      end
+      super.push(:DI).uniq
     end
 
     def const_defined?(sym, inherit = true)
