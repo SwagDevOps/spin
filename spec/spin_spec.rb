@@ -18,25 +18,7 @@ end
 # class methods -----------------------------------------------------
 describe Spin, :spin do
   context '.constants' do
-    let(:expected) do
-      # @formatter:off
-      [:Container,
-       :Pathname,
-       :Controller,
-       :Helpers,
-       :Initializer,
-       :Setup,
-       :User,
-       :VERSION,
-       :Dotenv,
-       :Autoloadable,
-       :Base,
-       :Config,
-       :DI].sort
-      # @formatter:on
-    end
-
-    it { expect(described_class.constants.sort).to eq(expected) }
+    it { expect(described_class.constants).to include(:DI) }
   end
 end
 
