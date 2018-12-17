@@ -121,7 +121,9 @@ class Spin
     end
 
     def constants
-      super.push(:DI)
+      super.tap do |c|
+        c.push(:DI) unless c.include?(:DI)
+      end
     end
 
     def const_defined?(sym, inherit = true)
