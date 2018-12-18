@@ -8,6 +8,7 @@ group :default do
   gem 'bcrypt', '~> 3.1'
   gem 'dry-auto_inject', '~> 0.6', '>= 0.6.0'
   gem 'dry-container', '~> 0.6'
+  gem 'ice_nine', '~> 0.11'
   gem 'kamaze-version', '~> 1.0'
   gem 'sqlite3', '~> 1.3'
   gem 'tty-config', '~> 0.3'

@@ -35,6 +35,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("bcrypt", ["~> 3.1"])
   s.add_runtime_dependency("dry-auto_inject", [">= 0.6.0", "~> 0.6"])
   s.add_runtime_dependency("dry-container", ["~> 0.6"])
+  s.add_runtime_dependency("ice_nine", ["~> 0.11"])
   s.add_runtime_dependency("kamaze-version", ["~> 1.0"])
   s.add_runtime_dependency("sqlite3", ["~> 1.3"])
   s.add_runtime_dependency("tty-config", ["~> 0.3"])
