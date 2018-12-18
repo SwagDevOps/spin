@@ -14,6 +14,7 @@ class Spin::ConfigReader::Loader < TTY::Config
   autoload(:Erb, 'erb')
   autoload(:OpenStruct, 'ostruct')
   autoload(:Pathname, 'pathname')
+  autoload(:IceNine, 'ice_nine')
 
   attr_reader :paths
 
@@ -95,8 +96,9 @@ class Spin::ConfigReader::Loader < TTY::Config
 
       OpenStruct.new(input.each_with_object({}) do |(key, val), h|
         h[key.to_sym] = val.is_a?(Hash) ? __send__(__callee__, val) : val
-        h[key.to_sym].freeze if frozen
-      end).freeze
+      end).tap do |struct|
+        IceNine.deep_freeze(struct) if frozen
+      end
     end
   end
 end
