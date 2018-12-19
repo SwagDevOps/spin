@@ -44,14 +44,14 @@ class Spin::ConfigReader < Array
   protected
 
   # @type [Cache]
-  # @return [Cache]
+  # @return [Cache{Symobol => OpenStruct}]
   attr_accessor :cache
 
   # @param [String] base
   #
   # @return [Spin::ConfigReader::Loader|nil]
   def read(base)
-    self.load_as(base).to_recursive_ostruct
+    self.load_as(base)
   rescue TTY::Config::ReadError
     nil
   end
@@ -68,7 +68,7 @@ class Spin::ConfigReader < Array
     end
 
     unless cache.key?(filename)
-      cache[filename] = Loader.new(self, filename)
+      cache[filename] = Loader.new(self, filename).to_recursive_ostruct
     end
 
     cache.fetch(filename)
