@@ -20,7 +20,13 @@ class Spin::ConfigReader < Array
 
   # @param [Array<String>] paths
   def initialize(paths)
-    paths.to_a.each { |path| self.push(Pathname.new(path)) }
+    paths.to_a.each do |path|
+      ENV['APP_ENV'].tap do |env|
+        self.push(Pathname.new(path).join(env)) if env
+      end
+
+      self.push(Pathname.new(path))
+    end
 
     self.cache = Cache.new
   end
