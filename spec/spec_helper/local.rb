@@ -24,13 +24,31 @@ module Local
     @silence_stream_mutex.synchronize do
       begin
         old_stream = stream.dup
+        # formatter:off
         (RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ? 'NUL:' : '/dev/null')
           .tap { |stream_null| stream.reopen(stream_null) }
+        # @formatter:on
         stream.sync = true
         yield
       ensure
         stream.reopen(old_stream)
         old_stream.close
+      end
+    end
+  end
+
+  # @param env [Hash]
+  def with_env(env)
+    @env_mutex ||= Mutex.new
+
+    @env_mutex.synchronize do
+      begin
+        original_env = ENV.to_hash
+        ENV.replace(env)
+
+        yield
+      ensure
+        ENV.replace(original_env)
       end
     end
   end
