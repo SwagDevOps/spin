@@ -172,7 +172,7 @@ GEM
       ripl-multi_line (>= 0.2.4)
       ripl-rack (>= 0.2.0)
       sinatra (>= 1.2.1)
-    unicode-display_width (1.4.0)
+    unicode-display_width (1.4.1)
     unicode_utils (1.4.0)
     warden (1.2.8)
       rack (>= 2.0.6)
