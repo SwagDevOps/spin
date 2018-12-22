@@ -10,7 +10,7 @@ require_relative '../spin'
 require 'tty/config'
 
 # Reader for config
-class Spin::ConfigReader < Array
+class Spin::ConfigReader
   # @formatter:off
   {
     Cache: :cache,
@@ -19,12 +19,12 @@ class Spin::ConfigReader < Array
   }.each { |k, v| autoload(k, "#{__dir__}/config_reader/#{v}") }
   # @formatter:on
 
+  # @return [Path]
+  attr_reader :paths
+
   # @param [Array<String>] paths
   def initialize(paths)
-    Path.new(paths).to_a.each do |path|
-      self.push(path)
-    end
-
+    self.paths = Path.new(paths)
     self.cache = Cache.new
   end
 
@@ -44,11 +44,17 @@ class Spin::ConfigReader < Array
     end
   end
 
+  def to_a
+    self.paths.to_a
+  end
+
   protected
 
   # @type [Cache]
   # @return [Cache{Symobol => OpenStruct}]
   attr_accessor :cache
+
+  attr_writer :paths
 
   # @param [String] base
   #
@@ -71,7 +77,7 @@ class Spin::ConfigReader < Array
     end
 
     unless cache.key?(filename)
-      cache[filename] = Loader.new(self, filename).to_recursive_ostruct
+      cache[filename] = Loader.new(self.paths, filename).to_recursive_ostruct
     end
 
     cache.fetch(filename)
