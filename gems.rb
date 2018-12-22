@@ -10,7 +10,6 @@ group :default do
   gem 'dry-container', '~> 0.6'
   gem 'ice_nine', '~> 0.11'
   gem 'kamaze-version', '~> 1.0'
-  gem 'sqlite3', '~> 1.3'
   gem 'tty-config', '~> 0.3'
 end
 
@@ -37,9 +36,11 @@ group :development do
   gem 'erubi', '~> 1.7'
   gem 'hanami-helpers', '~> 1.3'
   gem 'rack_csrf', '~> 2.6'
-  gem 'sinatra-contrib', '= 2.0.2'
-  gem 'sinatra-flash', '~> 0.3'
+  gem 'sqlite3', '~> 1.3'
   gem 'warden'
+  # sinatra ------------------------------
+  gem 'sinatra-contrib', '= 2.0.5'
+  gem 'sinatra-flash', '~> 0.3'
 end
 
 group :test do
