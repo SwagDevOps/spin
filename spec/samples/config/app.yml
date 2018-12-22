@@ -4,8 +4,14 @@ math:
   E: 2.718
   SQRT1_2: 0.707
 heroes:
-  - Jack 'King' Kirby
-  - Umberto Eco
-  - Mary Berry
-  - Mary Berry
+  - "Jack 'King' Kirby"
+  - "Umberto Eco"
+  - "Mary Berry"
+  - "Kraftwerk"
+  - "Velma"
+  - "Neil Gaiman"
+  - "Sarah Lamb"
+  - "George Takei"
+  - "Fiona Staples"
+  - "Steve Jobs"
 

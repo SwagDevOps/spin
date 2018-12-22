@@ -4,6 +4,7 @@
 describe Spin::ConfigReader, :'spin/config_reader' do
   it { expect(described_class).to be_const_defined(:Cache) }
   it { expect(described_class).to be_const_defined(:Loader) }
+  it { expect(described_class).to be_const_defined(:Path) }
 end
 
 describe Spin::ConfigReader, :'spin/config_reader' do
@@ -49,7 +50,7 @@ describe Spin::ConfigReader, :'spin/config_reader' do
   end
 end
 
-# all values should be frozen ---------------------------------------
+# all (string) values should be frozen ---------------------------------------
 describe Spin::ConfigReader, :'spin/config_reader' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
   let(:subject) { described_class.new(paths) }
@@ -74,7 +75,7 @@ describe Spin::ConfigReader, :'spin/config_reader', :wip do
   it { expect(subject).to respond_to(:get) }
 
   context '.get' do
+    it { expect(subject.get('app.version')).to be_frozen }
     it { expect(subject.get('app.version')).to be_a(OpenStruct) }
-    it { expect(subject.get('app.math')).to be_a(OpenStruct) }
   end
 end
