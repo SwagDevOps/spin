@@ -1,49 +1,24 @@
 # frozen_string_literal: true
 
-require 'spin/controller/base'
-require_relative '../controller'
+require_relative './base'
+require 'spin/controller/authenticable'
 
 # Auth controller
-class WebApp::Controller::Auth < WebApp::Base
-  get '/login' do
-    session[:return_to] = nil if session[:return_to] == '/login'
-    redirect(session[:return_to] || '/protected') if current_user
+class WebApp::Controller::Auth < WebApp::Controller::Base
+  include Spin::Controller::Authenticable
 
-    erb :login
-  end
-
-  post '/login' do
-    self.authenticate!
-
-    flash[:success] = 'Logged in!'
-    redirect(session[:return_to] || '/protected')
-  end
-
-  get '/logout' do
-    env['warden'].logout
-
-    'Successfully logged out'.tap do |msg|
-      flash[:success] = 'Successfully logged out'
-      logger.info(msg)
+  class << self
+    def urls
+      super.merge(
+        protected: '/protected',
+        success_login: '/protected'
+      )
     end
-
-    redirect '/'
   end
 
-  post '/unauthenticated' do
-    redirect '/' unless env['warden.options']
+  authenticable!
 
-    session[:return_to] = env['warden.options'][:attempted_path]
+  get(urls.fetch(:protected)) { erb :protected }
 
-    flash[:error] = env['warden'].message || 'You must log in'
-    redirect '/login'
-  end
-
-  get '/protected' do
-    erb :protected
-  end
-
-  before %r{/protected} do
-    authenticate!
-  end
+  before(/#{urls.fetch(:protected)}/) { authenticate! }
 end

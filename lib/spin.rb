@@ -20,28 +20,32 @@ require 'dry/auto_inject'
 # ```
 class Spin
   require_relative 'spin/bundled'
-  autoload(:Dotenv, 'dotenv')
 
+  autoload(:Dotenv, 'dotenv')
+  autoload(:Pathname, 'pathname')
+
+  # @formatter:off
   {
     VERSION: :version,
     Autoloadable: :autoloadable,
     Base: :base,
     Config: :config,
+    ConfigReader: :config_reader,
     Container: :container,
     Controller: :controller,
+    Helpers: :helpers,
     Initializer: :initializer,
     Setup: :setup,
     User: :user,
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
+  # @formatter:on
 
   # @return [Spin::Container]
   attr_reader :container
 
   def initialize
-    @container = self.class.const(:Import).container
-    if container.nil?
-      raise 'Container must be set'
-    end
+    @container = self.class.const(:DI).container
+    raise 'Container must be set' if container.nil?
 
     setup!
   end
@@ -50,6 +54,7 @@ class Spin
   def setup!
     self.tap do
       Dotenv.load
+      Setup.new(container).call
       Setup.new(container, :base_class).call
       Initializer.new(container).call
 
@@ -103,13 +108,26 @@ class Spin
     end
 
     def const_missing(name)
-      if name.to_sym == :Import
+      if name.to_sym == :DI
         self.container_builder.call.tap do |container|
           self.const_set(name, Dry::AutoInject(container))
 
           return self.const_get(name)
         end
       end
+
+      super
+    end
+
+    # Returns an array of the names of accessible constants.
+    #
+    # @return [Array<Symbol>]
+    def constants
+      super.push(:DI).uniq
+    end
+
+    def const_defined?(sym, inherit = true)
+      const_missing(sym) if sym == :DI and !super
 
       super
     end

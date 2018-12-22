@@ -6,6 +6,7 @@
 /build/
 /cache/
 /config/*.yml
+/coverage/
 /doc/
 /log/
 /mix-manifest.json

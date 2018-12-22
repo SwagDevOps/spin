@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 # vim: ai ts=2 sts=2 et sw=2 ft=ruby
 
+if ENV['coverage'] and Gem::Specification.find_all_by_name('simplecov').any?
+  require 'simplecov'
+
+  SimpleCov.start do
+    add_filter 'rake/'
+    add_filter 'spec/'
+  end
+end
+
 require_relative 'lib/spin'
 
 if Gem::Specification.find_all_by_name('sys-proc').any?
@@ -18,6 +27,7 @@ if Gem::Specification.find_all_by_name('kamaze-project').any?
       project.name    = 'spin'
       project.tasks   = [
         'cs:correct', 'cs:control', 'cs:pre-commit',
+        'doc', 'doc:watch',
         'gem',
         'misc:gitignore',
         'shell',
@@ -30,5 +40,6 @@ if Gem::Specification.find_all_by_name('kamaze-project').any?
   task default: [:gem]
 end
 
-require_relative 'rake/assets'
-require_relative 'rake/serve'
+[:assets, :serve, :clobber].each do |t|
+  require_relative "rake/#{t}"
+end

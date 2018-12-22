@@ -7,6 +7,7 @@
 # There is NO WARRANTY, to the extent permitted by law.
 
 require_relative '../spin'
+require 'dry/inflector'
 
 # Setup loader
 class Spin::Setup < Array
@@ -19,10 +20,12 @@ class Spin::Setup < Array
 
   # @param [Spin::Container] container
   # @param [String] target
-  def initialize(container, target)
+  def initialize(container, target = nil)
     @container = container
-    @loader = container[target.to_sym]
-    @target = target.to_s.gsub(/_class$/, '')
+    @loader = container[target.to_sym] if target
+    @loader ||= container
+
+    self.target = target
 
     container[:paths].to_a.map { |fp| Pathname.new(fp) }.tap do |paths|
       self.push(*paths)
@@ -61,7 +64,7 @@ class Spin::Setup < Array
   #
   # @return [self]
   def call
-    self.loader.__send__('container=', self.container)
+    loader.__send__('container=', self.container) if loader != container
 
     self.tap do
       files.each do |file|
@@ -78,6 +81,11 @@ class Spin::Setup < Array
   #
   # @return [Class]
   attr_reader :loader
+
+  # @param [String|Symbol] target
+  def target=(target)
+    @target = (target ? target.to_s.gsub(/_class$/, '') : :container).to_s
+  end
 
   # Load given file.
   #

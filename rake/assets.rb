@@ -2,7 +2,6 @@
 
 require 'shellwords'
 require 'fileutils'
-require 'rake/clean'
 
 webpack = 'node_modules/webpack/bin/webpack.js'
 config  = 'node_modules/webpack-mix/setup/webpack.config.js'
@@ -15,8 +14,6 @@ handler = lambda do |task, args, cmd = command|
   sh({ 'NODE_ENV' => env }, Shellwords.join(cmd), verbose: false)
   task.reenable
 end
-
-CLOBBER.push('public')
 
 desc 'Build assets'
 task :assets, [:environment] do |task, args|

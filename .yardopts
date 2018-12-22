@@ -1,5 +1,6 @@
 # vim: ft=sh
 
+dev/**/*.rb                                   \
 lib/**/*.rb                                   \
     --no-progress                             \
     --markup-provider 'redcarpet'             \

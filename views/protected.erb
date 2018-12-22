@@ -1,15 +1,9 @@
-<div class="container">
-    <%= erb :'partials/banner' %>
+<h2>Protected Page</h2>
 
-    <div class="col-md-8 col-md-offset-2">
-        <h2>Protected Page</h2>
+<div class="content full">
+    <p>
+        This page requires to be logged in.
+    </p>
 
-        <div class="content full">
-            <p>
-                This page requires to be logged in.
-            </p>
-
-            <%= html.pre(JSON.pretty_generate(session.to_h), class: 'code json') %>
-        </div>
-    </div>
+    <%= html.pre(JSON.pretty_generate(session.to_h), class: 'code json') %>
 </div>

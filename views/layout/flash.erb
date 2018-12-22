@@ -1,0 +1,11 @@
+<% # @see https://foundation.zurb.com/building-blocks/blocks/alerts-fancy.html %>
+
+<% flash.keys.each do |type| %>
+    <div data-closable class="alert-box callout <%= type %>">
+        <%= h(flash[type]) %>
+
+        <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+            <span aria-hidden="true">&CircleTimes;</span>
+        </button>
+    </div>
+<% end %>
