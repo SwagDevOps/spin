@@ -15,17 +15,14 @@ class Spin::ConfigReader < Array
   {
     Cache: :cache,
     Loader: :loader,
+    Path: :path,
   }.each { |k, v| autoload(k, "#{__dir__}/config_reader/#{v}") }
   # @formatter:on
 
   # @param [Array<String>] paths
   def initialize(paths)
-    paths.to_a.each do |path|
-      ENV['APP_ENV'].tap do |env|
-        self.push(Pathname.new(path).join(env)) if env
-      end
-
-      self.push(Pathname.new(path))
+    Path.new(paths).to_a.each do |path|
+      self.push(path)
     end
 
     self.cache = Cache.new
