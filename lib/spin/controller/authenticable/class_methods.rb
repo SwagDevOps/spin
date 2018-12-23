@@ -67,7 +67,7 @@ module Spin::Controller::Authenticable
       controller.tap do |c|
         c.authenticate!
 
-        c.flash[:success] = 'Logged in!'
+        c.flash[:success] = 'Successfully logged in'
         c.redirect(c.session[:return_to] || urls.fetch(:success_login))
       end
     end
@@ -77,7 +77,7 @@ module Spin::Controller::Authenticable
         c.env['warden'].logout
 
         'Successfully logged out'.tap do |msg|
-          c.flash[:success] = msg
+          c.flash[:info] = msg
           c.logger.info(msg)
         end
 
@@ -92,7 +92,7 @@ module Spin::Controller::Authenticable
           c.session[:return_to] = options[:attempted_path]
         end
 
-        c.flash[:error] = c.env['warden'].message || 'You must log in'
+        c.flash[:warning] = c.env['warden'].message || 'You must log in'
 
         c.redirect(urls.fetch(:login))
       end
