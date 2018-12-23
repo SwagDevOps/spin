@@ -7,6 +7,7 @@
 # There is NO WARRANTY, to the extent permitted by law.
 
 require_relative '../config_reader'
+require 'forwardable'
 require 'tty/config'
 
 # Config reader
@@ -15,6 +16,10 @@ class Spin::ConfigReader::Loader < TTY::Config
   autoload(:Pathname, 'pathname')
 
   attr_reader :paths
+
+  extend Forwardable
+
+  def_delegators(:to_h, :each, :'[]', :fetch)
 
   def initialize(filename, *paths, **settings)
     super(settings)
@@ -42,23 +47,13 @@ class Spin::ConfigReader::Loader < TTY::Config
     super(other_settings.nil? ? {} : other_settings)
   end
 
-  def to_h
+  def to_hash
     read unless self.read?
 
     super
   end
 
-  def fetch(*args)
-    self.to_h.fetch(*args)
-  end
-
-  def [](key)
-    self.to_h[key]
-  end
-
-  def each(&block)
-    to_h.each(&block)
-  end
+  alias to_h to_hash
 
   # @api private
   def unmarshal(file, format: :auto)
