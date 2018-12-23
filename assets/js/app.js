@@ -1,5 +1,4 @@
 'use strict'
 
-import foundation from './app/foundation.js'
-
-foundation()
+import 'bootstrap/js/src/alert'
+import 'bootstrap/js/src/button'
