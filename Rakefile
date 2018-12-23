@@ -40,6 +40,6 @@ if Gem::Specification.find_all_by_name('kamaze-project').any?
   task default: [:gem]
 end
 
-[:assets, :serve, :clobber].each do |t|
+[:assets, :package, :serve, :clobber].each do |t|
   require_relative "rake/#{t}"
 end

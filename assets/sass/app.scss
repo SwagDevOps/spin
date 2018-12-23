@@ -2,19 +2,17 @@
  * -------------------------- */
 $fa-font-path: '/fonts';
 $fa-css-prefix: 'fa';
-$global-flexbox: true;
+$roboto-font-path: $fa-font-path + '/';
+$image-path: '/images/';
 
 /* Modules
  * -------------------------- */
 @import '~font-awesome/scss/font-awesome';
 
-/* Foundation
- * -------------------------- */
-@import '~foundation-sites/scss/foundation';
-@include foundation-everything;
-@include foundation-flex-grid;
-@include foundation-flex-classes;
+
 
 /* App
  * -------------------------- */
-@import 'app/breakpoint';
+@import 'app/main';
+
+

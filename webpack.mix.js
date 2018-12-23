@@ -45,11 +45,19 @@ const paths = {
 const copiables = [
   [path.join(sourcePath, 'images/favicon.png'), path.join(publicPath, 'favicon.ico')],
   [path.join(sourcePath, 'images'), paths.images],
-  ['node_modules/font-awesome/fonts/', paths.fonts]
+  ['node_modules/font-awesome/fonts/', paths.fonts],
+  ['node_modules/mdbootstrap/font/roboto', paths.fonts],
+  ['node_modules/mdbootstrap/img/', paths.images]
 ]
 
 const config = {
   devtool: 'source-map',
+  resolve: {
+    modules: [
+      path.resolve('./assets/js'),
+      path.resolve('./node_modules')
+    ]
+  },
   plugins: [
     new Clean(copiables.map(x => x[1]), { verbose: true }),
     new VersionFile({

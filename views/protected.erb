@@ -1,9 +1,15 @@
-<h2>Protected Page</h2>
+<div class="col-md-12 mb-4">
+    <div class="card mb-4 wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+        <div class="card-body">
+            <h2>Protected Page</h2>
 
-<div class="content full">
-    <p>
-        This page requires to be logged in.
-    </p>
+            <div class="content full">
+                <p>
+                    This page requires to be logged in.
+                </p>
 
-    <%= html.pre(JSON.pretty_generate(session.to_h), class: 'code json') %>
+                <%= html.pre(JSON.pretty_generate(session.to_h), class: 'code json') %>
+            </div>
+        </div>
+    </div>
 </div>
