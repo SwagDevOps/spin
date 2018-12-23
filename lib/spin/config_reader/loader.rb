@@ -36,6 +36,12 @@ class Spin::ConfigReader::Loader < TTY::Config
     @read_count >= 1
   end
 
+  def merge(other_settings)
+    # avoid to raise ``TypeError`` from an empty file
+
+    super(other_settings.nil? ? {} : other_settings)
+  end
+
   def to_h
     read unless self.read?
 
