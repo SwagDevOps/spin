@@ -8,26 +8,22 @@
         <%= html.script(src: asset_url('/js/app.js')) %>
         <%= html.meta(name: 'csrf-token', content: csrf_token) %>
     </head>
-    <body>
+    <body class="grey lighten-3">
         <%= erb(:'layout/top-bar') %>
-        <div class="callout large primary">
-            <div class="row column text-center">
-                <h1>Our Blog</h1>
-            </div>
-        </div>
-        <section class="row">
-            <div class="columns">
-                <%= erb(:'layout/flash') %>
-            </div>
-        </section>
-        <section class="row" id="content">
-            <div class="medium-9 columns">
-                <section>
-                    <%= yield %>
+        <!--Main layout-->
+        <main class="mt-5 pt-5">
+            <div class="container">
+                <!--Section: Post-->
+                <section class="mt-4">
+                    <!--Grid row-->
+                    <div class="row">
+                        <%= erb(:'layout/flash') %>
+
+                        <%= yield %>
+                    </div>
                 </section>
             </div>
-            <%= erb(:'layout/sidebar') %>
-        </section>
+        </main>
         <%= erb(:'layout/footer') %>
     </body>
 </html>

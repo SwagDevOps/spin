@@ -1,33 +1,45 @@
-<h2>Sinatra Template Default Page</h2>
+<div class="col-md-8 mb-4">
+    <div class="card mb-4 wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+        <div class="card-body">
+            <h2>Sinatra Template Default Page</h2>
 
-<p>
-    Welcome to the Sinatra Template!
-    If you're seeing this page, then everything is working
-    as expected.
-    To get started, delete this file
-    (<code>app/views/welcome.erb</code>)
-    and begin adding
-    your own actions and controllers.
-    For more information, see the <code>README</code>.
-</p>
+            <p>
+                Welcome to the Sinatra Template!
+                If you're seeing this page, then everything is working
+                as expected.
+                To get started, delete this file
+                (<code>app/views/welcome.erb</code>)
+                and begin adding
+                your own actions and controllers.
+                For more information, see the <code>README</code>.
+            </p>
 
-<h3>Environment</h3>
-<ul>
-    <li>
-        <b>Ruby:</b>
-        <code><%= RUBY_VERSION %></code>
-    </li>
-    <li>
-        <b>Environment:</b>
-        <code><%= ENV["RACK_ENV"] %></code>
-    </li>
-    <li>
-        <b>Server:</b>
-        <code><%= @env["SERVER_SOFTWARE"] %></code>
-    </li>
-    <li>
-        <b>Port:</b>
-        <code><%= @env["SERVER_PORT"] %></code>
-    </li>
-</ul>
-
+            <h3>Environment</h3>
+            <ul>
+                <li>
+                    <b>Ruby:</b>
+                    <code><%= RUBY_VERSION %></code>
+                </li>
+                <li>
+                    <b>Environment:</b>
+                    <code><%= ENV["RACK_ENV"] %></code>
+                </li>
+                <li>
+                    <b>Server:</b>
+                    <code><%= @env["SERVER_SOFTWARE"] %></code>
+                </li>
+                <li>
+                    <b>Port:</b>
+                    <code><%= @env["SERVER_PORT"] %></code>
+                </li>
+                <li>
+                    <b>Sinatra:</b>
+                    <code><%= Sinatra::VERSION %></code>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-md-4 mb-4">
+    <%= erb(:'layout/sidebar') %>
+</div>
