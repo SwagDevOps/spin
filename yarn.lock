@@ -1116,6 +1116,11 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
+bootstrap@~4.2:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.2.1.tgz#8f8bdca024dbf0e8644da32e918c8a03a90a5757"
+  integrity sha512-tt/7vIv3Gm2mnd/WeDx36nfGGHleil0Wg8IeB7eMrVkY0fZ5iTaBisSh8oNANc2IBsCc6vCgCNTIM/IEN0+50Q==
+
 brace-expansion@^1.1.7:
   version "1.1.11"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.11.tgz#3c7fcbf529d87226f3d2f52b966ff5271eb441dd"
@@ -3572,11 +3577,6 @@ forwarded@~0.1.2:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
 
-foundation-sites@~6.5:
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.5.1.tgz#a96da2da2dc81b84ff7730714ca1090445de4a42"
-  integrity sha512-Z+FiBvogwIDjRlefJ5pYkVcmsGx3pbndRJ80+OvPvI9UwfKCif6YtOyTxpCjUoS3XBlOms5vYonfnasp2V2wZw==
-
 fragment-cache@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/fragment-cache/-/fragment-cache-0.2.1.tgz#4290fad27f13e89be7f33799c6bc5a0abfff0d19"
@@ -5461,6 +5461,11 @@ md5@^2.2.1:
     charenc "~0.0.1"
     crypt "~0.0.1"
     is-buffer "~1.1.1"
+
+mdbootstrap@*:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/mdbootstrap/-/mdbootstrap-4.6.0.tgz#47387ee2dc8355a6b060f2fe01e9e893a00c585a"
+  integrity sha512-IrgRzd6Chya61iYzUHiu/2hGQQPFx7miuwWrTgvw9d6S7M/RlsoEctOw4Fg7mVhJmphFoqauIhwvNNrp+en4rQ==
 
 mdn-data@~1.1.0:
   version "1.1.4"
@@ -7896,6 +7901,11 @@ split-string@^3.0.1, split-string@^3.0.2:
   integrity sha512-NzNVhJDYpwceVVii8/Hu6DKfD2G+NrQHlS/V/qgv763EYudVwEcMQNxd2lh+0VrUByXN/oJkl5grOhYWvQUYiw==
   dependencies:
     extend-shallow "^3.0.0"
+
+sprintf-js@*:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.2.tgz#da1765262bf8c0f571749f2ad6c26300207ae673"
+  integrity sha512-VE0SOVEHCk7Qc8ulkWw3ntAzXuqf7S2lvwQaDLRnUeIEaKNQJzV6BwmLKhOqT61aGhfUMrXeaBk+oDGCzvhcug==
 
 sprintf-js@~1.0.2:
   version "1.0.3"
