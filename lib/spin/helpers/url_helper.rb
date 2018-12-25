@@ -11,7 +11,7 @@ module Spin::Helpers::UrlHelper
   # the current domain (the default), or <code>:full_url</code>, which will
   # include the site name and port number.  The latter is typically necessary
   # for links in RSS feeds.
-  def url_for(url_fragment, path_only = true)
+  def url_for(url_fragment, path_only: true)
     url_fragment = url_fragment.gsub(%r{^/}, '')
     ports = [['http', 80], ['https', 443]]
     # @formatter:off
