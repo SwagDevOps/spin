@@ -5,6 +5,9 @@ require_relative '../helpers'
 # Provides useful methods related to assets
 #
 # ``asset_url`` provides cache busting URLs
+#
+# @see Sinatra::Base.public_dir
+# @see https://github.com/sinatra/sinatra/blob/7a5c499f0e6099137fd1cb4ee20178af2a125d47/lib/sinatra/base.rb#L1378
 module Spin::Helpers::AssetsHelper
   autoload(:Pathname, 'pathname')
   autoload(:URI, 'uri')
@@ -36,10 +39,12 @@ module Spin::Helpers::AssetsHelper
     end
   end
 
-  # @return [Time]
+  # @return [Time|nil]
   def asset_mtime
-    Pathname.new('public/version.json').tap do |version_file|
-      return version_file.file? ? version_file.mtime : nil
+    'version.json'.tap do |version_file|
+      Pathname.new(self.class.public_dir).join(version_file).tap do |file|
+        return file.file? ? file.mtime : nil
+      end
     end
   end
 
@@ -47,8 +52,8 @@ module Spin::Helpers::AssetsHelper
   #
   # @return [Pathname]
   def asset_path(*args)
-    (['public'] + args).map { |fp| fp.to_s.gsub(%r{^/*}, '') }.tap do |parts|
-      return Pathname.new(Dir.pwd).join(*parts)
+    args.map { |fp| fp.to_s.gsub(%r{^/*}, '') }.tap do |parts|
+      return Pathname.new(self.class.public_dir).join(*parts)
     end
   end
 end
