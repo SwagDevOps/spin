@@ -14,4 +14,18 @@ require 'dry/container'
 # @see https://dry-rb.org/gems/dry-auto_inject/
 class Spin::Container < Dry::Container
   extend Dry::Container::Mixin
+
+  def register(key, contents = nil, options = {}, &block)
+    if self.key?(key)
+      Dry::Container.new.tap do |container|
+        container.register(key, contents, options, &block)
+
+        return self.merge(container)
+      end
+    end
+
+    super
+  end
+
+  alias_method '[]=', 'register'
 end
