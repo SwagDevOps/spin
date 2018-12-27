@@ -35,6 +35,7 @@ class Spin
     Controller: :controller,
     Helpers: :helpers,
     Initializer: :initializer,
+    Injectable: :injectable,
     Setup: :setup,
     User: :user,
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
