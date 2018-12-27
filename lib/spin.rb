@@ -54,7 +54,6 @@ class Spin
   def setup!
     self.tap do
       Dotenv.load
-      Setup.new(container).call
       Setup.new(container, :base_class).call
       Initializer.new(container).call
 
@@ -77,6 +76,12 @@ class Spin
   end
 
   class << self
+    def inherited(subclass)
+      super.tap do
+        $INJECTOR = -> { subclass.const_get(:DI) }
+      end
+    end
+
     def const(const_name)
       const_name.to_s.gsub(/^::/, '').tap do |name|
         return Object.const_get("::#{self.name}::#{name}")
@@ -92,7 +97,9 @@ class Spin
           c.register(:base_class, self.const(:Base))
           c.register(:config, config_builder.call)
           c.register(:controller_class, self.const(:Controller))
-        end
+
+          Setup.new(c).call
+        end.freeze
       end
     end
 
@@ -110,9 +117,9 @@ class Spin
     def const_missing(name)
       if name.to_sym == :DI
         self.container_builder.call.tap do |container|
-          self.const_set(name, Dry::AutoInject(container))
-
-          return self.const_get(name)
+          return Dry::AutoInject(container)
+          # self.const_set(name, Dry::AutoInject(container))
+          # return self.const_get(name)
         end
       end
 
@@ -127,7 +134,8 @@ class Spin
     end
 
     def const_defined?(sym, inherit = true)
-      const_missing(sym) if sym == :DI and !super
+      # const_missing(sym) if sym == :DI and !super
+      return true if sym == :DI
 
       super
     end

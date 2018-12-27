@@ -2,3 +2,6 @@
 inherit_gem:
   kamaze-project:
     - .rubocop.yml
+GlobalVars:
+  AllowedVariables:
+    - $INJECTOR
