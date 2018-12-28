@@ -9,7 +9,9 @@ group :default do
   gem 'dry-auto_inject', '~> 0.6', '>= 0.6.0'
   gem 'dry-container', '~> 0.6'
   gem 'ice_nine', '~> 0.11'
+  gem 'image_size', '~> 2.0'
   gem 'kamaze-version', '~> 1.0'
+  gem 'moneta', '~> 1.0'
   gem 'tty-config', '~> 0.3'
 end
 
@@ -33,7 +35,7 @@ group :development do
   gem 'shotgun', '~> 0.9'
   # optional support ---------------------
   gem 'dotenv', '~> 2.5'
-  gem 'erubi', '~> 1.7'
+  gem 'erubi', '~> 1.8'
   gem 'hanami-helpers', '~> 1.3'
   gem 'rack_csrf', '~> 2.6'
   gem 'sqlite3', '~> 1.3'
