@@ -6,6 +6,7 @@ source 'https://rubygems.org'
 
 group :default do
   gem 'bcrypt', '~> 3.1'
+  gem 'concurrent-ruby', '~> 1.0'
   gem 'dry-auto_inject', '~> 0.6', '>= 0.6.0'
   gem 'dry-container', '~> 0.6'
   gem 'ice_nine', '~> 0.11'
