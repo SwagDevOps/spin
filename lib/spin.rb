@@ -23,6 +23,7 @@ class Spin
 
   autoload(:Dotenv, 'dotenv')
   autoload(:Pathname, 'pathname')
+  autoload(:Concurrent, 'concurrent')
 
   # @formatter:off
   {
@@ -62,24 +63,12 @@ class Spin
     end
   end
 
-  # Use ``container`` to respond to missing nethods.
-  #
-  # @param [Symbol] method
-  # @param [Array] args
-  #
-  # @return [Mixed]
-  def method_missing(method, *args, &block)
-    respond_to_missing?(method) ? self.container[method.to_sym] : super
-  end
-
-  def respond_to_missing?(method, include_private = false)
-    container.key?(method.to_sym) || super(method, include_private)
-  end
-
   class << self
     def inherited(subclass)
       super.tap do
         $INJECTOR = -> { subclass.const_get(:DI) }
+
+        subclass.const_set(:Base, Class.new(self::Base))
       end
     end
 
@@ -89,12 +78,18 @@ class Spin
       end
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+
+    # Get an instance of container from a lambda.
+    #
     # @return [Proc]
     def container_builder
       lambda do
         self.const(:Container).new.tap do |c|
-          c.register(:paths, self.paths)
           c.register(:entry_class, self)
+
+          c.register(:paths, self.paths)
+          c.register(:storage_path, Pathname.new(Dir.pwd).join('storage'))
           c.register(:base_class, self.const(:Base))
           c.register(:config, config_builder.call)
           c.register(:controller_class, self.const(:Controller))
@@ -103,6 +98,8 @@ class Spin
         end.freeze
       end
     end
+
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     # @return [Proc]
     def config_builder
@@ -116,13 +113,7 @@ class Spin
     end
 
     def const_missing(name)
-      if name.to_sym == :DI
-        self.container_builder.call.tap do |container|
-          return Dry::AutoInject(container)
-          # self.const_set(name, Dry::AutoInject(container))
-          # return self.const_get(name)
-        end
-      end
+      return injector if name.to_sym == :DI
 
       super
     end
@@ -147,6 +138,19 @@ class Spin
     def paths
       [Pathname.new(Dir.pwd).freeze,
        Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze].freeze
+    end
+
+    protected
+
+    # @return [Dry::AutoInject::Builder]
+    def injector
+      unless (@injectors ||= Concurrent::Hash.new).key?(self.name)
+        self.container_builder.call.tap do |container|
+          @injectors[self.name] = Dry::AutoInject(container)
+        end
+      end
+
+      @injectors[self.name]
     end
   end
 end

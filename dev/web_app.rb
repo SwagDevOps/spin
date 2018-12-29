@@ -10,11 +10,12 @@ class WebApp < Spin
     User: :user,
   }.each { |k, v| autoload k, "#{__dir__}/web_app/#{v}" }
 
-  class Base < Spin::Base
-    # Avoid to pollute original class
-  end
-
   class << self
+    # @return [WebApp::Controller]
+    def mount!
+      self.new.container[:controller_class].mount!
+    end
+
     def paths
       [Pathname.new(Dir.pwd),
        Pathname.new(__FILE__.gsub(/\.rb$/, '')),

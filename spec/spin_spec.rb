@@ -24,7 +24,11 @@ end
 
 # @see https://www.rubydoc.info/github/dry-rb/dry-auto_inject/master/Dry/AutoInject/Builder
 describe Class, :'spin/di' do
-  let(:subject) { Spin.const_get(:DI) }
+  let(:subject) do
+    silence_stream($stdout) do
+      Spin.const_get(:DI)
+    end
+  end
 
   it { expect(subject).to respond_to(:container) }
   it { expect(subject).to respond_to(:strategies) }
@@ -38,8 +42,17 @@ describe Spin, :spin do
   end
 
   it { expect(subject).to respond_to(:container) }
+end
 
-  # missing methods
-  it { expect(subject).to respond_to(:paths) }
-  it { expect(subject).to respond_to(:controller_class) }
+# testing inheritance
+#
+# ``Base`` SHOULD be inherited as a class constant,
+# specific to each class, avoiding to pollute each other.
+# -------------------------------------------------------------------
+describe Class.new(Spin)::Base, :spin, :'spin/base' do
+  it { expect(described_class).not_to eq(Spin::Base) }
+
+  context '.ancestors' do
+    it { expect(described_class.ancestors).to include(Spin::Base) }
+  end
 end
