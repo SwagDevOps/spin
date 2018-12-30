@@ -23,16 +23,18 @@ describe Spin, :spin do
 end
 
 # @see https://www.rubydoc.info/github/dry-rb/dry-auto_inject/master/Dry/AutoInject/Builder
-describe Class, :'spin/di' do
-  let(:subject) do
-    silence_stream($stdout) do
-      Spin.const_get(:DI)
+describe Spin, :spin, :'spin/di' do
+  context '::DI' do
+    let(:subject) do
+      silence_stream($stdout) do
+        described_class.const_get(:DI)
+      end
     end
-  end
 
-  it { expect(subject).to respond_to(:container) }
-  it { expect(subject).to respond_to(:strategies) }
-  it { expect(subject).to respond_to(:'[]') }
+    it { expect(subject).to respond_to(:container) }
+    it { expect(subject).to respond_to(:strategies) }
+    it { expect(subject).to respond_to(:'[]') }
+  end
 end
 
 # instance methods --------------------------------------------------
@@ -42,6 +44,18 @@ describe Spin, :spin do
   end
 
   it { expect(subject).to respond_to(:container) }
+end
+
+# const_missing -----------------------------------------------------
+describe Spin, :spin do
+  context '.const_get' do
+    it do
+      # @formatter:off
+      expect { described_class.const_get(:InexistingConstant) }
+        .to raise_error(NameError)
+      # @formatter:on
+    end
+  end
 end
 
 # testing inheritance
