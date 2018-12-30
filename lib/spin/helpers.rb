@@ -6,6 +6,7 @@ require_relative '../spin'
 module Spin::Helpers
   {
     AssetsHelper: :assets_helper,
+    ErbCacheHelper: :erb_cache_helper,
     PageTitleHelper: :page_title_helper,
     UrlHelper: :url_helper,
   }.each { |k, v| autoload(k, "#{__dir__}/helpers/#{v}") }
@@ -15,6 +16,7 @@ module Spin::Helpers
       include UrlHelper
       include AssetsHelper
       include PageTitleHelper
+      include ErbCacheHelper
     end
   end
 end
