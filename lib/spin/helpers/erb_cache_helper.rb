@@ -31,7 +31,7 @@ module Spin::Helpers::ErbCacheHelper
 
   # @return [Spin::Cache]
   def erb_cache_instance(options = {})
-    Spin::Cache.new(:File, options.merge(dir: erb_cache_path))
+    Spin::Core::Cache.new(:File, options.merge(dir: erb_cache_path))
   end
 
   # @return [Pathname]

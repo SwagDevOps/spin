@@ -34,6 +34,7 @@ class Spin
     ConfigReader: :config_reader,
     Container: :container,
     Controller: :controller,
+    Core: :core,
     Helpers: :helpers,
     Initializer: :initializer,
     Injectable: :injectable,
