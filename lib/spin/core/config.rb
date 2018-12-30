@@ -6,17 +6,17 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../spin'
+require_relative '../core'
 require 'tty/config'
 
 # Reader for config
-class Spin::ConfigReader
+class Spin::Core::Config
   # @formatter:off
   {
     Cache: :cache,
     Loader: :loader,
     Path: :path,
-  }.each { |k, v| autoload(k, "#{__dir__}/config_reader/#{v}") }
+  }.each { |k, v| autoload(k, "#{__dir__}/config/#{v}") }
   # @formatter:on
 
   autoload(:IceNine, 'ice_nine')

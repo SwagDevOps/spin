@@ -6,14 +6,15 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../config_reader'
+require_relative '../config'
 require 'forwardable'
 require 'tty/config'
 
 # Config reader
-class Spin::ConfigReader::Loader < TTY::Config
+class Spin::Core::Config::Loader < TTY::Config
   autoload(:Erb, 'erb')
   autoload(:Pathname, 'pathname')
+  autoload(:Moneta, 'moneta')
 
   attr_reader :paths
 

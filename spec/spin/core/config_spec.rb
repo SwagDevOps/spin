@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 # constants ---------------------------------------------------------
-describe Spin::ConfigReader, :'spin/config_reader' do
+describe Spin::Core::Config, :'spin/core/config' do
   it { expect(described_class).to be_const_defined(:Cache) }
   it { expect(described_class).to be_const_defined(:Loader) }
   it { expect(described_class).to be_const_defined(:Path) }
 end
 
-describe Spin::ConfigReader, :'spin/config_reader' do
+describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
   let(:subject) { described_class.new(paths) }
 
@@ -27,7 +27,7 @@ describe Spin::ConfigReader, :'spin/config_reader' do
 end
 
 # paths should include ``APP_ENV`` ----------------------------------
-describe Spin::ConfigReader, :'spin/config_reader' do
+describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
   let(:subject) { described_class.new(paths) }
 
@@ -51,7 +51,7 @@ describe Spin::ConfigReader, :'spin/config_reader' do
 end
 
 # all (string) values should be frozen ---------------------------------------
-describe Spin::ConfigReader, :'spin/config_reader' do
+describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
   let(:subject) { described_class.new(paths) }
 
@@ -63,7 +63,7 @@ describe Spin::ConfigReader, :'spin/config_reader' do
 end
 
 # merging files by env ----------------------------------------------
-describe Spin::ConfigReader, :'spin/config_reader', :wip do
+describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
   let(:app_env) { 'test' }
   let(:subject) do
@@ -77,5 +77,28 @@ describe Spin::ConfigReader, :'spin/config_reader', :wip do
   context '.get' do
     it { expect(subject.get('app.version')).to be_frozen }
     it { expect(subject.get('app.version')).to be_a(OpenStruct) }
+  end
+end
+
+# using empty file --------------------------------------------------
+describe Spin::Core::Config, :'spin/core/config' do
+  let(:paths) { [SAMPLES_PATH.join('config')] }
+  let(:subject) { described_class.new(paths) }
+
+  context '.get' do
+    it { expect(subject.get('empty')).to be_frozen }
+    it { expect(subject.get('empty')).to be_a(OpenStruct) }
+  end
+end
+
+# using empty file --------------------------------------------------
+describe Spin::Core::Config, :'spin/core/config' do
+  let(:paths) { [SAMPLES_PATH.join('config')] }
+  let(:subject) { described_class.new(paths) }
+
+  context '.get' do
+    it do
+      expect { subject.get('sample/path') }.to raise_error(ArgumentError)
+    end
   end
 end

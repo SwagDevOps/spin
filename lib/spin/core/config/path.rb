@@ -6,10 +6,10 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../config_reader'
+require_relative '../config'
 
 # Array of paths
-class Spin::ConfigReader::Path < Array
+class Spin::Core::Config::Path < Array
   # @param [Array<String>] paths
   def initialize(paths)
     paths.to_a.each do |path|

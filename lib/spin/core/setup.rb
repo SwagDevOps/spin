@@ -6,11 +6,11 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../spin'
+require_relative '../core'
 require 'dry/inflector'
 
 # Setup loader
-class Spin::Setup < Array
+class Spin::Core::Setup < Array
   autoload :Pathname, 'pathname'
 
   # @return [String]

@@ -6,10 +6,10 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../config_reader'
+require_relative '../config'
 
 # Cache for config
-class Spin::ConfigReader::Cache < Hash
+class Spin::Core::Config::Cache < Hash
   def initialize
     super
   end

@@ -31,14 +31,12 @@ class Spin
     Autoloadable: :autoloadable,
     Base: :base,
     Config: :config,
-    ConfigReader: :config_reader,
     Container: :container,
     Controller: :controller,
     Core: :core,
     Helpers: :helpers,
     Initializer: :initializer,
     Injectable: :injectable,
-    Setup: :setup,
     User: :user,
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
   # @formatter:on
@@ -47,8 +45,11 @@ class Spin
   attr_reader :container
 
   def initialize
-    @container = self.class.const(:DI).container
-    raise 'Container must be set' if container.nil?
+    self.class.__send__(:const, :DI).container.tap do |container|
+      @container = container
+
+      raise 'Container must be set' if container.nil?
+    end
 
     setup!
   end
@@ -57,7 +58,7 @@ class Spin
   def setup!
     self.tap do
       Dotenv.load
-      Setup.new(container, :base_class).call
+      self.class.__send__(:setup, container, :base_class)
       Initializer.new(container).call
 
       container[:controller_class].__send__('config=', container[:config])
@@ -73,13 +74,7 @@ class Spin
       end
     end
 
-    def const(const_name)
-      const_name.to_s.gsub(/^::/, '').tap do |name|
-        return Object.const_get("::#{self.name}::#{name}")
-      end
-    end
-
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength
 
     # Get an instance of container from a lambda.
     #
@@ -95,12 +90,12 @@ class Spin
           c.register(:config, config_builder.call)
           c.register(:controller_class, self.const(:Controller))
 
-          Setup.new(c).call
+          self.setup(c)
         end.freeze
       end
     end
 
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength
 
     # @return [Proc]
     def config_builder
@@ -143,6 +138,12 @@ class Spin
 
     protected
 
+    def const(const_name)
+      const_name.to_s.gsub(/^::/, '').tap do |name|
+        return Object.const_get("::#{self.name}::#{name}")
+      end
+    end
+
     # @return [Dry::AutoInject::Builder]
     def injector
       unless (@injectors ||= Concurrent::Hash.new).key?(self.name)
@@ -152,6 +153,14 @@ class Spin
       end
 
       @injectors[self.name]
+    end
+
+    # @see Spin::Core::Setup
+    def setup(*args)
+      self.const('Core::Setup').tap do |klass|
+        # @type [Spin::Core::Setup] klass
+        return klass.new(*args).call
+      end
     end
   end
 end
