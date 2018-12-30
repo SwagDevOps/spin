@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'dev/web_app'
+Dir.chdir(__dir__) do
+  require_relative 'dev/web_app'
 
-run(WebApp.mount!)
+  run(WebApp.mount!)
+end
