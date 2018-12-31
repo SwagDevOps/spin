@@ -7,7 +7,6 @@
 # There is NO WARRANTY, to the extent permitted by law.
 
 require_relative '../core'
-require 'dry/inflector'
 
 # Setup loader
 class Spin::Core::Setup < Array
