@@ -9,7 +9,8 @@ require 'dry/inflector'
 #
 # @see https://www.oreilly.com/library/view/sinatra-up-and/9781449306847/ch04.html
 class Spin::Controller < Spin::Base
-  include Spin::Autoloadable
+  include Spin::Core::Autoloadable
+  include Spin::Core::Injectable
 
   autoload_self
 
