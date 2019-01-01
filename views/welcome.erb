@@ -1,5 +1,20 @@
 <div class="col-md-8 mb-4">
-    <div class="card mb-4 wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
+    <% erb_cache('welcome:featured_image', expires: 120) do %>
+        <div class="card mb-4 wow fadeIn" data-updated_at="<%= Time.now %>">
+            <%=
+                image = '/images/unsplash/rawpixel-678089.jpg'
+                size = image_size(image)
+
+                html.img(src: asset_url(image),
+                         class: 'img-fluid fadeIn animated wow',
+                         alt: nil,
+                         height: "#{size.height}",
+                         width: "#{size.width}")
+            %>
+        </div>
+    <% end %>
+
+    <div class="card mb-4 wow fadeIn">
         <div class="card-body">
             <h2>Sinatra Template Default Page</h2>
 

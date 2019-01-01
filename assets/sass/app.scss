@@ -8,11 +8,19 @@ $image-path: '/images/';
 /* Modules
  * -------------------------- */
 @import '~font-awesome/scss/font-awesome';
+@import '~animate.css/animate';
 
 
 
 /* App
  * -------------------------- */
 @import 'app/main';
+
+#alerts-container {
+  border: 1px solid transparent;
+  top: -1.75rem;
+  margin-bottom: -1.15rem;
+  overflow-x: hidden;
+}
 
 

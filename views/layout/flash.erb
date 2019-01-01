@@ -1,11 +1,13 @@
 <% unless flash.empty? %>
-    <% flash.each do |type, message| %>
-        <div class="alert alert-<%= type %> alert-dismissible fade show col-12" role="alert">
-            <%= h(message) %>
+    <div id="alerts-container" class="col-12">
+        <% flash.each do |type, message| %>
+            <div class="alert alert-<%= type %> alert-dismissible slideInRight wow" role="alert">
+                <%= h(message) %>
 
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    <% end %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <% end %>
+    </div>
 <% end %>
