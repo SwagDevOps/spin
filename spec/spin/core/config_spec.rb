@@ -102,3 +102,16 @@ describe Spin::Core::Config, :'spin/core/config' do
     end
   end
 end
+
+# using invalid file ------------------------------------------------
+describe Spin::Core::Config, :'spin/core/config' do
+  let(:paths) { [SAMPLES_PATH.join('config')] }
+  let(:subject) { described_class.new(paths) }
+
+  context '.get' do
+    it do
+      # Psych::SyntaxError
+      expect { subject.get('invalid_syntax') }.to raise_error(StandardError)
+    end
+  end
+end
