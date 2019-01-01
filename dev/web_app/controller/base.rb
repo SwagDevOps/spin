@@ -21,7 +21,26 @@ require_relative '../controller'
 #     super(app)
 #   end
 # end
+# ```
+#
+# or (using ``Injectable``):
+#
+# ```ruby
+# class WebApp::Controller::Sample < WebApp::Controller::Base
+#   include WebApp::Injectable
+#
+#   inject(:sample_service)
+#
+#   def initialize(app = nil, **options)
+#     @service = options[:sample_service]
+#
+#     super(app)
+#   end
+# end
+# ```
 class WebApp::Controller::Base < WebApp::Base
+  include WebApp::Core::Injectable
+
   # A new instance of Base.
   #
   # @param [WebApp::Controller|nil] app
