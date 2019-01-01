@@ -11,7 +11,7 @@ require_relative '../initializer'
 # Loader
 #
 # @see https://guides.rubyonrails.org/v2.3/configuring.html#using-initializers
-class Spin::Initializer::Loader < Array
+class Spin::Core::Initializer::Loader < Array
   # @param [Spin::Container] container
   def initialize(container)
     @container = container

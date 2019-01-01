@@ -2,9 +2,11 @@
 
 $LOAD_PATH.unshift(__dir__)
 
-require 'sinatra/base'
-require 'dry/inflector'
+require 'forwardable'
 require 'dry/auto_inject'
+require 'dry/inflector'
+
+# rubocop:disable Metrics/ClassLength
 
 # Base class
 #
@@ -21,9 +23,10 @@ require 'dry/auto_inject'
 class Spin
   require_relative 'spin/bundled'
 
-  autoload(:Dotenv, 'dotenv')
   autoload(:Pathname, 'pathname')
   autoload(:Concurrent, 'concurrent')
+
+  extend Forwardable
 
   # @formatter:off
   {
@@ -31,12 +34,9 @@ class Spin
     Autoloadable: :autoloadable,
     Base: :base,
     Config: :config,
-    Container: :container,
     Controller: :controller,
     Core: :core,
     Helpers: :helpers,
-    Initializer: :initializer,
-    Injectable: :injectable,
     User: :user,
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
   # @formatter:on
@@ -44,8 +44,12 @@ class Spin
   # @return [Spin::Container]
   attr_reader :container
 
+  (@delegables = [:resolve]).tap do |delegables|
+    def_delegators(*[self] + delegables)
+  end
+
   def initialize
-    self.class.__send__(:const, :DI).container.tap do |container|
+    resolve(:DI).container.tap do |container|
       @container = container
 
       raise 'Container must be set' if container.nil?
@@ -57,9 +61,8 @@ class Spin
   # @return [self]
   def setup!
     self.tap do
-      Dotenv.load
       self.class.__send__(:setup, container, :base_class)
-      Initializer.new(container).call
+      self.class.__send__(:init, container)
 
       container[:controller_class].__send__('config=', container[:config])
     end
@@ -70,6 +73,7 @@ class Spin
       super.tap do
         $INJECTOR = -> { subclass.const_get(:DI) }
 
+        subclass.def_delegators(*[subclass] + @delegables)
         subclass.const_set(:Base, Class.new(self::Base))
       end
     end
@@ -81,14 +85,14 @@ class Spin
     # @return [Proc]
     def container_builder
       lambda do
-        self.const(:Container).new.tap do |c|
+        resolve('core/container').new.tap do |c|
           c.register(:entry_class, self)
+          c.register(:base_class, self.const(:Base))
+          c.register(:controller_class, self.const(:Controller))
 
           c.register(:paths, self.paths)
           c.register(:storage_path, Pathname.new(Dir.pwd).join('storage'))
-          c.register(:base_class, self.const(:Base))
           c.register(:config, config_builder.call)
-          c.register(:controller_class, self.const(:Controller))
 
           self.setup(c)
         end.freeze
@@ -100,7 +104,7 @@ class Spin
     # @return [Proc]
     def config_builder
       lambda do
-        self.const(:Config).tap do |config_class|
+        resolve(:config).tap do |config_class|
           config_class.__send__('paths=', self.paths)
 
           return config_class.new
@@ -109,9 +113,7 @@ class Spin
     end
 
     def const_missing(name)
-      return injector if name.to_sym == :DI
-
-      super
+      name.to_sym == :DI ? injector : super
     end
 
     # Returns an array of the names of accessible constants.
@@ -122,10 +124,7 @@ class Spin
     end
 
     def const_defined?(sym, inherit = true)
-      # const_missing(sym) if sym == :DI and !super
-      return true if sym == :DI
-
-      super
+      sym == :DI ? true : super
     end
 
     # Paths where ``setup`` file are resolved.
@@ -136,8 +135,16 @@ class Spin
        Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze].freeze
     end
 
+    def resolve(name)
+      Dry::Inflector.new.camelize(name).tap do |const_name|
+        return self.const(const_name)
+      end
+    end
+
     protected
 
+    # @param [String|Symbol]
+    # @return [Class]
     def const(const_name)
       const_name.to_s.gsub(/^::/, '').tap do |name|
         return Object.const_get("::#{self.name}::#{name}")
@@ -162,5 +169,15 @@ class Spin
         return klass.new(*args).call
       end
     end
+
+    # @see Spin::Core::Initializer
+    def init(*args)
+      self.const('Core::Initializer').tap do |klass|
+        # @type [Spin::Core::Initializer] klass
+        return klass.new(*args).call
+      end
+    end
   end
 end
+
+# rubocop:enable Metrics/ClassLength

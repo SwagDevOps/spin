@@ -6,17 +6,18 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../spin'
+require_relative '../core'
 
 # Initializers loader
 #
 # After it loads the framework plus any gems and plugins,
 # ``Spin`` turns to loading initializers.
+#
 # An initializer is any file of ruby code stored under ``initializers``
 # in your application.
 # You can use initializers to hold configuration settings
 # that should be made after all of the frameworks and plugins are loaded.
-class Spin::Initializer < Array
+class Spin::Core::Initializer < Array
   autoload :Pathname, 'pathname'
   autoload :Loader, "#{__dir__}/initializer/loader"
 

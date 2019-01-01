@@ -6,14 +6,24 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../spin'
+require_relative '../core'
 require 'dry/container'
 
 # Container
 #
 # @see https://dry-rb.org/gems/dry-auto_inject/
-class Spin::Container < Dry::Container
+class Spin::Core::Container < Dry::Container
   extend Dry::Container::Mixin
+
+  def initialize(*)
+    if Gem::Specification.find_all_by_name('dotenv').any?
+      autoload(:Dotenv, 'dotenv')
+
+      Dotenv.load
+    end
+
+    super
+  end
 
   def register(key, contents = nil, options = {}, &block)
     if self.key?(key)

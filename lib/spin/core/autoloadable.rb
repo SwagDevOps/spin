@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative '../spin'
+require_relative '../core'
 require 'dry/inflector'
 
 # Provides automagic autoload.
-module Spin::Autoloadable
+module Spin::Core::Autoloadable
   class << self
     def included(base)
       base.extend(ClassMethods)

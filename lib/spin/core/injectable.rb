@@ -6,10 +6,10 @@
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-require_relative '../spin'
+require_relative '../core'
 
 # Cache for config
-module Spin::Injectable
+module Spin::Core::Injectable
   def self.included(base)
     base.extend(ClassMethods)
   end
