@@ -31,7 +31,7 @@ const mix = function () {
   mix.sourceMaps()
 }
 
-const sourcePath = path.join(__dirname, 'assets')
+const sourcePath = path.join(__dirname, 'resources/assets')
 
 const publicPath = path.join(__dirname, 'public')
 
@@ -54,8 +54,8 @@ const config = {
   devtool: 'source-map',
   resolve: {
     modules: [
-      path.resolve('./assets/js'),
-      path.resolve('./node_modules')
+      path.resolve(path.join(sourcePath, 'js')),
+      path.resolve(path.join(__dirname, 'node_modules'))
     ]
   },
   plugins: [

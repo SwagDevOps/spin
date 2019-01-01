@@ -3,4 +3,4 @@
 set(:root, Dir.pwd)
 set(:environment, (ENV['APP_ENV'] || :production).to_sym)
 set(:public_folder, "#{root}/public")
-set(:views, "#{root}/views")
+set(:views, "#{root}/resources/views")
