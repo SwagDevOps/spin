@@ -23,7 +23,7 @@ class Spin::Controller < Spin::Base
     # @return [self]
     def mount!
       Dry::Inflector.new.tap do |inf|
-        config.fetch('controllers', []).each do |name|
+        config&.fetch('controllers').to_a.each do |name|
           name = "#{self}::#{inf.camelize(name)}" unless name =~ /^[A-Z]/
 
           use Object.const_get(name)
@@ -35,7 +35,16 @@ class Spin::Controller < Spin::Base
 
     protected
 
-    # @type [Spin:;Config]
-    attr_accessor :config
+    # @type [Spin::Config]
+    attr_writer :config
+
+    # Get config.
+    #
+    # @return [Spin::Config|nil]
+    def config
+      # rubocop:disable Style/NilComparison
+      @config || (injector == nil ? nil : injector.container[:config])
+      # rubocop:enable Style/NilComparison
+    end
   end
 end

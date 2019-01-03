@@ -63,8 +63,6 @@ class Spin
     self.tap do
       self.class.__send__(:setup, container, :base_class)
       self.class.__send__(:init, container)
-
-      container[:controller_class].__send__('config=', container[:config])
     end
   end
 
