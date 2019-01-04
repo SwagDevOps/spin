@@ -6,8 +6,6 @@ require 'forwardable'
 require 'dry/auto_inject'
 require 'dry/inflector'
 
-# rubocop:disable Metrics/ClassLength
-
 # Base class
 #
 # Sample of use:
@@ -44,7 +42,7 @@ class Spin
   # @return [Spin::Container]
   attr_reader :container
 
-  (@delegables = [:resolve]).tap do |delegables|
+  (@delegables = [:build, :resolve]).tap do |delegables|
     def_delegators(*[self] + delegables)
   end
 
@@ -61,8 +59,8 @@ class Spin
   # @return [self]
   def setup!
     self.tap do
-      self.class.__send__(:setup, container, :base_class)
-      self.class.__send__(:init, container)
+      build(:setup, container, :base_class).call
+      build(:initializer, container).call
     end
   end
 
@@ -76,7 +74,7 @@ class Spin
       end
     end
 
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize:
 
     # Get an instance of container from a lambda.
     #
@@ -92,12 +90,12 @@ class Spin
           c.register(:storage_path, Pathname.new(Dir.pwd).join('storage'))
           c.register(:config, config_builder.call)
 
-          self.setup(c)
+          self.build(:setup, c).call
         end.freeze
       end
     end
 
-    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
     # @return [Proc]
     def config_builder
@@ -139,6 +137,16 @@ class Spin
       end
     end
 
+    # @see Spin::Core::Setup
+    # @see Spin::Core::Initializer
+    #
+    # @return [Spin::Core::Setup|Spin::Core::Initializer]
+    def build(type, *args)
+      resolve("core/#{type}").tap do |klass|
+        return klass.new(*args)
+      end
+    end
+
     protected
 
     # @param [String|Symbol]
@@ -159,23 +167,5 @@ class Spin
 
       @injectors[self.name]
     end
-
-    # @see Spin::Core::Setup
-    def setup(*args)
-      self.const('Core::Setup').tap do |klass|
-        # @type [Spin::Core::Setup] klass
-        return klass.new(*args).call
-      end
-    end
-
-    # @see Spin::Core::Initializer
-    def init(*args)
-      self.const('Core::Initializer').tap do |klass|
-        # @type [Spin::Core::Initializer] klass
-        return klass.new(*args).call
-      end
-    end
   end
 end
-
-# rubocop:enable Metrics/ClassLength
