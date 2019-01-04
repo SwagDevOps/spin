@@ -38,7 +38,7 @@ GEM
     ice_nine (0.11.2)
     image_size (2.0.0)
     interesting_methods (0.1.2)
-    jaro_winkler (1.5.1)
+    jaro_winkler (1.5.2)
     json (2.1.0)
     kamaze-project (1.0.4)
       cli-ui (~> 1.1)
