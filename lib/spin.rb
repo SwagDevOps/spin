@@ -25,20 +25,27 @@ class Spin
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
   # @formatter:on
 
-  extend Core::Forwardable
-
   # @return [Spin::Container]
   attr_reader :container
 
+  # @see @delegables ------------------------------------------------
+
   # @!method build(type, *args)
   #   @see .build
+  #   @!visibility protected
+  #   @!parse plop
   #   @param [String|Symbol] type
   #   @return [Spin::Core::Setup|Spin::Core::Initializer]
-  #
+
   # @!method resolve(name)
   #   @see .resolve
+  #   @!parse plop
   #   @param [String|Symbol] name
   #   @return [Class]
+
+  # -----------------------------------------------------------------
+  extend Core::Forwardable
+
   (@delegables = [:build, :resolve]).tap do |delegables|
     def_delegators(*[self] + delegables)
   end
@@ -105,6 +112,7 @@ class Spin
       end
     end
 
+    # @!parse DI = Dry::AutoInject(injector)
     def const_missing(name)
       name.to_sym == :DI ? injector : super
     end
