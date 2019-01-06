@@ -33,13 +33,11 @@ class Spin
   # @!method build(type, *args)
   #   @see .build
   #   @!visibility protected
-  #   @!parse plop
   #   @param [String|Symbol] type
   #   @return [Spin::Core::Setup|Spin::Core::Initializer]
 
   # @!method resolve(name)
   #   @see .resolve
-  #   @!parse plop
   #   @param [String|Symbol] name
   #   @return [Class]
 
