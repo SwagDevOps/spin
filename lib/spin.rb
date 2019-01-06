@@ -6,17 +6,6 @@ require 'dry/auto_inject'
 require 'dry/inflector'
 
 # Base class
-#
-# Sample of use:
-#
-#
-# ```ruby
-# # config.ru
-#
-# require 'spin'
-#
-# run(Spin.controller)
-# ```
 class Spin
   require_relative 'spin/bundled'
 
