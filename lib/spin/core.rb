@@ -10,6 +10,7 @@ module Spin::Core
     Cache: :cache,
     Config: :config,
     Container: :container,
+    Forwardable: :forwardable,
     Initializer: :initializer,
     Injectable: :injectable,
     Setup: :setup,
