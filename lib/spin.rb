@@ -2,7 +2,6 @@
 
 $LOAD_PATH.unshift(__dir__)
 
-require 'forwardable'
 require 'dry/auto_inject'
 require 'dry/inflector'
 
@@ -24,8 +23,6 @@ class Spin
   autoload(:Pathname, 'pathname')
   autoload(:Concurrent, 'concurrent')
 
-  extend Forwardable
-
   # @formatter:off
   {
     VERSION: :version,
@@ -39,9 +36,20 @@ class Spin
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
   # @formatter:on
 
+  extend Core::Forwardable
+
   # @return [Spin::Container]
   attr_reader :container
 
+  # @!method build(type, *args)
+  #   @see .build
+  #   @param [String|Symbol] type
+  #   @return [Spin::Core::Setup|Spin::Core::Initializer]
+  #
+  # @!method resolve(name)
+  #   @see .resolve
+  #   @param [String|Symbol] name
+  #   @return [Class]
   (@delegables = [:build, :resolve]).tap do |delegables|
     def_delegators(*[self] + delegables)
   end
@@ -137,6 +145,8 @@ class Spin
       end
     end
 
+    protected
+
     # @see Spin::Core::Setup
     # @see Spin::Core::Initializer
     #
@@ -147,9 +157,7 @@ class Spin
       end
     end
 
-    protected
-
-    # @param [String|Symbol]
+    # @param [String|Symbol] const_name
     # @return [Class]
     def const(const_name)
       const_name.to_s.gsub(/^::/, '').tap do |name|
