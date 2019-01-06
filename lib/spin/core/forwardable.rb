@@ -137,11 +137,13 @@
 #       by Keiju ISHITSUKA(keiju@ishitsuka.com)
 # ```
 #
+# @see https://ruby-doc.org/stdlib-2.6/libdoc/forwardable/rdoc/Forwardable.html
 # @see https://github.com/sj26/ruby-1.9.3-p0/blob/b6dccd90a6ed7750aebd7c4c7b37f2c95bc1538c/lib/forwardable.rb#L2
 # @see https://bugs.ruby-lang.org/issues/12782
 # @see https://github.com/pry/pry/blob/1d463198a9d3505584974c31812e0523144da30b/lib/pry/forwardable.rb#L7
 module Spin::Core::Forwardable
   # Takes a hash as its argument.
+  #
   # The key is a symbol or an array of symbols.
   # These symbols correspond to method names.
   # The value is the accessor to which the methods will be delegated.
@@ -155,6 +157,8 @@ module Spin::Core::Forwardable
     end
   end
 
+  # Shortcut for defining multiple delegator methods.
+  #
   # Shortcut for defining multiple delegator methods,
   # but with no provision for using a different name.
   # The following two code samples have the same effect:
@@ -176,6 +180,8 @@ module Spin::Core::Forwardable
     # @formatter:on
   end
 
+  # Define ``method`` as delegator instance method.
+  #
   # Define ``method`` as delegator instance method
   # with an optional alias name ``ali``.
   # Method calls to ``ali`` will be delegated to ``accessor.method``.
