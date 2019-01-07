@@ -5,7 +5,6 @@ describe Spin, :spin do
   it { expect(described_class).to be_const_defined(:VERSION) }
   it { expect(described_class).to be_const_defined(:Autoloadable) }
   it { expect(described_class).to be_const_defined(:Base) }
-  it { expect(described_class).to be_const_defined(:Config) }
   it { expect(described_class).to be_const_defined(:Core) }
   it { expect(described_class).to be_const_defined(:Controller) }
   it { expect(described_class).to be_const_defined(:DI) }

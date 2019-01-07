@@ -17,7 +17,6 @@ class Spin
     VERSION: :version,
     Autoloadable: :autoloadable,
     Base: :base,
-    Config: :config,
     Controller: :controller,
     Core: :core,
     Helpers: :helpers,
@@ -90,7 +89,12 @@ class Spin
 
           c.register(:paths, self.paths)
           c.register(:storage_path, Pathname.new(Dir.pwd).join('storage'))
-          c.register(:config, config_builder.call)
+
+          c.register(:config, lambda do
+            self.resolve('core/config').new.tap do |conf|
+              conf.__send__(:paths=, paths.map { |path| path.join('config') })
+            end
+          end)
 
           self.build(:setup, c).call
         end.freeze
@@ -98,17 +102,6 @@ class Spin
     end
 
     # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-
-    # @return [Proc]
-    def config_builder
-      lambda do
-        resolve(:config).tap do |config_class|
-          config_class.__send__('paths=', self.paths)
-
-          return config_class.new
-        end
-      end
-    end
 
     # @!parse DI = Dry::AutoInject(injector)
     def const_missing(name)

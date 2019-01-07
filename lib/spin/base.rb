@@ -14,15 +14,21 @@ class Spin::Base < Sinatra::Base
   # @type [Spin::Container]
   @container = nil
 
+  # @type [Spin::Core::Config]
+  @config = nil
+
   class << self
     protected
 
-    # @return [Spin:;Container]
+    # @return [Spin::Container]
     attr_accessor :container
 
-    # @return [Object]
-    def config(*args)
-      container[:entry_class].__send__(:config, *args)
+    # @return [Spin::Core::Config]
+    attr_writer :config
+
+    # @return [Spin::Core::Config]
+    def config
+      @config || container[:config]
     end
   end
 end

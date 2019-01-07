@@ -9,12 +9,12 @@ require 'dry/inflector'
 #
 # @see https://www.oreilly.com/library/view/sinatra-up-and/9781449306847/ch04.html
 class Spin::Controller < Spin::Base
-  include Spin::Core::Autoloadable
   include Spin::Core::Injectable
+  include Spin::Core::Autoloadable
 
   autoload_self
 
-  # @type [Spin::Config]
+  # @type [Spin::Core::Config]
   @config = nil
 
   class << self
@@ -23,7 +23,7 @@ class Spin::Controller < Spin::Base
     # @return [self]
     def mount!
       Dry::Inflector.new.tap do |inf|
-        config&.fetch('controllers').to_a.each do |name|
+        config&.get('app.controllers').to_a.each do |name|
           name = "#{self}::#{inf.camelize(name)}" unless name =~ /^[A-Z]/
 
           use Object.const_get(name)
@@ -40,7 +40,7 @@ class Spin::Controller < Spin::Base
 
     # Get config.
     #
-    # @return [Spin::Config|nil]
+    # @return [Spin::Core::Config|nil]
     def config
       # rubocop:disable Style/NilComparison
       @config || (injector == nil ? nil : injector.container[:config])
