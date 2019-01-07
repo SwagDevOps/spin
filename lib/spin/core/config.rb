@@ -11,6 +11,10 @@ require 'tty/config'
 
 # Reader for config
 class Spin::Core::Config
+  include Spin::Core::Injectable
+
+  inject(:paths)
+
   # @formatter:off
   {
     Cache: :cache,
@@ -25,9 +29,9 @@ class Spin::Core::Config
   # @return [Path]
   attr_reader :paths
 
-  # @param [Array<String>] paths
-  def initialize(paths)
-    self.paths = Path.new(paths)
+  # @option options [Array<String>] :paths
+  def initialize(**options)
+    self.paths = options.fetch(:paths, [])
     self.cache = Cache.new
   end
 
@@ -57,7 +61,9 @@ class Spin::Core::Config
   # @return [Cache{Symobol => OpenStruct}]
   attr_accessor :cache
 
-  attr_writer :paths
+  def paths=(paths)
+    @paths = Path.new(paths)
+  end
 
   # @param [String] base
   #

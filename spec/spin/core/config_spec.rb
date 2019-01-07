@@ -9,7 +9,7 @@ end
 
 describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
-  let(:subject) { described_class.new(paths) }
+  let(:subject) { described_class.new(paths: paths) }
 
   it { expect(subject).to respond_to(:get) }
 
@@ -29,7 +29,7 @@ end
 # paths should include ``APP_ENV`` ----------------------------------
 describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
-  let(:subject) { described_class.new(paths) }
+  let(:subject) { described_class.new(paths: paths) }
 
   context '.to_a' do
     let(:app_env) { 'test' }
@@ -53,7 +53,7 @@ end
 # all (string) values should be frozen ---------------------------------------
 describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
-  let(:subject) { described_class.new(paths) }
+  let(:subject) { described_class.new(paths: paths) }
 
   let(:tested) { subject.get('app.heroes').map(&:frozen?).uniq }
 
@@ -68,7 +68,7 @@ describe Spin::Core::Config, :'spin/core/config' do
   let(:app_env) { 'test' }
   let(:subject) do
     with_env('APP_ENV' => app_env) do
-      described_class.new(paths)
+      described_class.new(paths: paths)
     end
   end
 
@@ -83,7 +83,7 @@ end
 # using empty file --------------------------------------------------
 describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
-  let(:subject) { described_class.new(paths) }
+  let(:subject) { described_class.new(paths: paths) }
 
   context '.get' do
     it { expect(subject.get('empty')).to be_frozen }
@@ -94,7 +94,7 @@ end
 # using empty file --------------------------------------------------
 describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
-  let(:subject) { described_class.new(paths) }
+  let(:subject) { described_class.new(paths: paths) }
 
   context '.get' do
     it do
@@ -106,7 +106,7 @@ end
 # using invalid file ------------------------------------------------
 describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
-  let(:subject) { described_class.new(paths) }
+  let(:subject) { described_class.new(paths: paths) }
 
   context '.get' do
     it do
