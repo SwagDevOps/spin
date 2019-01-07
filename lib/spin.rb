@@ -48,6 +48,10 @@ class Spin
   end
 
   def initialize
+    # rubocop:disable Style/AccessModifierDeclarations
+    singleton_class.class_eval { protected :build }
+    # rubocop:enable Style/AccessModifierDeclarations
+
     resolve(:DI).container.tap do |container|
       @container = container
 
