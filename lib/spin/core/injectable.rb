@@ -23,10 +23,9 @@ module Spin::Core::Injectable
     # @return [Boolean]
     # @see https://dry-rb.org/gems/dry-auto_inject/
     def inject(key, strategy: :kwargs)
-      # rubocop:disable Style/NilComparison
+      # rubocop:disable Style/NilComparison, Layout/EmptyLineAfterGuardClause
       return false if self.injector == nil
-
-      # rubocop:enable Style/NilComparison
+      # rubocop:enable Style/NilComparison, Layout/EmptyLineAfterGuardClause
 
       !!self.__send__(:include, self.injector.__send__(strategy)[key])
     end
