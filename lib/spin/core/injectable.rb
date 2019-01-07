@@ -8,7 +8,19 @@
 
 require_relative '../core'
 
-# Cache for config
+# Provides injectable behavior
+#
+# Sample of use:
+#
+# ```ruby
+# class Injected
+#   inlcude Injectable
+#
+#   inject(:key)
+# end
+# ```
+#
+# @see https://dry-rb.org/gems/dry-auto_inject/
 module Spin::Core::Injectable
   def self.included(base)
     base.extend(ClassMethods)
