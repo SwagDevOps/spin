@@ -60,10 +60,25 @@ end
 # ``Base`` SHOULD be inherited as a class constant,
 # specific to each class, avoiding to pollute each other.
 # -------------------------------------------------------------------
-describe Class.new(Spin)::Base, :spin, :'spin/base' do
-  it { expect(described_class).not_to eq(Spin::Base) }
+describe Spin::Base, :spin, :'spin/base' do
+  let(:parent_class) { Spin::Base }
+  let(:described_class) { sham!(:spin).class_builder.call::Base }
+
+  it { expect(described_class).not_to eq(parent_class) }
 
   context '.ancestors' do
-    it { expect(described_class.ancestors).to include(Spin::Base) }
+    it { expect(described_class.ancestors).to include(parent_class) }
+  end
+end
+
+describe Spin, :spin do
+  let(:described_class) { sham!(:spin).class_builder.call }
+
+  # ``build`` is a method, but protected or private (not public)
+  :build.tap do |method|
+    it { expect(described_class).not_to respond_to(method) }
+    context '.methods' do
+      it { expect(described_class.methods).to include(method) }
+    end
   end
 end
