@@ -52,10 +52,8 @@ class Spin
     singleton_class.class_eval { protected :build }
     # rubocop:enable Style/AccessModifierDeclarations
 
-    resolve(:DI).container.tap do |container|
+    self.resolve(:DI)&.container.tap do |container|
       @container = container
-
-      raise 'Container must be set' if container.nil?
     end
 
     setup!
@@ -64,6 +62,8 @@ class Spin
   # @return [self]
   def setup!
     self.tap do
+      raise 'Container must be set' if container.nil?
+
       build(:setup, container, :base_class).call
       build(:initializer, container).call
     end
