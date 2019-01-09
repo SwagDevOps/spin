@@ -67,7 +67,7 @@ class Spin::Core::Setup < Array
 
     self.tap do
       files.each do |file|
-        puts "* Loading: #{file}"
+        puts "* Loading: #{file}" if ENV['APP_DEBUG']
 
         self.load(file)
       end
