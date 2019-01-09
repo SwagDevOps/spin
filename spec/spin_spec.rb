@@ -73,6 +73,7 @@ end
 
 describe Spin, :spin do
   let(:described_class) { sham!(:spin).class_builder.call }
+  let(:subject) { described_class.new }
 
   # ``build`` is a method, but protected or private (not public)
   :build.tap do |method|

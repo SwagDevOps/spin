@@ -27,32 +27,8 @@ class Spin
   # @return [Spin::Container]
   attr_reader :container
 
-  # @see @delegables ------------------------------------------------
-
-  # @!method build(type, *args)
-  #   @see .build
-  #   @!visibility protected
-  #   @param [String|Symbol] type
-  #   @return [Spin::Core::Setup|Spin::Core::Initializer]
-
-  # @!method resolve(name)
-  #   @see .resolve
-  #   @param [String|Symbol] name
-  #   @return [Class]
-
-  # -----------------------------------------------------------------
-  extend Core::Forwardable
-
-  (@delegables = [:build, :resolve]).tap do |delegables|
-    def_delegators(*[self] + delegables)
-  end
-
   def initialize
-    # rubocop:disable Style/AccessModifierDeclarations
-    singleton_class.class_eval { protected :build }
-    # rubocop:enable Style/AccessModifierDeclarations
-
-    self.resolve(:DI)&.container.tap do |container|
+    self.class.resolve(:DI)&.container.tap do |container|
       @container = container
     end
 
@@ -64,8 +40,8 @@ class Spin
     self.tap do
       raise 'Container must be set' if container.nil?
 
-      build(:setup, container, :base_class).call
-      build(:initializer, container).call
+      self.class.__send__(:build, :setup, container, :base_class).call
+      self.class.__send__(:build, :initializer, container).call
     end
   end
 
@@ -74,7 +50,6 @@ class Spin
       super.tap do
         $INJECTOR = -> { subclass.const_get(:DI) }
 
-        subclass.def_delegators(*[subclass] + @delegables)
         subclass.const_set(:Base, Class.new(self::Base))
       end
     end
@@ -144,7 +119,7 @@ class Spin
     #
     # @return [Spin::Core::Setup|Spin::Core::Initializer]
     def build(type, *args)
-      resolve("core/#{type}").tap do |klass|
+      self.resolve("core/#{type}").tap do |klass|
         return klass.new(*args)
       end
     end
