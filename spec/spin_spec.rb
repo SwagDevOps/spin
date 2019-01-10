@@ -108,3 +108,14 @@ describe Spin, :spin do
     end
   end
 end
+
+describe Spin, :spin do
+  let(:described_class) { sham!(:spin).class_builder.call }
+
+  # same inherited class should be initializable several times
+  context '.new' do
+    it do
+      10.times { described_class.new }
+    end
+  end
+end
