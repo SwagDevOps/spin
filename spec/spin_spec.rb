@@ -73,13 +73,38 @@ end
 
 describe Spin, :spin do
   let(:described_class) { sham!(:spin).class_builder.call }
-  let(:subject) { described_class.new }
 
   # ``build`` is a method, but protected or private (not public)
   :build.tap do |method|
     it { expect(described_class).not_to respond_to(method) }
     context '.methods' do
       it { expect(described_class.methods).to include(method) }
+    end
+  end
+end
+
+describe Spin, :spin do
+  let(:described_class) { sham!(:spin).class_builder.call }
+  let(:container_builder) { described_class.__send__(:container_builder) }
+
+  context '.container_builder' do
+    it { expect(container_builder).to be_a(Proc) }
+  end
+
+  # @formatter:off
+  {
+    entry_class: Class,
+    base_class: Class,
+    config: Spin::Core::Config,
+    controller_class: Class,
+    paths: Array,
+    storage_path: Pathname,
+  }.each do |key, type| # @formatter:on
+    context ".container_builder.call[#{key}.inspect]" do
+      it do
+        # @type [Proc] container_builder
+        container_builder.call[key].tap { |item| expect(item).to be_a(type) }
+      end
     end
   end
 end
