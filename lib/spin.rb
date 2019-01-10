@@ -54,34 +54,6 @@ class Spin
       end
     end
 
-    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize:
-
-    # Get an instance of container from a lambda.
-    #
-    # @return [Proc]
-    def container_builder
-      lambda do
-        resolve('core/container').new.tap do |c|
-          c.register(:entry_class, self)
-          c.register(:base_class, self.const(:Base))
-          c.register(:controller_class, self.const(:Controller))
-
-          c.register(:paths, self.paths)
-          c.register(:storage_path, Pathname.new(Dir.pwd).join('storage'))
-
-          c.register(:config, lambda do
-            self.resolve('core/config').new.tap do |conf|
-              conf.__send__(:paths=, paths.map { |path| path.join('config') })
-            end
-          end)
-
-          self.build(:setup, c).call
-        end.freeze
-      end
-    end
-
-    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-
     # @!parse DI = Dry::AutoInject(injector)
     def const_missing(name)
       name.to_sym == :DI ? injector : super
@@ -113,6 +85,34 @@ class Spin
     end
 
     protected
+
+    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize:
+
+    # Get an instance of container from a lambda.
+    #
+    # @return [Proc]
+    def container_builder
+      lambda do
+        resolve('core/container').new.tap do |c|
+          c.register(:entry_class, self)
+          c.register(:base_class, self.const(:Base))
+          c.register(:controller_class, self.const(:Controller))
+
+          c.register(:paths, self.paths)
+          c.register(:storage_path, Pathname.new(Dir.pwd).join('storage'))
+
+          c.register(:config, lambda do
+            self.resolve('core/config').new.tap do |conf|
+              conf.__send__(:paths=, paths.map { |path| path.join('config') })
+            end
+          end)
+
+          self.build(:setup, c).call
+        end.freeze
+      end
+    end
+
+    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
     # @see Spin::Core::Setup
     # @see Spin::Core::Initializer
