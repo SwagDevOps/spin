@@ -51,6 +51,8 @@ class Spin::Core::Config
     end
   end
 
+  alias_method '[]', 'get'
+
   def to_a
     self.paths.to_a
   end
