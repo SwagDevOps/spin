@@ -12,17 +12,18 @@ describe Spin::Core::Config, :'spin/core/config' do
   let(:subject) { described_class.new(paths: paths) }
 
   it { expect(subject).to respond_to(:get) }
+  it { expect(subject).to respond_to('[]') }
 
   context '.get' do
-    it { expect(subject.get('app')).to be_frozen }
-    it { expect(subject.get('app')).to be_a(OpenStruct) }
+    it { expect(subject['app']).to be_frozen }
+    it { expect(subject['app']).to be_a(OpenStruct) }
 
-    it { expect(subject.get('app.math')).to be_frozen }
-    it { expect(subject.get('app.math')).to be_a(OpenStruct) }
-    it { expect(subject.get('app.math.PI')).to eq(3.14159) }
+    it { expect(subject['app.math']).to be_frozen }
+    it { expect(subject['app.math']).to be_a(OpenStruct) }
+    it { expect(subject['app.math.PI']).to eq(3.14159) }
 
-    it { expect(subject.get('app.heroes')).to be_frozen }
-    it { expect(subject.get('app.heroes')).to be_a(Array) }
+    it { expect(subject['app.heroes']).to be_frozen }
+    it { expect(subject['app.heroes']).to be_a(Array) }
   end
 end
 
@@ -55,7 +56,7 @@ describe Spin::Core::Config, :'spin/core/config' do
   let(:paths) { [SAMPLES_PATH.join('config')] }
   let(:subject) { described_class.new(paths: paths) }
 
-  let(:tested) { subject.get('app.heroes').map(&:frozen?).uniq }
+  let(:tested) { subject['app.heroes'].map(&:frozen?).uniq }
 
   context '.get().map(&:frozen?).uniq' do
     it { expect(tested).to eq([true]) }
@@ -75,8 +76,8 @@ describe Spin::Core::Config, :'spin/core/config' do
   it { expect(subject).to respond_to(:get) }
 
   context '.get' do
-    it { expect(subject.get('app.version')).to be_frozen }
-    it { expect(subject.get('app.version')).to be_a(OpenStruct) }
+    it { expect(subject['app.version']).to be_frozen }
+    it { expect(subject['app.version']).to be_a(OpenStruct) }
   end
 end
 
@@ -86,8 +87,8 @@ describe Spin::Core::Config, :'spin/core/config' do
   let(:subject) { described_class.new(paths: paths) }
 
   context '.get' do
-    it { expect(subject.get('empty')).to be_frozen }
-    it { expect(subject.get('empty')).to be_a(OpenStruct) }
+    it { expect(subject['empty']).to be_frozen }
+    it { expect(subject['empty']).to be_a(OpenStruct) }
   end
 end
 
@@ -98,7 +99,7 @@ describe Spin::Core::Config, :'spin/core/config' do
 
   context '.get' do
     it do
-      expect { subject.get('sample/path') }.to raise_error(ArgumentError)
+      expect { subject['sample/path'] }.to raise_error(ArgumentError)
     end
   end
 end
@@ -111,7 +112,7 @@ describe Spin::Core::Config, :'spin/core/config' do
   context '.get' do
     it do
       # Psych::SyntaxError
-      expect { subject.get('invalid_syntax') }.to raise_error(StandardError)
+      expect { subject['invalid_syntax'] }.to raise_error(StandardError)
     end
   end
 end
