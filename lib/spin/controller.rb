@@ -23,7 +23,7 @@ class Spin::Controller < Spin::Base
     # @return [self]
     def mount!
       Dry::Inflector.new.tap do |inf|
-        config&.get('app.controllers').to_a.each do |name|
+        config['app.controllers'].to_a.each do |name|
           name = "#{self}::#{inf.camelize(name)}" unless name =~ /^[A-Z]/
 
           use Object.const_get(name)
