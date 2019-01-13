@@ -13,11 +13,10 @@ require 'forwardable'
 class Spin::Core::Cache
   autoload(:Moneta, 'moneta')
 
-  attr_reader :storage
-
   extend Forwardable
 
   def_delegators(:storage,
+                 :[],
                  :[]=,
                  :clear,
                  :close,
@@ -37,10 +36,15 @@ class Spin::Core::Cache
                  :with)
 
   def initialize(name, options = {})
-    @storage = Moneta.new(name, options)
+    # rubocop:disable Lint/ShadowingOuterLocalVariable
+    Hash[options.map { |(k, v)| [k.to_sym, v] }].tap do |options|
+      @storage = Moneta.new(name, options)
+    end
+    # rubocop:enable Lint/ShadowingOuterLocalVariable
   end
 
   def cache(key)
+    # cache is still valid
     return storage[key] if storage.key?(key)
 
     storage[key] = yield
@@ -48,5 +52,5 @@ class Spin::Core::Cache
 
   protected
 
-  attr_writer :storage
+  attr_accessor :storage
 end
