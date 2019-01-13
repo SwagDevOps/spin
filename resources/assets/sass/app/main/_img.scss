@@ -2,20 +2,21 @@
  * Sample of use:
  *
  * ```
- * <img style="--img-ratio: 2/3"
+ * <img style="--img-ratio: 400/200"
  * width="200"
  * height="400"
  * src="https://unsplash.com/photos/12ImpwcVL44/download?force=true" />
  * ```
  */
-img {
-  height: auto;
-  background: transparent;
-}
+img[style~='--img-ratio:'] {
+  & {
+    height: auto;
+    background: transparent;
+  }
 
-img::after, img::before {
-  content: " ";
-  display: block;
-  padding-bottom: calc(var(--img-ratio) * 100%);
+  &::after, &::before {
+    content: ' ';
+    display: block;
+    padding-bottom: calc(var(--img-ratio * 100%));
+  }
 }
-
