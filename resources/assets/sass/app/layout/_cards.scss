@@ -1,0 +1,9 @@
+// @see node_modules/bootstrap/scss/_variables.scss
+@import './mdb';
+
+.card {
+  .card-header {
+    font-size: $font-size-base;
+    font-weight: $font-weight-normal;
+  }
+}
