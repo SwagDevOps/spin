@@ -1,8 +1,9 @@
 'use strict'
 
-/* global require, path, __dirname */
+/* global process, require, path, __dirname */
 
 const Mix = require('webpack-mix')
+const glob = require('simple-glob')
 const Clean = require('clean-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
 
@@ -21,7 +22,7 @@ const mix = function () {
 
   mix.js(path.join(sourcePath, 'js/app.js'), paths.js)
   mix.sass(path.join(sourcePath, 'sass/app.scss'), paths.css, {
-    sourceComments: !mix.config.production
+    sourceComments: !mix.config.production,
   })
 
   copiables.forEach(function (i) {
@@ -50,8 +51,17 @@ const copiables = [
   ['node_modules/mdbootstrap/img/', paths.images]
 ]
 
+let cleanables = [
+  path.join(paths.css, '*.map'),
+  path.join(paths.js, '*.map')
+]
+  .map(fp => glob(fp))
+  .reduce((acc, val) => acc.concat(val), [])
+  .concat(copiables.map(x => x[1]))
+  .sort(function (a, b) { return a.localeCompare(b) })
+
 const config = {
-  devtool: 'source-map',
+  devtool: process.env.NODE_ENV !== 'production' ? 'source-map' : false,
   resolve: {
     modules: [
       path.resolve(path.join(sourcePath, 'js')),
@@ -59,7 +69,7 @@ const config = {
     ]
   },
   plugins: [
-    new Clean(copiables.map(x => x[1]), { verbose: true }),
+    new Clean(cleanables, { verbose: true }),
     new VersionFile({
       packageFile: path.join(__dirname, 'package.json'),
       template: path.join(sourcePath, 'version.ejs'),
