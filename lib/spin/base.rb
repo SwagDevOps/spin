@@ -7,10 +7,6 @@ require 'sinatra/base'
 #
 # @see https://github.com/sinatra/sinatra/blob/ba63ae84bd52174af03d3933863007ca8a37ac1c/lib/sinatra/base.rb#L904
 class Spin::Base < Sinatra::Base
-  def authenticate!
-    env.fetch('warden').authenticate!
-  end
-
   # @type [Spin::Container]
   @container = nil
 
@@ -20,7 +16,7 @@ class Spin::Base < Sinatra::Base
   class << self
     protected
 
-    # @return [Spin::Container]
+    # @return [Spin::Core::Container]
     attr_accessor :container
 
     # @return [Spin::Core::Config]
