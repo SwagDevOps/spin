@@ -4,6 +4,9 @@
 require 'hanami/helpers'
 
 # rubocop:disable Style/MixinUsage
-include(Hanami::Helpers)
+if Gem::Specification.find_all_by_name('hanami-helpers').any?
+  include(Hanami::Helpers)
+end
+
 include(Spin::Helpers)
 # rubocop:enable Style/MixinUsage
