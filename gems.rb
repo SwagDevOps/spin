@@ -33,8 +33,9 @@ group :development do
   gem 'yard-coderay', '~> 0.1'
   # server -------------------------------
   gem 'puma', '~> 3.12'
-  gem 'shotgun', '~> 0.9'
+  gem 'rerun', '~> 0.13'
   # optional support ---------------------
+  gem 'better_errors', '~> 2.5'
   gem 'dotenv', '~> 2.6'
   gem 'erubi', '~> 1.8'
   gem 'hanami-helpers', '~> 1.3'
