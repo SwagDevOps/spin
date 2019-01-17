@@ -36,6 +36,7 @@ group :development do
   gem 'rerun', '~> 0.13'
   # optional support ---------------------
   gem 'better_errors', '~> 2.5'
+  gem 'binding_of_caller', '~> 0.8'
   gem 'dotenv', '~> 2.6'
   gem 'erubi', '~> 1.8'
   gem 'hanami-helpers', '~> 1.3'
