@@ -4,20 +4,28 @@
 #
 # ```sh
 # rake serve
-# rake serve[shotgun] # default
-# rake serve[puma]
+# rake serve[environment] # default (uses APP_ENV)
 # ```
 desc 'Serve'
-task :serve, [:engine] do |task, args|
-  task.reenable
+task :serve, [:environment] do |task, args|
+  engine = :puma
+  env = (args[:environment] || ENV['APP_ENV'] || 'production').to_s
+  # @formatter:off
+  paths = ['lib', 'dev', 'setup', 'config', 'vendor']
+          .map { |fp| Pathname.new(fp) }
+          .keep_if(&:directory?)
+  # @formatter:on
 
-  [(args[:engine] || 'shotgun').to_s,
-   '--port', ENV.fetch('SERVE_PORT', '9393')].tap do |command|
-    # rubocop:disable Lint/HandleExceptions
+  [{ 'APP_ENV' => env }, 'rerun', '--dir', paths.join(','),
+   '--verbose',
+   '--no-notify',
+   "#{engine} --port=9393 -R config.ru"].tap do |command|
     begin
       sh(*command, verbose: false)
     rescue Interrupt
+      task.reenable
+    else
+      task.reenable
     end
-    # rubocop:enable Lint/HandleExceptions
   end
 end
