@@ -8,9 +8,12 @@ if Gem::Specification.find_all_by_name('better_errors').any?
     use BetterErrors::Middleware
     BetterErrors.maximum_variable_inspect_size = 100_000
 
-    # you need to set the application root in order to abbreviate filenames
-    # within the application:
+    # set application root
     BetterErrors.application_root = File.expand_path(root)
+  end
+
+  if Gem::Specification.find_all_by_name('binding_of_caller').any?
+    require 'binding_of_caller'
   end
 end
 
