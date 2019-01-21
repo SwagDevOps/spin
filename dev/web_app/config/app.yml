@@ -2,3 +2,5 @@
 controllers:
   - home
   - auth
+  - admin
+  - admin/posts
