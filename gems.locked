@@ -156,7 +156,7 @@ GEM
       dry-inflector (~> 0.1)
     tenjin (0.7.1)
     tilt (2.0.9)
-    timers (4.2.0)
+    timers (4.3.0)
     transproc (1.0.3)
     tty-color (0.4.3)
     tty-config (0.3.0)
