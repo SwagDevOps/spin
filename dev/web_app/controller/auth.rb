@@ -9,11 +9,11 @@ class WebApp::Controller::Auth < WebApp::Controller::Base
 
   class << self
     def urls
-      WebApp::Controller::Admin::BASE_URI.to_s.tap do |uri|
+      WebApp::Controller::Admin.base_uri.to_s.tap do |url|
         # formatter:off
         return super.merge(
-          protected: uri,
-          success_login: uri
+          protected: url,
+          success_login: url
         )
         # formatter:on
       end
