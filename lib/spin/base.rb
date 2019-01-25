@@ -31,7 +31,7 @@ class Spin::Base < Sinatra::Base
 
     # @return [Spin::Core::Config]
     def config
-      @config || container[:config]
+      @config || (container || {})[:config]
     end
   end
 end
