@@ -159,7 +159,7 @@ GEM
     timers (4.3.0)
     transproc (1.0.3)
     tty-color (0.4.3)
-    tty-config (0.3.0)
+    tty-config (0.3.1)
     tty-cursor (0.6.0)
     tty-editor (0.5.0)
       tty-prompt (~> 0.18)
