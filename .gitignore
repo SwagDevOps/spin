@@ -11,6 +11,7 @@
 /mix-manifest.json
 /node_modules/*
 /public/*
+/serve/*
 /storage/
 /tmp/
 /vagrant/*.override.yml
@@ -22,5 +23,6 @@
 !/.gitignore
 !/.rspec
 !/.rubocop.yml
+!/.rerun
 !/.solargraph.yml
 !/.yardopts

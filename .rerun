@@ -1,0 +1,10 @@
+# vim: ft=sh
+
+--force-polling
+--no-notify
+--no-quiet
+--dir lib,dev,vendor
+
+# Local Variables:
+# mode: sh
+# End:
