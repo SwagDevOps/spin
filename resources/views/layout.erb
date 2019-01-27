@@ -2,25 +2,27 @@
 <html lang="en">
     <head>
         <%= html.meta(charset: 'utf-8') %>
-        <%= html.meta(name: 'viewport', content: 'width=device-width, initial-scale=1.0') %>
+        <%= html.meta(name: 'viewport', content: 'width=device-width, initial-scale=1.0,minimum-scale=1.0') %>
         <%= html.meta(name: 'csrf-token', content: csrf_token) %>
         <%= html.title(['Unicorn Agency', self.page_title].compact.join(' - ')) %>
         <%= html.link(href: asset_url('/css/app.css'), rel: 'stylesheet') %>
         <%= html.script(src: asset_url('/js/app.js')) %>
     </head>
-    <body class="grey lighten-3">
-        <%= erb(:'layout/top-bar') %>
-        <main class="mt-5 pt-5">
-            <div class="container">
-                <section class="mt-4">
-                    <div class="row">
-                        <%= erb(:'layout/flash') %>
+    <body>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <%= erb(:'layout/top-bar') %>
+            <main class="mt-5 pt-5">
+                <div class="container">
+                    <section class="mt-4">
+                        <div class="row">
+                            <%= erb(:'layout/flash') %>
 
-                        <%= yield %>
-                    </div>
-                </section>
-            </div>
-        </main>
-        <%= erb(:'layout/footer') %>
+                            <%= yield %>
+                        </div>
+                    </section>
+                </div>
+            </main>
+            <%= erb(:'layout/footer') %>
+        </div>
     </body>
 </html>

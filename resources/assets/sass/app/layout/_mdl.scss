@@ -1,0 +1,17 @@
+/* material-design-lite'
+ *
+ * @see https://getmdl.io/started/
+ * -------------------------- */
+@import '~material-design-lite/src/material-design-lite';
+
+header[id="fixed-header"] {
+  .mdl-layout__header-row {
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  h1 a.android-title {
+    color: #fff;
+    text-decoration: none;
+  }
+}
