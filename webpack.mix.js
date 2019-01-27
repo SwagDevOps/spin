@@ -47,8 +47,8 @@ const copiables = [
   [path.join(sourcePath, 'images/favicon.png'), path.join(publicPath, 'favicon.ico')],
   [path.join(sourcePath, 'images'), paths.images],
   ['node_modules/font-awesome/fonts/', paths.fonts],
-  ['node_modules/mdbootstrap/font/roboto', paths.fonts],
-  ['node_modules/mdbootstrap/img/', paths.images]
+  // ['node_modules/mdbootstrap/font/roboto', paths.fonts],
+  // ['node_modules/mdbootstrap/img/', paths.images]
 ]
 
 let cleanables = [

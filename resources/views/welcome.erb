@@ -1,5 +1,6 @@
 <div class="col-md-8 mb-4">
     <% erb_cache('welcome:featured_image', expires: 120) do %>
+        <!--
         <div class="card mb-4 wow fadeIn" data-updated_at="<%= Time.now %>">
             <%=
                 image = '/images/unsplash/rawpixel-678089.jpg'
@@ -12,6 +13,7 @@
                          width: "#{size.width}")
             %>
         </div>
+        -->
     <% end %>
 
     <div class="card mb-4 wow fadeIn">
