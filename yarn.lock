@@ -7250,6 +7250,11 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
+reflex-grid@~2.0:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/reflex-grid/-/reflex-grid-2.0.4.tgz#739bf59927855fc744fb0273d1455e63822dfe5f"
+  integrity sha512-NPbZ5/JWzRgurognW/n2DgN76pBsN8ajSbXEjAQNhvRuF87O7IaEemrt608tsxKhSCoykRWGgYzpkhLcRTzCsQ==
+
 regenerate@^1.2.1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
