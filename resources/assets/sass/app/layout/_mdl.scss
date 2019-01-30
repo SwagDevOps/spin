@@ -26,3 +26,12 @@ header[id="fixed-header"] {
   max-width: 100%;
   height: auto;
 }
+
+.android-content main[id=main-col] {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.mdl-card {
+  width: 100%;
+}
