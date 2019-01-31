@@ -58,6 +58,7 @@ let cleanables = [
   .map(fp => glob(fp))
   .reduce((acc, val) => acc.concat(val), [])
   .concat(copiables.map(x => x[1]))
+  .filter((x, i, a) => a.indexOf(x) === i)
   .sort(function (a, b) { return a.localeCompare(b) })
 
 const config = {
