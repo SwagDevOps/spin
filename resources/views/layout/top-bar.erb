@@ -12,11 +12,13 @@
             <nav class="android-navigation mdl-navigation">
                 <% if current_user %>
                     <%= link_to('/logout', class: 'mdl-navigation__link mdl-typography--text-uppercase') do
-                      html.i('class': "fa fa-sign-out", 'aria-hidden': true) + 'Logout'
+                      html.span('class': 'icon material-icons', 'aria-hidden': true) { 'account_circle' } +
+                      'Logout'
                     end %>
                 <% else %>
                     <%= link_to('/login', class: 'mdl-navigation__link mdl-typography--text-uppercase') do
-                      html.i('class': "fa fa-sign-in", 'aria-hidden': true) + 'Login'
+                      html.span('class': 'icon material-icons', 'aria-hidden': true) { 'account_circle' } +
+                      'Login'
                     end %>
                 <% end %>
             </nav>
