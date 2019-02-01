@@ -18,7 +18,7 @@ let calc = function (height, width) {
 /**
  * @type {string}
  */
-const stylePattern = '<div style="padding-bottom: %s%%; display: inline-block">'
+const stylePattern = '<div style="padding-bottom: %s%%">'
 
 /**
  * Apply aspect ratio.
@@ -28,29 +28,14 @@ const stylePattern = '<div style="padding-bottom: %s%%; display: inline-block">'
  * @param {number} width
  */
 let apply = function ($image, height, width) {
-  $image.memento = $image.attr('src')
-
-  $.ajax({
-    url: $image.memento,
-    cache: true,
-    crossDomain: true,
-    method: 'HEAD',
-    context: document.body,
-    beforeSend: function () {
-      $image
-        .wrap(sprintf(stylePattern, calc(height, width)))
-        .css('position', 'absolute')
-    }
-  }).always(function () {
-    $image
-      .attr('src', $image.memento)
-      .show()
-  })
+  return $image
+    .wrap(sprintf(stylePattern, calc(height, width)))
+    .css('position', 'absolute')
 }
 
 export default function () {
   $(function () {
-    $('img[height][width]').hide().each(function () {
+    $('img[height][width]').each(function () {
       let $image = $(this)
       let height = parseInt($image.attr('height'), 10)
       let width = parseInt($image.attr('width'), 10)
