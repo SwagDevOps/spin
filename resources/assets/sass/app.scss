@@ -1,13 +1,9 @@
 /* Variables
  * -------------------------- */
-$fa-font-path: '/fonts';
-$fa-css-prefix: 'fa';
-$roboto-font-path: $fa-font-path + '/';
 $image-path: '/images/';
 
 /* Modules
  * -------------------------- */
-@import '~font-awesome/scss/font-awesome';
 @import '~animate.css/animate';
 
 /* App
