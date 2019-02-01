@@ -1,62 +1,44 @@
-<div class="col-md-8 mb-4">
-    <% erb_cache('welcome:featured_image', expires: 120) do %>
-        <!--
-        <div class="card mb-4 wow fadeIn" data-updated_at="<%= Time.now %>">
-            <%=
-                image = '/images/unsplash/rawpixel-678089.jpg'
-                size = image_size(image)
+<% (1..3).each do |i| %>
+    <div class="grid">
+        <% (1..3).each do |j| %>
+            <div class="col-md-4">
+                <div class="mdl-card mdl-shadow--4dp">
+                    <heder class="mdl-card__title">
+                        <h2 class="mdl-card__title-text">Voluptate voluptate</h2>
+                    </heder>
+                    <% erb_cache('welcome:featured_image', expires: 120) do %>
+                        <div class="mdl-card__media" data-updated_at="<%= Time.now %>">
+                            <%=
+                                image = '/images/unsplash/rawpixel-678089.jpg'
+                                size = image_size(image)
 
-                html.img(src: asset_url(image),
-                         class: 'img-fluid fadeIn animated wow',
-                         alt: nil,
-                         height: "#{size.height}",
-                         width: "#{size.width}")
-            %>
-        </div>
-        -->
-    <% end %>
-
-    <div class="card mb-4 wow fadeIn">
-        <div class="card-body">
-            <h2>Sinatra Template Default Page</h2>
-
-            <p>
-                Welcome to the Sinatra Template!
-                If you're seeing this page, then everything is working
-                as expected.
-                To get started, delete this file
-                (<code>app/views/welcome.erb</code>)
-                and begin adding
-                your own actions and controllers.
-                For more information, see the <code>README</code>.
-            </p>
-
-            <h3>Environment</h3>
-            <ul>
-                <li>
-                    <b>Ruby:</b>
-                    <code><%= RUBY_VERSION %></code>
-                </li>
-                <li>
-                    <b>Environment:</b>
-                    <code><%= ENV["RACK_ENV"] %></code>
-                </li>
-                <li>
-                    <b>Server:</b>
-                    <code><%= @env["SERVER_SOFTWARE"] %></code>
-                </li>
-                <li>
-                    <b>Port:</b>
-                    <code><%= @env["SERVER_PORT"] %></code>
-                </li>
-                <li>
-                    <b>Sinatra:</b>
-                    <code><%= Sinatra::VERSION %></code>
-                </li>
-            </ul>
-        </div>
+                                html.img(src: asset_url(image),
+                                         class: 'img-fluid animated fadeIn slower',
+                                         alt: nil,
+                                         height: "#{size.height}",
+                                         width: "#{size.width}")
+                            %>
+                        </div>
+                    <% end %>
+                    <div class="mdl-card__supporting-text no-bottom-padding">
+                        <span>Posted 2 days ago</span>
+                        <div id="tt-share-<%= "#{i}:#{j}" %>" class="icon material-icons">
+                            share
+                        </div>
+                        <div class="mdl-tooltip" for="tt-share-<%= "#{i}:#{j}" %>">
+                            Share via social media
+                        </div>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <p>
+                            Excepteur reprehenderit sint exercitation ipsum consequat qui sit id velit elit.
+                            Velit anim eiusmod labore
+                            sit
+                            amet. Voluptate voluptate irure occaecat deserunt incididunt esse in.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <% end %>
     </div>
-</div>
-<div class="col-md-4 mb-4">
-    <%= erb(:'layout/sidebar') %>
-</div>
+<% end %>
