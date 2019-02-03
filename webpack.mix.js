@@ -23,6 +23,9 @@ const mix = function () {
   mix.js(path.join(sourcePath, 'js/app.js'), paths.js)
   mix.sass(path.join(sourcePath, 'sass/app.scss'), paths.css, {
     sourceComments: !mix.config.production,
+    includePaths: [
+      path.resolve(path.join(sourcePath, '../modules'))
+    ]
   })
 
   copiables.forEach(function (i) {
@@ -69,6 +72,7 @@ const config = {
   resolve: {
     modules: [
       path.resolve(path.join(sourcePath, 'js')),
+      path.resolve(path.join(sourcePath, '../modules')),
       path.resolve(path.join(__dirname, 'node_modules'))
     ]
   },
