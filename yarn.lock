@@ -2689,6 +2689,11 @@ emojis-list@^2.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-2.1.0.tgz#4daa4d9db00f9819880c79fa457ae5b09a1fd389"
   integrity sha1-TapNnbAPmBmIDHn6RXrlsJof04k=
 
+encapsulated-mdl@1.2.*:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/encapsulated-mdl/-/encapsulated-mdl-1.2.5.tgz#cc31da2e7b4c7ee8bdcb838a551caa46a39fbab0"
+  integrity sha1-zDHaLntMfui9y4OKVRyqRqOfurA=
+
 encodeurl@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
