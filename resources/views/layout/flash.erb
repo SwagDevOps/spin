@@ -1,13 +1,15 @@
 <% unless flash.empty? %>
-    <div id="alerts-container" class="col-12">
+    <section id="alerts-container" class="col-12">
         <% flash.each do |type, message| %>
-            <div class="alert alert-<%= type %> alert-dismissible slideInRight wow" role="alert">
-                <%= h(message) %>
+            <div class="alert alert-<%= type %> animated slideInRight" role="alert">
+                <p>
+                    <%= h(message) %>
+                </p>
 
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="close-alert" aria-hidden="true">
+                    ×
                 </button>
             </div>
         <% end %>
-    </div>
+    </section>
 <% end %>

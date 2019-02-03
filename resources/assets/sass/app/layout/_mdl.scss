@@ -4,6 +4,7 @@
  * -------------------------- */
 @import "~material-design-lite/src/material-design-lite";
 @import "mdl/icons";
+@import "md-alerts/alert";
 
 header[id="fixed-header"] {
   .mdl-layout__header-row {
@@ -35,4 +36,9 @@ header[id="fixed-header"] {
 
 .mdl-card {
   width: 100%;
+}
+
+#alerts-container[class*="col-"] {
+  padding: 0 $reflex-grid-spacing;
+  margin: 0;
 }
