@@ -2,6 +2,7 @@
 
 import $ from 'jquery'
 import imageReflow from './layout/img_reflow'
+import mdl from 'encapsulated-mdl'
 
 // expose jQuery to window ------------------------------------------
 if (typeof window !== 'undefined') {
@@ -11,7 +12,7 @@ if (typeof window !== 'undefined') {
 
 export default function () {
   $(function () {
-    require('material-design-lite/material')
+    mdl.componentHandler.upgradeDom()
 
     imageReflow()
   })
