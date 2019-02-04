@@ -49,7 +49,6 @@ const paths = {
 const copiables = [
   [path.join(sourcePath, 'images/favicon.png'), path.join(publicPath, 'favicon.ico')],
   [path.join(sourcePath, 'images'), paths.images],
-  ['node_modules/font-awesome/fonts/', paths.fonts],
   ['node_modules/material-icons/iconfont/MaterialIcons-Regular.eot', paths.fonts],
   ['node_modules/material-icons/iconfont/MaterialIcons-Regular.svg', paths.fonts],
   ['node_modules/material-icons/iconfont/MaterialIcons-Regular.ttf', paths.fonts],
