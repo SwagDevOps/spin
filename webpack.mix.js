@@ -6,6 +6,7 @@ const Mix = require('webpack-mix')
 const glob = require('simple-glob')
 const Clean = require('clean-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
+const moduleRoots = require('./package.json').moduleRoots || []
 
 /*
  |--------------------------------------------------------------------------
@@ -23,9 +24,7 @@ const mix = function () {
   mix.js(path.join(sourcePath, 'js/app.js'), paths.js)
   mix.sass(path.join(sourcePath, 'sass/app.scss'), paths.css, {
     sourceComments: !mix.config.production,
-    includePaths: [
-      path.resolve(path.join(sourcePath, '../modules'))
-    ]
+    includePaths: moduleRoots
   })
 
   copiables.forEach(function (i) {
@@ -69,11 +68,7 @@ let cleanables = [
 const config = {
   devtool: process.env.NODE_ENV !== 'production' ? 'source-map' : false,
   resolve: {
-    modules: [
-      path.resolve(path.join(sourcePath, 'js')),
-      path.resolve(path.join(sourcePath, '../modules')),
-      path.resolve(path.join(__dirname, 'node_modules'))
-    ]
+    modules: moduleRoots,
   },
   plugins: [
     new Clean(cleanables, { verbose: true }),

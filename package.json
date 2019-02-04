@@ -30,5 +30,9 @@
         "webpack-cli": "~3.1.2",
         "webpack-mix": "~2.0.2",
         "webpack-version-file-plugin": "~0.3.3"
-    }
+    },
+    "moduleRoots": [
+        "./resources/modules",
+        "./node_modules"
+    ]
 }
