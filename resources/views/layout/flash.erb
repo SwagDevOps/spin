@@ -2,11 +2,11 @@
     <section id="alerts-container" class="col-12">
         <% flash.each do |type, message| %>
             <div class="alert alert-<%= type %> animated slideInRight" role="alert">
-                <p>
+                <p class="message">
                     <%= h(message) %>
                 </p>
 
-                <button type="button" class="close-alert" aria-hidden="true">
+                <button type="button" class="close" aria-hidden="true">
                     ×
                 </button>
             </div>
