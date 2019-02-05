@@ -6,7 +6,11 @@ const Mix = require('webpack-mix')
 const glob = require('simple-glob')
 const Clean = require('clean-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
-const moduleRoots = require('./package.json').moduleRoots || []
+
+const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots || [])
+  .concat(['node_modules'])
+  .map(fp => path.join(__dirname, fp) + '/')
+  .filter((x, i, a) => a.indexOf(x) === i)
 
 /*
  |--------------------------------------------------------------------------
@@ -52,7 +56,7 @@ const copiables = [
   ['node_modules/material-icons/iconfont/MaterialIcons-Regular.svg', paths.fonts],
   ['node_modules/material-icons/iconfont/MaterialIcons-Regular.ttf', paths.fonts],
   ['node_modules/material-icons/iconfont/MaterialIcons-Regular.woff', paths.fonts],
-  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.woff2', paths.fonts],
+  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.woff2', paths.fonts]
 ]
 
 let cleanables = [
@@ -68,7 +72,7 @@ let cleanables = [
 const config = {
   devtool: process.env.NODE_ENV !== 'production' ? 'source-map' : false,
   resolve: {
-    modules: moduleRoots,
+    modules: moduleRoots
   },
   plugins: [
     new Clean(cleanables, { verbose: true }),
