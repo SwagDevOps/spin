@@ -3,42 +3,10 @@
  * @see https://getmdl.io/started/
  * -------------------------- */
 @import "~material-design-lite/src/material-design-lite";
+
 @import "mdl/icons";
-@import "md-alerts/alert";
+@import "mdl/img";
+@import "mdl/alerts";
+@import "mdl/layout";
 
-header[id="fixed-header"] {
-  .mdl-layout__header-row {
-    height: 56px;
-    padding: 0 16px;
-  }
 
-  h1 a.android-title {
-    color: #fff;
-    text-decoration: none;
-  }
-}
-
-.img-fluid {
-  max-width: 100%;
-  height: auto;
-}
-
-.img-responsive {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-.android-content main[id=main-col] {
-  max-width: 980px;
-  margin: 0 auto;
-}
-
-.mdl-card {
-  width: 100%;
-}
-
-#alerts-container[class*="col-"] {
-  padding: 0 $reflex-grid-spacing;
-  margin: 0;
-}

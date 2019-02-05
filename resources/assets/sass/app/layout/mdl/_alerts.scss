@@ -1,0 +1,8 @@
+@import "md-alerts/alert";
+
+#alerts-container[class*="col-"] {
+  padding: 0 $reflex-grid-spacing;
+  margin: 0;
+
+  overflow-x: hidden;
+}

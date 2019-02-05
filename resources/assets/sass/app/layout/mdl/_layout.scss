@@ -1,0 +1,20 @@
+header[id="fixed-header"] {
+  .mdl-layout__header-row {
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  h1 a.android-title {
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.android-content main[id=main-col] {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.mdl-card {
+  width: 100%;
+}
