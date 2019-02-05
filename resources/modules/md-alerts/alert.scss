@@ -44,12 +44,10 @@ $alert-danger-bg-color: #d32f2f !default;
     background-color: $alert-danger-bg-color;
   }
 
-  p {
-    padding: 0;
-    margin: 0;
+  .message {
     flex: 1;
-
-    padding-left: 8px;
+    margin: 0;
+    padding: 0 0 0 8px;
   }
 
   i {
@@ -58,30 +56,36 @@ $alert-danger-bg-color: #d32f2f !default;
     font-size: 24px;
   }
 
-  .close-alert {
-    flex: 0 0 auto;
-    text-align: center;
-    -moz-appearance: none;
-    -webkit-appearance: none;
+  .close {
+    & {
+      flex: 0 0 auto;
+      text-align: center;
 
-    position: relative;
-    cursor: pointer;
-    color: inherit;
-    background: 0 0;
-    font-size: 21px;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, .7);
+      position: relative;
+      cursor: pointer;
+      color: inherit;
+      background: 0 0;
+      font-size: 21px;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, .7);
 
-    border: none;
-    outline: none;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      vertical-align: middle;
+      border-radius: 50%;
+    }
 
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    vertical-align: middle;
-    border-radius: 50%;
+    &, &:active &:focus {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      text-transform: none;
+
+      border: none;
+      outline: none;
+    }
 
     &:hover {
-      background-color:rgba(0, 0, 0, 0.15);
+      background-color: rgba(0, 0, 0, 0.15);
     }
   }
 }

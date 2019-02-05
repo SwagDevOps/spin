@@ -1,0 +1,7 @@
+{
+    "name": "md-alerts",
+    "main": "index.js",
+    "dependencies": {
+        "jquery": "*"
+    }
+}
