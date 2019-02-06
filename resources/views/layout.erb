@@ -11,15 +11,15 @@
     <body>
         <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
             <%= erb(:'layout/top-bar') %>
+
             <section class="android-content mdl-layout__content">
                 <main id="main-col">
-
                     <%= erb(:'layout/flash') %>
 
                     <%= yield %>
-
-                    <%= erb(:'layout/footer') %>
                 </main>
+
+                <%= erb(:'layout/footer') %>
             </section>
         </div>
     </body>

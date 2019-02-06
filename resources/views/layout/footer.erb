@@ -1,19 +1,31 @@
-<!--Footer-->
-<footer class="page-footer sticky text-center font-small mdb-color darken-2 mt-4 wow fadeIn">
-    <!--Call to action-->
-    <div class="pt-4 pb-4">
-        <a class="btn btn-outline-white"
-           href="https://github.com/SwagDevOps/spin"
-           role="button">
-            Download
-            <i class="fa fa-download ml-2"></i>
-        </a>
-    </div>
-    <!--Copyright-->
-    <div class="footer-copyright pt-3 pb-3">
-        &copy;
-        <%= Spin::VERSION.date.split('-')[0] %>
-        -
-        <%= Spin::VERSION.authors.join(', ') %>
+<footer id="page-footer" class="mdl-mini-footer">
+    <!-- MDL Footer left Section-->
+    <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">Tutorials Park</div>
+        <!-- MDL Footer link-list -->
+        <ul class="mdl-mini-footer__link-list">
+            <li><a href="#">Contacts</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+        </ul>
     </div>
 </footer>
+<!--
+<div>
+    <section class="footer-content">
+        <div>
+            <a href="https://github.com/SwagDevOps/spin"
+               role="button">
+                Download
+                <i class="fa fa-download ml-2"></i>
+            </a>
+        </div>
+
+        <div class="footer-copyright">
+            &copy;
+<%= Spin::VERSION.date.split('-')[0] %>
+            -
+            <%= Spin::VERSION.authors.join(', ') %>
+        </div>
+    </section>
+</div>
+-->
