@@ -1,31 +1,15 @@
 <footer id="page-footer" class="mdl-mini-footer">
-    <!-- MDL Footer left Section-->
     <div class="mdl-mini-footer__left-section">
-        <div class="mdl-logo">Tutorials Park</div>
-        <!-- MDL Footer link-list -->
+        <div class="mdl-logo">
+            &copy;
+            <%= Spin::VERSION.date.split('-')[0] %>
+            -
+            <%= Spin::VERSION.authors.join(', ') %>
+        </div>
+
         <ul class="mdl-mini-footer__link-list">
             <li><a href="#">Contacts</a></li>
             <li><a href="#">Privacy Policy</a></li>
         </ul>
     </div>
 </footer>
-<!--
-<div>
-    <section class="footer-content">
-        <div>
-            <a href="https://github.com/SwagDevOps/spin"
-               role="button">
-                Download
-                <i class="fa fa-download ml-2"></i>
-            </a>
-        </div>
-
-        <div class="footer-copyright">
-            &copy;
-<%= Spin::VERSION.date.split('-')[0] %>
-            -
-            <%= Spin::VERSION.authors.join(', ') %>
-        </div>
-    </section>
-</div>
--->
