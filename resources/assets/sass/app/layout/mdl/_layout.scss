@@ -12,7 +12,8 @@ header[id="fixed-header"] {
 .android-content main[id=main-col] {
   max-width: 980px;
   margin: $reflex-grid-spacing auto;
-  min-height: calc(100vh - 169px);
+
+  min-height: calc(100vh - 160px);
 }
 
 .mdl-card {
