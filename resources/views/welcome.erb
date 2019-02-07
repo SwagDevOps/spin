@@ -3,9 +3,9 @@
         <% (1..3).each do |j| %>
             <div class="col-md-4">
                 <div class="mdl-card mdl-shadow--4dp">
-                    <heder class="mdl-card__title">
+                    <header class="mdl-card__title">
                         <h2 class="mdl-card__title-text">Voluptate voluptate</h2>
-                    </heder>
+                    </header>
                     <% erb_cache('welcome:featured_image', expires: 120) do %>
                         <div class="mdl-card__media" data-updated_at="<%= Time.now %>">
                             <%=
