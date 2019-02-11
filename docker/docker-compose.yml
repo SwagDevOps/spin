@@ -13,12 +13,10 @@ services:
       VIRTUAL_HOST: "web.spin.${DC_DOMAIN:-test}"
     volumes:
       - ..:/var/www/localhost/
-      - web-gems:/usr/lib/ruby/gems/2.5.0/
       - web-bundle:/usr/lib/bundle/
     networks: [default, proxy]
 
 volumes:
-  web-gems:
   web-bundle:
 
 networks:

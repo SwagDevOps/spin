@@ -19,5 +19,6 @@ chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/serve
 
 (test -f /var/www/localhost/gems.rb && {
      (cd /var/www/localhost/
-      sudo bundle install || :)
+      bundle config
+      bundle install || :)
 }) || :
