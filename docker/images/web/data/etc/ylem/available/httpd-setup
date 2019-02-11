@@ -1,0 +1,24 @@
+#!/usr/bin/env sh
+
+set -eu
+
+groupadd -f -g ${VOLUME_GID} --system www-data
+useradd -d /var/www/ \
+        -g ${VOLUME_GID} \
+        --no-create-home \
+        --no-user-group \
+        --system \
+        --shell $(which bash) \
+        www-data || :
+
+usermod -u ${VOLUME_UID} www-data
+groupmod -g ${VOLUME_GID} www-data
+
+mkdir -p /var/serve
+chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/serve
+
+(test -f /var/www/localhost/gems.rb && {
+     (cd /var/www/localhost/
+      bundle config
+      bundle install || :)
+}) || :
