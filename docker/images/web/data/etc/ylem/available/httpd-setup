@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+set -eu
+
+groupadd -f -g ${VOLUME_GID} --system www-data
+useradd -d /var/www/ \
+        -g ${VOLUME_GID} \
+        --no-create-home \
+        --no-user-group \
+        --system \
+        --shell $(which bash) \
+        www-data || :
+
+usermod -u ${VOLUME_UID} www-data
+groupmod -g ${VOLUME_GID} www-data
+
+mkdir -p /var/serve
+chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/serve
+
+(cd /var/www/localhost/ && {
+     ((test -f gems.rb && test -f gems.locked) && {
+          export BUNDLE_JOBS=$(nproc)
+          export BUNDLE_IGNORE_MESSAGES=true
+
+          bundle install --clean
+      })
+ }) || :
