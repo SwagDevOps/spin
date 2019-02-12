@@ -17,8 +17,11 @@ groupmod -g ${VOLUME_GID} www-data
 mkdir -p /var/serve
 chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/serve
 
-(test -f /var/www/localhost/gems.rb && {
-     (cd /var/www/localhost/
-      bundle config
-      bundle install || :)
-}) || :
+(cd /var/www/localhost/ && {
+     ((test -f gems.rb && test -f gems.locked) && {
+          export BUNDLE_JOBS=$(nproc)
+          export BUNDLE_IGNORE_MESSAGES=true
+
+          bundle install --clean
+      })
+ }) || :
