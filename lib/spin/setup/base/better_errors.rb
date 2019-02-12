@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/MixinUsage
 if Gem::Specification.find_all_by_name('better_errors').any?
   configure :development do
     require 'better_errors'
@@ -16,6 +15,3 @@ if Gem::Specification.find_all_by_name('better_errors').any?
     require 'binding_of_caller'
   end
 end
-
-include(Spin::Helpers)
-# rubocop:enable Style/MixinUsage
