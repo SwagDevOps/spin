@@ -4,7 +4,7 @@
 require 'rack/csrf'
 
 configure do
-  use Rack::Csrf, raise: true
+  use Rack::Csrf, raise: true, field: '_csrf_token'
 end
 
 helpers do
