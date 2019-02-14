@@ -7,6 +7,7 @@ require_relative '../lib/spin'
 class WebApp < Spin
   {
     Controller: :controller,
+    Forms: :forms,
     User: :user,
   }.each { |k, v| autoload k, "#{__dir__}/web_app/#{v}" }
 
