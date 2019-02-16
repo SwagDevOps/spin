@@ -11,6 +11,7 @@ module Spin::Core
     Config: :config,
     Container: :container,
     Forwardable: :forwardable,
+    Html: :html,
     Initializer: :initializer,
     Injectable: :injectable,
     Setup: :setup,
