@@ -34,12 +34,21 @@ module Spin::Core::Injectable
     #
     # @return [Boolean]
     # @see https://dry-rb.org/gems/dry-auto_inject/
-    def inject(key, strategy: :kwargs)
+    def inject(*keys, strategy: :kwargs)
       # rubocop:disable Style/NilComparison, Layout/EmptyLineAfterGuardClause
       return false if self.injector == nil
       # rubocop:enable Style/NilComparison, Layout/EmptyLineAfterGuardClause
 
-      !!self.__send__(:include, self.injector.__send__(strategy)[key])
+      true.tap do
+        keys.each do |key|
+          # Produce something similar to:
+          #
+          # ```
+          # include Import.args["users_repository"]
+          # ```
+          self.__send__(:include, self.injector.__send__(strategy)[key])
+        end
+      end
     end
 
     # @return [Dry::AutoInject::Builder|nil]
