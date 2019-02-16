@@ -4,8 +4,10 @@ require_relative './base'
 
 # Login form
 class WebApp::Forms::Login < WebApp::Forms::Base
-  def prepare
-    self.url ||= '/login'
+  def initialize(*args)
+    super
+
+    self.url = '/login'
   end
 
   # rubocop:disable Metrics/LineLength
@@ -21,9 +23,7 @@ class WebApp::Forms::Login < WebApp::Forms::Base
         end
       end
     end
-  end)
-
-  push(lambda do |_f|
+  end, lambda do |_f|
     div(class: 'grid') do
       div(class: 'col-sm-12') do
         submit('Submit', class: 'mdl-button mdl-button--raised mdl-button--colored')
