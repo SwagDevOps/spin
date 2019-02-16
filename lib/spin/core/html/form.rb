@@ -36,6 +36,10 @@ class Spin::Core::Html::Form
     def structure
       @structure ||= []
     end
+
+    def push(*args)
+      self.structure.push(*args)
+    end
   end
 
   # @param [Object] context
