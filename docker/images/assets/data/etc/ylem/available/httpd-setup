@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+set -eux
+
+# create user --------------------------------------------------------
+groupdel www-data ||:
+groupadd -f -g ${VOLUME_GID} --system www-data
+useradd -d /var/www/ \
+        -g ${VOLUME_GID} \
+        --no-create-home \
+        --no-user-group \
+        --system \
+        --shell $(which bash) \
+        www-data || :
+
+usermod -u ${VOLUME_UID} www-data
+groupmod -g ${VOLUME_GID} www-data
+
+# create logdir ------------------------------------------------------
+mkdir -p /var/log/darkhttpd/
+chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/log/darkhttpd/
