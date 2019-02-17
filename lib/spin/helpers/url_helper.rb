@@ -21,6 +21,9 @@ module Spin::Helpers::UrlHelper
         false => nil }[!ports.include?([request.scheme, request.port])],
       request.script_name
     ][(path_only ? -1 : 0)..-1]
+
+    # @todo use a environment variable or a config
+    parts = ['http://assets.spin.test/'] if true
     # @formatter:on
 
     "#{parts.join('')}/#{url_fragment}"
