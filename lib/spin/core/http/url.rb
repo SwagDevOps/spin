@@ -29,10 +29,13 @@ class Spin::Core::Http::Url
   # @type [Boolean]
   attr_accessor :path_only
 
+  attr_accessor :query
+
   # @param [String] fragment
   def initialize(fragment)
     @fragment = fragment.gsub(%r{^/}, '')
     @path_only = false
+    @query = {}
 
     yield(self) if block_given?
   end
@@ -45,7 +48,19 @@ class Spin::Core::Http::Url
   #
   # @return [String]
   def to_path
-    [request.script_name, fragment].join('/')
+    path = [request.script_name, fragment].join('/')
+
+    return path if query.empty?
+
+    URI(path).tap do |uri|
+      Hash[URI.decode_www_form(uri.query || '')].tap do |decoded_uri|
+        query.each { |k, v| decoded_uri[k] = v }
+
+        uri.query = URI.encode_www_form(decoded_uri)
+      end
+
+      return uri.to_s
+    end
   end
 
   # Get URL.
@@ -61,7 +76,7 @@ class Spin::Core::Http::Url
     ][(path_only? ? -1 : 0)..-1]
     # @formatter:on
 
-    "#{parts.join('')}/#{to_path}"
+    "#{parts.join('')}#{to_path}"
   end
 
   # @return [URI::HTTP]
