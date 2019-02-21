@@ -20,15 +20,30 @@ require_relative '../http'
 class Spin::Core::Http::Url
   autoload(:URI, 'uri')
 
+  # Base path used to construct URL.
+  #
   # @return [String]
   attr_reader :fragment
 
-  # @type [Object]
+  # Original request (or forged using a struct).
+  #
+  # Request SHOULD (at least) provide the following methods:
+  #
+  # * ``scheme``
+  # * ``host``
+  #
+  # @type [Rack::Request]
   attr_accessor :request
 
+  # Denote url will be constructed as a path or an aboslute URL including
+  # protocol, domain and port (when necessary).
+  #
   # @type [Boolean]
   attr_accessor :path_only
 
+  # Query-string parameters.
+  #
+  # @type [Hash]
   attr_accessor :query
 
   # @param [String] fragment
