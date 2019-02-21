@@ -12,20 +12,9 @@ module Spin::Helpers::UrlHelper
   # include the site name and port number.  The latter is typically necessary
   # for links in RSS feeds.
   def url_for(url_fragment, path_only: true)
-    url_fragment = url_fragment.gsub(%r{^/}, '')
-    ports = [['http', 80], ['https', 443]]
-    # @formatter:off
-    parts = [
-      request.scheme, '://', request.host,
-      { true => ":#{request.port}",
-        false => nil }[!ports.include?([request.scheme, request.port])],
-      request.script_name
-    ][(path_only ? -1 : 0)..-1]
-
-    # @todo use a environment variable or a config
-    parts = ['http://assets.spin.test/'] if true
-    # @formatter:on
-
-    "#{parts.join('')}/#{url_fragment}"
+    Spin::Core::Http::Url.new(url_fragment) do |url|
+      url.path_only = path_only
+      url.request = self.request
+    end
   end
 end
