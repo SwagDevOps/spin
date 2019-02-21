@@ -36,6 +36,7 @@ class Spin::Core::Http::Url
     @fragment = fragment.gsub(%r{^/}, '')
     @path_only = false
     @query = {}
+    @request = nil
 
     yield(self) if block_given?
   end
