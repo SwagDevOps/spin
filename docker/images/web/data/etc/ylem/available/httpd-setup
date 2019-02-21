@@ -13,10 +13,17 @@ useradd -d /var/www/ \
 
 usermod -u ${VOLUME_UID} www-data
 groupmod -g ${VOLUME_GID} www-data
-
+# minimal directories ------------------------------------------------
 mkdir -p /var/serve
 chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/serve
-
+# create logs --------------------------------------------------------
+sudo -u www-data touch /var/serve/stdout.log
+sudo -u www-data touch /var/serve/stderr.log
+sudo mkdir -p /var/log/httpd
+ln -sfvr /var/serve/stdout.log /var/log/httpd/
+ln -sfvr /var/serve/stderr.log /var/log/httpd/
+sudo chown -Rf www-data:www-data /var/log/httpd/
+# bundle install -----------------------------------------------------
 (cd /var/www/localhost/ && {
      ((test -f gems.rb && test -f gems.locked) && {
           export BUNDLE_JOBS=$(nproc)
