@@ -13,29 +13,19 @@ module Spin::Helpers::AssetsHelper
   autoload(:URI, 'uri')
   autoload(:ImageSize, 'image_size')
 
-  include Spin::Helpers::UrlHelper
-
+  # Get url for an asset file.
+  #
+  # @param [String] path
+  # @param [Boolean] path_only
+  #
+  # @return [Spin::Core::Http::Url]
+  #
   # @see Hanami::Helpers::LinkToHelper.link_to()
   def asset_url(path, path_only: false)
-    URI(url_for(path, path_only: path_only)).tap do |uri|
-      if asset_mtime
-        Hash[URI.decode_www_form(uri.query || '')].tap do |decoded_uri|
-          decoded_uri["t#{asset_mtime.to_f}"] = nil
-
-          uri.query = URI.encode_www_form(decoded_uri)
-        end
-      end
-
-      return uri.to_s
-    end
-  end
-
-  # @return [ImageSize|nil]
-  def image_size(path)
-    asset_path(path).tap do |fp|
-      return nil unless fp.file?
-
-      File.open(fp, 'rb') { |fh| return ImageSize.new(fh) }
+    Spin::Core::Http::Url.new(path) do |url|
+      url.path_only = path_only
+      url.request = self.request
+      url.query = { "t#{asset_mtime.to_f}" => nil }
     end
   end
 
@@ -45,6 +35,15 @@ module Spin::Helpers::AssetsHelper
       Pathname.new(self.class.public_dir).join(version_file).tap do |file|
         return file.file? ? file.mtime : nil
       end
+    end
+  end
+
+  # @return [ImageSize|nil]
+  def image_size(path)
+    asset_path(path).tap do |fp|
+      return nil unless fp.file?
+
+      File.open(fp, 'rb') { |fh| return ImageSize.new(fh) }
     end
   end
 
