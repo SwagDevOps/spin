@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+
+set -eu
+
+test -z "$(ls -A "$POSTGRES_DATAPATH")" || exit 0
+# setting database ---------------------------------------------------
+test -n "$POSTGRES_PASSWORD" && {
+    passwordSql="PASSWORD '${POSTGRES_PASSWORD}'"
+    authMethod=md5
+} || {
+    passwordSql=
+    authMethod=trust
+
+    echo 'Use POSTGRES_PASSWORD environment to secure your database' 1>&2
+}
+
+test "$POSTGRES_DATABASE" != 'postgres' && {
+    "CREATE DATABASE ${POSTGRES_DATABASE};" | \
+        sudo -u postgres postgres -D "$POSTGRES_DATAPATH" --single -jE
+}
+
+test "$POSTGRES_USER" != 'postgres' && {
+    op=CREATE
+} || {
+    op=ALTER
+}
+
+echo "${op} USER ${POSTGRES_USER} WITH SUPERUSER ${passwordSql};" | \
+    sudo -u postgres postgres -D "$POSTGRES_DATAPATH" --single -jE
+
+echo "host all all 0.0.0.0/0 ${authMethod}" >> \
+     "${POSTGRES_DATAPATH}/pg_hba.conf"
