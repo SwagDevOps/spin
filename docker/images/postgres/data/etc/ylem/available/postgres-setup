@@ -1,32 +1,73 @@
-#!/usr/bin/env sh
+#!/usr/bin/env ruby
 
-set -eu
+# @see https://hub.docker.com/_/postgres
+# @see https://github.com/docker-library/postgres/blob/cc305ee1c59d93ac1808108edda6556b879374a4/10/docker-entrypoint.sh
 
-test -z "$(ls -A "$POSTGRES_DATAPATH")" || exit 0
-# setting database ---------------------------------------------------
-test -n "$POSTGRES_PASSWORD" && {
-    passwordSql="PASSWORD '${POSTGRES_PASSWORD}'"
-    authMethod=md5
-} || {
-    passwordSql=
-    authMethod=trust
+require 'tempfile'
+require 'open3'
+require 'pathname'
+require 'fileutils'
+include(FileUtils::Verbose)
 
-    echo 'Use POSTGRES_PASSWORD environment to secure your database' 1>&2
-}
+sh = lambda do |*args|
+  system(*args) || lambda do
+    raise RuntimeError, args.inspect
+  end.call
+end
 
-test "$POSTGRES_DATABASE" != 'postgres' && {
-    "CREATE DATABASE ${POSTGRES_DATABASE};" | \
-        sudo -u postgres postgres -D "$POSTGRES_DATAPATH" --single -jE
-}
+psql = lambda do |stt, data_path = ENV.fetch('POSTGRES_DATAPATH')|
+  command = [
+    'sudo', '-u', 'postgres',
+    'postgres', '--single', '-D', data_path, '-j',
+  ].tap do |command|
+    _output, wait_thr = Open3.capture2(*command, stdin_data: stt)
+    unless wait_thr.success?
+      raise RuntimeError, stt.inspect
+    end
+  end
+end
 
-test "$POSTGRES_USER" != 'postgres' && {
-    op=CREATE
-} || {
-    op=ALTER
-}
+lambda do |data_path|
+  {
+    data_path => false,
+    '/run/postgresql/' => true,
+    '/var/log/postgresql/' => true,
+  }.each do |path, chowned|
+    mkdir_p(path)
+    chown_R('postgres', 'postgres', path) if chowned
+  end
 
-echo "${op} USER ${POSTGRES_USER} WITH SUPERUSER ${passwordSql};" | \
-    sudo -u postgres postgres -D "$POSTGRES_DATAPATH" --single -jE
+  return false unless Dir.empty?(data_path)
 
-echo "host all all 0.0.0.0/0 ${authMethod}" >> \
-     "${POSTGRES_DATAPATH}/pg_hba.conf"
+  chown_R('postgres', 'postgres', data_path)
+
+  [
+    ENV.fetch('POSTGRES_DATABASE'),
+    ENV.fetch('POSTGRES_USERNAME'),
+    ENV.fetch('POSTGRES_PASSWORD')
+  ].tap do |db_name, db_user, db_pass|
+    Tempfile.open('pwfile-') do |f|
+      f.write(db_pass)
+      f.close
+      chmod(0644, f.path).fetch(0)
+    end.tap do |pwfile|
+      sh.call('sudo', '-u', 'postgres',
+              'initdb',
+              '-U', db_user,
+              '-D', data_path,
+              '--pwfile', pwfile)
+    end
+
+    psql.call("CREATE DATABASE #{db_name};")
+  end
+
+  # config file (postgresql.conf) ------------------------------------
+  Pathname.new(data_path).join('postgresql.conf').open('a') do |f|
+    f.puts("include = '/etc/postgresql/postgresql.conf'\n")
+  end
+
+  # config file (pg_hba.conf) ----------------------------------------
+  Pathname.new(data_path).join('pg_hba.conf').open('a') do |f|
+    f.puts("host all all 0.0.0.0/0 md5\n")
+  end
+end.call(ENV.fetch('POSTGRES_DATAPATH'))
