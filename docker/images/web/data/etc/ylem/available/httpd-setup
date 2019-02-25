@@ -1,34 +1,70 @@
-#!/usr/bin/env sh
+#!/usr/bin/env ruby
+# frozen_string_literal: true
 
-set -eu
+require 'pathname'
+require 'fileutils'
+# rubocop:disable Style/MixinUsage
+include(FileUtils::Verbose)
+# rubocop:enable Style/MixinUsage
 
-groupadd -f -g ${VOLUME_GID} --system www-data
-useradd -d /var/www/ \
-        -g ${VOLUME_GID} \
-        --no-create-home \
-        --no-user-group \
-        --system \
-        --shell $(which bash) \
-        www-data || :
+sh = lambda do |*args|
+  system(*args) || lambda do
+    raise args.inspect
+  end.call
+end
 
-usermod -u ${VOLUME_UID} www-data
-groupmod -g ${VOLUME_GID} www-data
-# minimal directories ------------------------------------------------
-mkdir -p /var/serve
-chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/serve
-# create logs --------------------------------------------------------
-sudo -u www-data touch /var/serve/stdout.log
-sudo -u www-data touch /var/serve/stderr.log
-sudo mkdir -p /var/log/httpd
-ln -sfvr /var/serve/stdout.log /var/log/httpd/
-ln -sfvr /var/serve/stderr.log /var/log/httpd/
-sudo chown -Rf www-data:www-data /var/log/httpd/
-# bundle install -----------------------------------------------------
-(cd /var/www/localhost/ && {
-     ((test -f gems.rb && test -f gems.locked) && {
-          export BUNDLE_JOBS=$(nproc)
-          export BUNDLE_IGNORE_MESSAGES=true
+# user/group creation -----------------------------------------------
+user_setup = lambda do |gid, uid|
+  sh.call('groupadd', '-f', '-g', gid, '--system', 'www-data')
+  sh.call('useradd', '-d', '/var/www',
+          '-g', gid,
+          '-u', uid,
+          '--no-create-home',
+          '--no-user-group',
+          '--system',
+          '--shell', `which bash`.chomp,
+          'www-data')
+end
 
-          bundle install --clean
-      })
- }) || :
+# bundle install ----------------------------------------------------
+bundle_setup = lambda do |pwd|
+  Dir.chdir(pwd) do
+    ['gems.rb', 'gems.locked'].map { |f| Pathname.new(f).file? }.tap do |res|
+      return false unless res == [true, true]
+    end
+
+    # @formatter:off
+    {
+      'BUNDLE_JOBS' => `nproc`.chomp,
+      'BUNDLE_IGNORE_MESSAGES' => 'true',
+    }.tap do |env|
+      sh.call(env, 'bundle', 'install', '--clean')
+    end
+    # @formatter:on
+  end
+end
+
+# filesystem setup --------------------------------------------------
+filesystem_setup = lambda do |gid, uid|
+  mkdir_p('/var/www/localhost')
+  mkdir_p('/var/log/httpd')
+
+  '/var/serve'.tap do |var_dir|
+    mkdir_p(var_dir)
+    chown_R(uid, gid, var_dir)
+    ['stdout.log', 'stderr.log'].each do |fname|
+      Pathname.new(var_dir).join(fname).tap do |fp|
+        fp.write('')
+        chown_R(uid, gid, fp)
+        ln_s(fp, Pathname.new('/var/log/httpd').join(fp.basename))
+      end
+    end
+  end
+end
+
+# main process ------------------------------------------------------
+lambda do |gid, uid|
+  user_setup.call(gid, uid)
+  filesystem_setup.call(gid, uid)
+  bundle_setup.call('/var/www/localhost')
+end.call(ENV.fetch('VOLUME_GID'), ENV.fetch('VOLUME_UID'))
