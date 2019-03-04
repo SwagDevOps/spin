@@ -26,6 +26,9 @@ services:
       VIRTUAL_HOST: "assets.spin.${DC_DOMAIN:-test}"
     volumes:
       - ../public:/var/www/localhost/
+  spin_db:
+    build: { context: images/postgres }
+    expose: ["5432"]
 volumes:
   spin_web-bundle:
 

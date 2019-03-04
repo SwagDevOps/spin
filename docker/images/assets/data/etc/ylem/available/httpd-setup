@@ -1,21 +1,54 @@
-#!/usr/bin/env sh
+#!/usr/bin/env ruby
+# frozen_string_literal: true
 
-set -eux
+require 'pathname'
+require 'fileutils'
+# rubocop:disable Style/MixinUsage
+include(FileUtils::Verbose)
+# rubocop:enable Style/MixinUsage
 
-# create user --------------------------------------------------------
-groupdel www-data ||:
-groupadd -f -g ${VOLUME_GID} --system www-data
-useradd -d /var/www/ \
-        -g ${VOLUME_GID} \
-        --no-create-home \
-        --no-user-group \
-        --system \
-        --shell $(which bash) \
-        www-data || :
+sh = lambda do |*args|
+  system(*args) || lambda do
+    raise args.inspect
+  end.call
+end
 
-usermod -u ${VOLUME_UID} www-data
-groupmod -g ${VOLUME_GID} www-data
+# user/group creation -----------------------------------------------
+user_setup = lambda do |gid, uid|
+  ['www-data', 'darkhttpd'].each do |name|
+    # @formatter:off
+    {
+      user: '/etc/passwd',
+      group: '/etc/group',
+    }.each do |type, file|
+      next unless Pathname.new(file).read =~ /^#{name}:/
 
-# create logdir ------------------------------------------------------
-mkdir -p /var/log/darkhttpd/
-chown -Rf ${VOLUME_UID}:${VOLUME_GID} /var/log/darkhttpd/
+      sh.call("#{type}del", name)
+      # @formatter:on
+    end
+  end
+
+  sh.call('groupadd', '-f', '-g', gid, '--system', 'www-data')
+  sh.call('useradd', '-d', '/var/www',
+          '-g', gid,
+          '-u', uid,
+          '--no-create-home',
+          '--no-user-group',
+          '--system',
+          '--shell', `which bash`.chomp,
+          'www-data')
+end
+
+# filesystem setup --------------------------------------------------
+filesystem_setup = lambda do |gid, uid|
+  '/var/log/darkhttpd'.tap do |log_dir|
+    mkdir_p(log_dir)
+    chown_R(uid, gid, log_dir)
+  end
+end
+
+# main process ------------------------------------------------------
+lambda do |gid, uid|
+  user_setup.call(gid, uid)
+  filesystem_setup.call(gid, uid)
+end.call(ENV.fetch('VOLUME_GID'), ENV.fetch('VOLUME_UID'))

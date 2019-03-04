@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# By  default,  the locale package which provides the base support for
+# localisation of libc-based programs does not contain usable localisation files
+# for every supported language.
+# This limitation has became necessary because of the substantial size
+# of such files and the large number of languages supported by libc.
+#
+# locale-gen is a program that reads the file ``/etc/locale.yml``
+# and invokes localedef for the chosen localisation profiles.
+# Run locale-gen after you have modified the /etc/locale.gen file.
+#
+# @see http://manpages.ubuntu.com/manpages/bionic/man8/locale-gen.8.html
+class LocaleGen
+  autoload(:Pathname, 'pathname')
+  autoload(:YAML, 'yaml')
+
+  attr_reader :targets
+
+  attr_reader :charset
+
+  def initialize(definition_file)
+    @charset = 'UTF-8'
+    @targets = lambda do |file|
+      Pathname.new(file).read.tap do |content|
+        return YAML.safe_load(content)
+      end
+    end.call(definition_file)
+  end
+
+  def call
+    $stdout.tap do |output|
+      output.puts('Generating locales (this might take a while)...')
+      return targets.map { |locale| self.gen(locale) }.tap do
+        output.puts('Generation complete.')
+      end
+    end
+  end
+
+  protected
+
+  def gen(locale)
+    $stdout.tap do |output|
+      [locale, charset].join('.').tap do |target|
+        output.write("  #{locale}.#{charset}...")
+        sh('localedef', '-i', locale, '-f', charset, target)
+        output.write(" done\n")
+
+        return target
+      end
+    end
+  end
+
+  def sh(*args)
+    system(*args) || lambda do
+      raise args.inspect
+    end
+  end
+end
+
+LocaleGen.new('/etc/locale.yml').call

@@ -1,0 +1,11 @@
+#!/usr/bin/env svrun
+# vim: ai ts=2 sts=2 et sw=2 ft=ruby
+
+service(['postgres',
+         '-D', ENV.fetch('POSTGRES_DATAPATH')],
+        user: :'postgres',
+        group: 'postgres').call
+
+# Local Variables:
+# mode: ruby
+# End:
