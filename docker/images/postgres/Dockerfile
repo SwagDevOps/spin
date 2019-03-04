@@ -13,15 +13,15 @@ RUN apk add --no-cache \
 
 # @see https://github.com/sgerrand/alpine-pkg-glibc
 # @see https://github.com/gliderlabs/docker-alpine/issues/144
-RUN apk --no-cache add ca-certificates wget && \
+RUN apk add --no-cache ca-certificates wget && \
     wget https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
-         -qO /etc/apk/keys/sgerrand.rsa.pub
+         -O /etc/apk/keys/sgerrand.rsa.pub
 RUN export GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc && \
     export RELEASE_URL=${GLIBC_REPO}/releases/download/${GLIBC_VERSION} && \
     cd /tmp && \
-    wget -q ${RELEASE_URL}/glibc-${GLIBC_VERSION}.apk && \
-    wget -q ${RELEASE_URL}/glibc-bin-${GLIBC_VERSION}.apk && \
-    wget -q ${RELEASE_URL}/glibc-i18n-${GLIBC_VERSION}.apk && \
+    wget ${RELEASE_URL}/glibc-${GLIBC_VERSION}.apk && \
+    wget ${RELEASE_URL}/glibc-bin-${GLIBC_VERSION}.apk && \
+    wget ${RELEASE_URL}/glibc-i18n-${GLIBC_VERSION}.apk && \
     apk add glibc-*.apk && rm *.apk && sync
 
 COPY /data /
