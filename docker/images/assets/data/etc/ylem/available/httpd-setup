@@ -15,6 +15,19 @@ end
 
 # user/group creation -----------------------------------------------
 user_setup = lambda do |gid, uid|
+  ['www-data', 'darkhttpd'].each do |name|
+    # @formatter:off
+    {
+      user: '/etc/passwd',
+      group: '/etc/group',
+    }.each do |type, file|
+      next unless Pathname.new(file).read =~ /^#{name}:/
+
+      sh.call("#{type}del", name)
+      # @formatter:on
+    end
+  end
+
   sh.call('groupadd', '-f', '-g', gid, '--system', 'www-data')
   sh.call('useradd', '-d', '/var/www',
           '-g', gid,
@@ -26,39 +39,11 @@ user_setup = lambda do |gid, uid|
           'www-data')
 end
 
-# bundle install ----------------------------------------------------
-bundle_setup = lambda do |pwd|
-  Dir.chdir(pwd) do
-    ['gems.rb', 'gems.locked'].map { |f| Pathname.new(f).file? }.tap do |res|
-      return false unless res == [true, true]
-    end
-
-    # @formatter:off
-    {
-      'BUNDLE_JOBS' => `nproc`.chomp,
-      'BUNDLE_IGNORE_MESSAGES' => 'true',
-    }.tap do |env|
-      sh.call(env, 'bundle', 'install', '--clean')
-    end
-    # @formatter:on
-  end
-end
-
 # filesystem setup --------------------------------------------------
 filesystem_setup = lambda do |gid, uid|
-  mkdir_p('/var/www/localhost')
-  mkdir_p('/var/log/httpd')
-
-  '/var/serve'.tap do |var_dir|
-    mkdir_p(var_dir)
-    chown_R(uid, gid, var_dir)
-    ['stdout.log', 'stderr.log'].each do |fname|
-      Pathname.new(var_dir).join(fname).tap do |fp|
-        fp.write('')
-        chown_R(uid, gid, fp)
-        ln_s(fp, Pathname.new('/var/log/httpd').join(fp.basename))
-      end
-    end
+  '/var/log/darkhttpd'.tap do |log_dir|
+    mkdir_p(log_dir)
+    chown_R(uid, gid, log_dir)
   end
 end
 
@@ -66,5 +51,4 @@ end
 lambda do |gid, uid|
   user_setup.call(gid, uid)
   filesystem_setup.call(gid, uid)
-  bundle_setup.call('/var/www/localhost')
 end.call(ENV.fetch('VOLUME_GID'), ENV.fetch('VOLUME_UID'))

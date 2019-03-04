@@ -13,11 +13,24 @@ services:
       VIRTUAL_HOST: "web.spin.${DC_DOMAIN:-test}"
     volumes:
       - ..:/var/www/localhost/
-      - web-bundle:/usr/lib/bundle/
+      - spin_web-bundle:/usr/lib/bundle/
     networks: [default, proxy]
-
+  spin_assets:
+    build: { context: images/assets }
+    extra_hosts:
+      - "assets.spin.${DC_DOMAIN:-test}:127.0.0.1"
+    expose: ["80"]
+    environment:
+      VOLUME_UID: ${UID:-1000}
+      VOLUME_GID: ${GID:-1000}
+      VIRTUAL_HOST: "assets.spin.${DC_DOMAIN:-test}"
+    volumes:
+      - ../public:/var/www/localhost/
+  spin_db:
+    build: { context: images/postgres }
+    expose: ["5432"]
 volumes:
-  web-bundle:
+  spin_web-bundle:
 
 networks:
   proxy:

@@ -1,0 +1,18 @@
+#!/usr/bin/env svrun
+# vim: ai ts=2 sts=2 et sw=2 ft=ruby
+
+Dir.chdir('/var/www/localhost') do
+  service(['darkhttpd',
+           '/var/www/localhost',
+           '--chroot',
+           '--no-listing',
+           '--port', '80',
+           '--mimetypes', '/etc/mime.types',
+           '--uid', ENV.fetch('VOLUME_UID'),
+           '--gid', ENV.fetch('VOLUME_GID'),
+           '--log', '/var/log/darkhttpd/access.log']).call
+end
+
+# Local Variables:
+# mode: ruby
+# End:
