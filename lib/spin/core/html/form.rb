@@ -83,9 +83,15 @@ class Spin::Core::Html::Form
   # @return [self]
   def overload(filepath)
     self.tap do |form|
-      Pathname.new(filepath).realpath.read.tap do |content|
-        form.structure.instance_eval(content, filepath.to_s, 1)
-      end
+      form.structure = lambda do |structure, fp|
+        Pathname.new(fp).realpath.read.tap do |content|
+          # @formatter:off
+          return Array.new(structure)
+                      .instance_eval(content, Pathname.new(fp).realpath.to_s, 1)
+                      .freeze
+          # @formatter:on
+        end
+      end.call(form.structure, filepath)
     end
   end
 
