@@ -6,9 +6,4 @@ require_relative '../forms'
 #
 # @abstract
 class WebApp::Forms::Base < Spin::Core::Html::Form
-  def initialize(*args)
-    super
-
-    self.attributes = { class: 'mdl-card__supporting-text' }
-  end
 end
