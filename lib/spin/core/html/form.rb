@@ -7,9 +7,10 @@ require 'hanami/helpers'
 # @abstract
 class Spin::Core::Html::Form
   autoload(:Pathname, 'pathname')
+  autoload(:Loader, "#{__dir__}/form/loader")
   include Hanami::Helpers
   include(Spin::Core::Injectable)
-  inject(:paths, strategy: :kwargs)
+  inject(:forms_paths, strategy: :kwargs)
 
   # @type [Hash]
   attr_reader :params
@@ -46,7 +47,7 @@ class Spin::Core::Html::Form
   def initialize(context, **options)
     with_context(context) do |form|
       form.structure = self.class.__send__(:structure).clone.freeze
-      form.paths = options.fetch(:paths, []).clone.freeze
+      form.paths = options.fetch(:forms_paths, []).clone.freeze
 
       form.name = default_name
       form.attributes = {}
@@ -75,30 +76,21 @@ class Spin::Core::Html::Form
     nil
   end
 
-  # Use a boilerplate file to redefine behavior.
-  #
-  # @todo Define a loader, to load files from injected paths or given filepath.
+  # Use a boilerplate file to redefine structure.
   #
   # @param [String] filepath
+  #
   # @return [self]
-  def overload(filepath)
+  def pack(filepath)
     self.tap do |form|
-      form.structure = lambda do |structure, fp|
-        Pathname.new(fp).realpath.read.tap do |content|
-          # @formatter:off
-          return Array.new(structure)
-                      .instance_eval(content, Pathname.new(fp).realpath.to_s, 1)
-                      .freeze
-          # @formatter:on
-        end
-      end.call(form.structure, filepath)
+      form.structure = Loader.new(self.paths).call(form.structure, filepath)
     end
   end
 
   protected
 
   # @type [Array<String>]
-  attr_writer :paths
+  attr_accessor :paths
 
   # @type [Array<Proc>]
   attr_writer :structure
