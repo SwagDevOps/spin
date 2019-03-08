@@ -7,7 +7,7 @@ if Gem::Specification.find_all_by_name('warden').any?
     env['REQUEST_METHOD'] = 'POST'
 
     env['rack.input'] = lambda do
-      { '_csrf' => Rack::Csrf.csrf_token(env) }.tap do |params|
+      { '_csrf_token' => Rack::Csrf.csrf_token(env) }.tap do |params|
         Rack::Utils.build_nested_query(params).tap do |query|
           return StringIO.new(query)
         end
@@ -23,19 +23,23 @@ if Gem::Specification.find_all_by_name('warden').any?
         attr_reader :entry_class
       end
 
+      def login
+        params['login'] || {}
+      end
+
       # Denote request validity.
-      #
+
       # @return Boolean
       def valid?
-        params['username'] && params['password']
+        login['username'] && login['password']
       end
 
       def authenticate!
         user_class = self.class.entry_class::User
 
-        user_class.fetch(params['username'], nil).tap do |user|
+        user_class.fetch(login['username'], nil).tap do |user|
           # rubocop:disable Style/GuardClause
-          if user&.authenticate(params['password'])
+          if user&.authenticate(login['password'])
             return success!(user)
           else
             return fail!('Could not log in')

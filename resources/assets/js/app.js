@@ -1,5 +1,5 @@
 'use strict'
 
-import layout from 'app/layout'
+import layout from './app/layout'
 
 layout()

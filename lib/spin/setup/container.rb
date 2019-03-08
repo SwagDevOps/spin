@@ -2,4 +2,8 @@
 
 # @see https://dry-rb.org/gems/dry-container/
 
-# self.register(:PI, -> { 3.14159265358979 }, call: false)
+autoload(:Pathname, 'pathname')
+
+self.register(:forms_paths, lambda do
+  self[:paths].map { |fp| Pathname.new(fp).join('resources/forms') }
+end, call: true)

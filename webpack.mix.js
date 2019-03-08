@@ -7,6 +7,11 @@ const glob = require('simple-glob')
 const Clean = require('clean-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
 
+const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots || [])
+  .concat(['node_modules'])
+  .map(fp => path.join(__dirname, fp) + '/')
+  .filter((x, i, a) => a.indexOf(x) === i)
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -23,6 +28,7 @@ const mix = function () {
   mix.js(path.join(sourcePath, 'js/app.js'), paths.js)
   mix.sass(path.join(sourcePath, 'sass/app.scss'), paths.css, {
     sourceComments: !mix.config.production,
+    includePaths: moduleRoots
   })
 
   copiables.forEach(function (i) {
@@ -46,9 +52,11 @@ const paths = {
 const copiables = [
   [path.join(sourcePath, 'images/favicon.png'), path.join(publicPath, 'favicon.ico')],
   [path.join(sourcePath, 'images'), paths.images],
-  ['node_modules/font-awesome/fonts/', paths.fonts],
-  ['node_modules/mdbootstrap/font/roboto', paths.fonts],
-  ['node_modules/mdbootstrap/img/', paths.images]
+  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.eot', paths.fonts],
+  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.svg', paths.fonts],
+  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.ttf', paths.fonts],
+  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.woff', paths.fonts],
+  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.woff2', paths.fonts]
 ]
 
 let cleanables = [
@@ -64,10 +72,7 @@ let cleanables = [
 const config = {
   devtool: process.env.NODE_ENV !== 'production' ? 'source-map' : false,
   resolve: {
-    modules: [
-      path.resolve(path.join(sourcePath, 'js')),
-      path.resolve(path.join(__dirname, 'node_modules'))
-    ]
+    modules: moduleRoots
   },
   plugins: [
     new Clean(cleanables, { verbose: true }),

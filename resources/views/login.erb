@@ -2,32 +2,19 @@
     self.page_title = 'Login Page'
 %>
 
-<div class="col-md-8 mb-4">
-    <div class="card mb-4 wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
-        <h2 class="card-header font-weight-bold">
-            Login
-        </h2>
-        <div class="card-body">
-            <section class="content">
-                <form method="POST" action="/login">
-                    <%= csrf_tag %>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" />
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Passord</label>
-                        <input type="password" class="form-control" id="password" name="password"/>
-                    </div>
-                    <hr />
-                    <button type="submit" class="btn btn-outline-primary waves-effect waves-light">
-                        Submit
-                    </button>
-                </form>
-            </section>
-        </div>
+<div class="grid">
+    <div class="col-md-12">
+        <section class="mdl-card mdl-shadow--4dp">
+            <header class="mdl-card__title">
+                <h2 class="mdl-card__title-text">
+                    Authentication
+                </h2>
+            </header>
+
+            <%= WebApp::Forms::Login.new(self).tap do |form|
+              form.attributes = { class: 'mdl-card__supporting-text' }
+              form.pack('login')
+            end %>
+        </section>
     </div>
-</div>
-<div class="col-md-4 mb-4">
-    <%= erb(:'layout/sidebar') %>
 </div>
