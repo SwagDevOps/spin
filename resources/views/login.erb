@@ -11,7 +11,10 @@
                 </h2>
             </header>
 
-            <%= WebApp::Forms::Login.new(self) %>
+            <%= WebApp::Forms::Login.new(self).tap do |form|
+              form.attributes = { class: 'mdl-card__supporting-text' }
+              form.pack('login')
+            end %>
         </section>
     </div>
 </div>
