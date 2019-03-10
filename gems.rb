@@ -41,8 +41,7 @@ group :development do
   gem 'erubi', '~> 1.8'
   gem 'hanami-helpers', '~> 1.3'
   gem 'rack_csrf', '~> 2.6'
-  gem 'sqlite3', '~> 1.3'
-  gem 'warden'
+  gem 'warden', '~> 1.2'
   # sinatra ------------------------------
   gem 'sinatra-contrib', '= 2.0.5'
   gem 'sinatra-flash', '~> 0.3'
