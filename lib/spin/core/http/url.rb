@@ -49,9 +49,9 @@ class Spin::Core::Http::Url
   # @param [String] fragment
   def initialize(fragment)
     @fragment = fragment.gsub(%r{^/}, '')
-    @path_only = false
+    @path_only = self.path_only.nil? ? false : self.path_only
     @query = {}
-    @request = nil
+    @request ||= nil
 
     yield(self) if block_given?
   end
