@@ -100,5 +100,7 @@ class Spin::Core::Http::Url
     URI(to_url)
   end
 
+  alias_method 'uri', 'to_uri'
+
   alias_method 'to_s', 'to_url'
 end
