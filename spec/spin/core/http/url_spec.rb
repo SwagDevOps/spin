@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ostruct'
+require 'uri'
 
 # instance methods --------------------------------------------------
 describe Spin::Core::Http::Url, :'spin/core/http/url' do
@@ -12,7 +13,9 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
   end
 
   # attributes ------------------------------------------------------
+  it { expect(subject).to respond_to(:path) }
   it { expect(subject).to respond_to(:fragment) }
+  it { expect(subject).to respond_to(:fragment=) }
   it { expect(subject).to respond_to(:request) }
   it { expect(subject).to respond_to(:request=) }
   it { expect(subject).to respond_to(:path_only) }

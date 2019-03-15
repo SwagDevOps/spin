@@ -23,7 +23,14 @@ class Spin::Core::Http::Url
   # Base path used to construct URL.
   #
   # @return [String]
-  attr_reader :fragment
+  attr_reader :path
+
+  # Fragment identifier
+  #
+  # @see https://en.wikipedia.org/wiki/Fragment_identifier
+  #
+  # @return [String]
+  attr_accessor :fragment
 
   # Original request (or forged using a struct).
   #
@@ -46,12 +53,13 @@ class Spin::Core::Http::Url
   # @type [Hash]
   attr_accessor :query
 
-  # @param [String] fragment
-  def initialize(fragment)
-    @fragment = fragment.gsub(%r{^/}, '')
+  # @param [String] path
+  def initialize(path)
+    @path = path.gsub(%r{^/}, '')
     @path_only = self.path_only.nil? ? false : self.path_only
     @query = {}
     @request ||= nil
+    @fragment ||= nil
 
     yield(self) if block_given?
   end
@@ -64,7 +72,7 @@ class Spin::Core::Http::Url
   #
   # @return [String]
   def to_path
-    path = [request.script_name, fragment].join('/')
+    path = [request.script_name, self.path].join('/')
 
     return path if query.empty?
 
@@ -79,25 +87,48 @@ class Spin::Core::Http::Url
     end
   end
 
+  class << self
+    protected
+
+    # Get URL from given request.
+    #
+    # @return [String]
+    def url_from(request, path_only: false)
+      ports = [['http', 80], ['https', 443]]
+      # @formatter:off
+      [
+        request.scheme, '://', request.host,
+        { true => ":#{request.port}",
+          false => nil }[!ports.include?([request.scheme, request.port])],
+      ][(path_only ? -1 : 0)..-1].join('')
+      # @formatter:on
+    end
+  end
+
   # Get URL.
   #
   # @return [String]
   def to_url
-    ports = [['http', 80], ['https', 443]]
-    # @formatter:off
-    parts = [
-      request.scheme, '://', request.host,
-      { true => ":#{request.port}",
-        false => nil }[!ports.include?([request.scheme, request.port])],
-    ][(path_only? ? -1 : 0)..-1]
-    # @formatter:on
-
-    "#{parts.join('')}#{to_path}"
+    self.class.__send__(:url_from, request, path_only: path_only?).tap do |url|
+      return '%<url>s%<path>s%<fragment>s' % {
+        url: url,
+        path: self.to_path,
+        fragment: (fragment ? "##{fragment}" : nil).to_s
+      }
+    end
   end
 
   # @return [URI::HTTP]
   def to_uri
     URI(to_url)
+  end
+
+  def freeze
+    super.tap do
+      [:fragment, :request, :path_only, :query].each do |attr|
+        self.__send__(attr).freeze
+      end
+    end.freeze
   end
 
   alias_method 'uri', 'to_uri'
