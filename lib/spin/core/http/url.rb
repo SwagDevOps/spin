@@ -90,7 +90,7 @@ class Spin::Core::Http::Url
   class << self
     protected
 
-    # Get URL from given request.
+    # Get base URL from given request.
     #
     # @return [String]
     def url_from(request, path_only: false)
