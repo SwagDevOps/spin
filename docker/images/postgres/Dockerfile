@@ -1,4 +1,4 @@
-FROM kamaze/alpine_server:0.0.1
+FROM swagdevops/alpine_server:3.8.1
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
     LANG=en_US.utf8 \
