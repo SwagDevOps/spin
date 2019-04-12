@@ -81,3 +81,32 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
     # rubocop:enable Metrics/LineLength
   end
 end
+
+describe Spin::Core::Http::Url, :'spin/core/http/url' do
+  let(:subject) do
+    request = OpenStruct.new(host: 'example.org', scheme: 'http', port: 80)
+    Spin::Core::Http::Url.new('sample/2') do |url|
+      url.request = request
+      url.fragment = 'anchor'
+      url.query = { q: 'verb', t: '10000' }
+    end
+  end
+
+  context '.to_path' do
+    it { expect(subject.to_path).to eq('/sample/2?q=verb&t=10000') }
+  end
+
+  context '.query' do
+    it { expect(subject.query).to eq(q: 'verb', t: '10000') }
+  end
+
+  'http://example.org/sample/2?q=verb&t=10000#anchor'.tap do |url|
+    context '.to_url' do
+      it { expect(subject.to_url).to eq(url) }
+    end
+
+    context '.to_uri' do
+      it { expect(subject.to_uri).to eq(URI(url)) }
+    end
+  end
+end
