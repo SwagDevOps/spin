@@ -128,7 +128,7 @@ class Spin::Core::Http::Url
       [:fragment, :request, :path_only, :query].each do |attr|
         self.__send__(attr).freeze
       end
-    end.freeze
+    end
   end
 
   alias_method 'uri', 'to_uri'
