@@ -75,10 +75,10 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
     it { expect(subject.query).to eq(q: 'verb', t: '10000') }
   end
 
-  context '.to_url' do
-    # rubocop:disable Metrics/LineLength
-    it { expect(subject.to_url).to eq('http://example.org/sample/2?q=verb&t=10000') }
-    # rubocop:enable Metrics/LineLength
+  'http://example.org/sample/2?q=verb&t=10000'.tap do |url|
+    context '.to_url' do
+      it { expect(subject.to_url).to eq(url) }
+    end
   end
 end
 
