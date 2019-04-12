@@ -110,3 +110,21 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
     end
   end
 end
+
+# freeze examples ---------------------------------------------------
+describe Spin::Core::Http::Url, :'spin/core/http/url' do
+  let(:subject) do
+    request = OpenStruct.new(host: 'example.org', scheme: 'http', port: 80)
+    Spin::Core::Http::Url.new('sample/1') do |url|
+      url.request = request
+    end.freeze
+  end
+
+  it { expect(subject).to be_frozen }
+
+  [:fragment, :request, :path_only, :query].each do |method|
+    context ".#{method}" do
+      it { expect(subject.__send__(method)).to be_frozen }
+    end
+  end
+end
