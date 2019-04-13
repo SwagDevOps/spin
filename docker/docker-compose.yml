@@ -6,24 +6,30 @@ services:
     build: { context: images/web }
     extra_hosts:
       - "web.spin.${DC_DOMAIN:-test}:127.0.0.1"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:web.spin.${DC_DOMAIN:-test}"
     expose: ["80"]
+    networks: [default, proxy]
     environment:
       VOLUME_UID: ${UID:-1000}
       VOLUME_GID: ${GID:-1000}
-      VIRTUAL_HOST: "web.spin.${DC_DOMAIN:-test}"
     volumes:
       - ..:/var/www/localhost/
       - spin_web-bundle:/usr/lib/bundle/
-    networks: [default, proxy]
   spin_assets:
     build: { context: images/assets }
     extra_hosts:
       - "assets.spin.${DC_DOMAIN:-test}:127.0.0.1"
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:assets.spin.${DC_DOMAIN:-test}"
+      traefik.frontend.headers.customResponseHeaders: "Access-Control-Allow-Origin:*"
     expose: ["80"]
+    networks: [proxy]
     environment:
       VOLUME_UID: ${UID:-1000}
       VOLUME_GID: ${GID:-1000}
-      VIRTUAL_HOST: "assets.spin.${DC_DOMAIN:-test}"
     volumes:
       - ../public:/var/www/localhost/
   spin_db:
@@ -33,8 +39,7 @@ volumes:
   spin_web-bundle:
 
 networks:
-  proxy:
-    external: true
+  proxy: { external: true }
 
 # Local Variables:
 # mode: yaml
