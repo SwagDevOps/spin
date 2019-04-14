@@ -1,47 +1,68 @@
 #!/usr/bin/env sh
+# vim: ft=sh
 
-export PWD=$(dirname -- "$(readlink -f "$0")") || $(pwd)
+# Samples of use:
+#
+# ```sh
+# ./compose restart
+# ./compose restart proxy
+# ```
+
+# Globals ------------------------------------------------------------
 export COMPOSE_BIN=$(which docker-compose)
+export PWD='.'
+readlink --version | grep -Eiq 'GNU coreutils' && {
+    PWD=$(dirname -- "$(readlink -f "$0")")
+}
 
+# Exposed functions --------------------------------------------------
 do_start() {
-    exec "${COMPOSE_BIN}" up -d --no-recreate --build
+    exec "${COMPOSE_BIN}" up -d --no-recreate --build "$@"
 }
 
 do_stop() {
-    "${COMPOSE_BIN}" stop || exit $?
-    "${COMPOSE_BIN}" rm -fv
+    "${COMPOSE_BIN}" stop "$@"
+    "${COMPOSE_BIN}" rm -fv "$@"
 }
 
 do_restart() {
-    do_stop
-    do_start
+    do_stop "$@"
+    do_start "$@"
 }
 
 do_exec() {
-    shift
    "${COMPOSE_BIN}" exec "$@"
 }
 
 do_help() {
-    local words=$(cat "$0" | egrep '^do_[a-z]+\(\)' | \
-                      awk -Fdo_ '{print $2}' | awk -F\( '{print $1}' | \
-                      sed ':a;N;$!ba;s/\n/|/g')
-    printf "Usage: %s {%s}\n" "${0}" "${words}"
+    printf "Usage: %s {%s}\n" "${0}" "$(funcs)"
 }
 
-test -z "${COMPOSE_BIN}" && {
-    echo 'see: https://docs.docker.com/compose/install/'
-    exit 95 # ENOTSUP
+# Main functions -----------------------------------------------------
+funcs() {
+    cat "$0" | \
+        grep -E '^do_[a-z]+\(\)' | \
+        awk -Fdo_ '{print $2}' | awk -F\( '{print $1}' | \
+        sed ':a;N;$!ba;s/\n/|/g'
 }
 
-test -z "$1" && {
-    do_help 1>&2
-    exit 22
+main() {
+    test -z "${COMPOSE_BIN}" && {
+        echo 'see: https://docs.docker.com/compose/install/' 1>&2
+        exit 95 # ENOTSUP
+    }
+
+    (test -n "$1" && echo "|$(funcs)|" | grep -Fq "|${1}|") || {
+        do_help 1>&2
+        exit 22 # EINVAL
+    }
+
+    set -eu
+    cd "$PWD"
+    f=$1
+    shift
+    "do_${f}" "$@"
 }
 
-type "do_${1}" > /dev/null || {
-    echo "Unsupported operation \`${1}'" 1>&2
-    exit 22 # EINVAL
-}
-
-cd "$PWD" && do_${1} "$@"
+# Execution ----------------------------------------------------------
+main "$@"
