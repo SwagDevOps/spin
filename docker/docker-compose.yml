@@ -7,8 +7,8 @@ services:
     extra_hosts:
       - "web.spin.${DC_DOMAIN:-test}:127.0.0.1"
     labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:web.spin.${DC_DOMAIN:-test}"
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:web.spin.${DC_DOMAIN:-test}"
     expose: ["80"]
     networks: [default, proxy]
     environment:
