@@ -15,7 +15,7 @@ class Spin::Core::Http::AssetUrl::Provider < Array
     end
   end
 
-  # Get a struct mimic
+  # Get a struct imitating a ``Rack::Request``.
   #
   # @return [OpenStruct]
   def to_request
