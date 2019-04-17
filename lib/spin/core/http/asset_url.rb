@@ -11,7 +11,7 @@ class Spin::Core::Http::AssetUrl < Spin::Core::Http::Url
   autoload(:Provider, "#{__dir__}/asset_url/provider")
 
   def initialize(fragment, **options)
-    options[:config]&.get('assets.hosts').tap do |hosts|
+    options[:config]&.public_send('[]', 'assets.hosts').tap do |hosts|
       if hosts and self.provider.nil?
         self.provider = Provider.new(hosts)
       end
