@@ -13,6 +13,7 @@ module Spin::Core::Http
   # @formatter:off
   {
     Url: :url,
+    AssetUrl: :asset_url,
   }.each { |k, v| autoload(k, "#{__dir__}/http/#{v}") }
   # @formatter:on
 end
