@@ -39,21 +39,21 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
     end
   end
 
-  context '.to_path' do
+  context '#to_path' do
     it { expect(subject.to_path).to eq('/sample/1') }
   end
 
-  context '.to_url' do
+  context '#to_url' do
     it { expect(subject.to_url).to match(%r{^http://}) }
     it { expect(subject.to_url).to be_a(String) }
     it { expect(subject.to_url).to eq('http://example.org/sample/1') }
   end
 
-  context '.to_uri' do
+  context '#to_uri' do
     it { expect(subject.to_uri).to be_a(URI) }
   end
 
-  context '.path_only?' do
+  context '#path_only?' do
     it { expect(subject.path_only).to be(false) }
   end
 end
@@ -67,16 +67,16 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
     end
   end
 
-  context '.to_path' do
+  context '#to_path' do
     it { expect(subject.to_path).to eq('/sample/2?q=verb&t=10000') }
   end
 
-  context '.query' do
+  context '#query' do
     it { expect(subject.query).to eq(q: 'verb', t: '10000') }
   end
 
   'http://example.org/sample/2?q=verb&t=10000'.tap do |url|
-    context '.to_url' do
+    context '#to_url' do
       it { expect(subject.to_url).to eq(url) }
     end
   end
@@ -92,20 +92,20 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
     end
   end
 
-  context '.to_path' do
+  context '#to_path' do
     it { expect(subject.to_path).to eq('/sample/2?q=verb&t=10000') }
   end
 
-  context '.query' do
+  context '#query' do
     it { expect(subject.query).to eq(q: 'verb', t: '10000') }
   end
 
   'http://example.org/sample/2?q=verb&t=10000#anchor'.tap do |url|
-    context '.to_url' do
+    context '#to_url' do
       it { expect(subject.to_url).to eq(url) }
     end
 
-    context '.to_uri' do
+    context '#to_uri' do
       it { expect(subject.to_uri).to eq(URI(url)) }
     end
   end
@@ -123,7 +123,7 @@ describe Spin::Core::Http::Url, :'spin/core/http/url' do
   it { expect(subject).to be_frozen }
 
   [:fragment, :request, :path_only, :query].each do |method|
-    context ".#{method}" do
+    context "##{method}" do
       it { expect(subject.__send__(method)).to be_frozen }
     end
   end
