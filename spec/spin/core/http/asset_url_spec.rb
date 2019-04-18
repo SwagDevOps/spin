@@ -47,11 +47,29 @@ describe Spin::Core::Http::AssetUrl, :'spin/core/http/asset_url' do
     Spin::Core::Http::AssetUrl.new('sample/1', config: config)
   end
 
-  context '.request?' do
+  context '#request?' do
     it { expect(subject.request?).to eq(true) }
   end
 
-  context '.request' do
+  context '#request' do
     it { expect(subject.request).to be_a(OpenStruct) }
+  end
+end
+
+# to_uri scheme + host ----------------------------------------------
+describe Spin::Core::Http::AssetUrl, :'spin/core/http/asset_url' do
+  let(:config) do
+    { 'assets.hosts' => ['http://example.org/'] }
+  end
+  let(:subject) do
+    Spin::Core::Http::AssetUrl.new('sample/1', config: config)
+  end
+
+  context '#to_uri.host' do
+    it { expect(subject.to_uri.host).to eq('example.org') }
+  end
+
+  context '#to_uri.scheme' do
+    it { expect(subject.to_uri.scheme).to eq('http') }
   end
 end
