@@ -14,6 +14,8 @@ services:
     environment:
       VOLUME_UID: ${UID:-1000}
       VOLUME_GID: ${GID:-1000}
+      # specific -----------------------------------------------------
+      ASSETS_HOST: "http://assets.spin.${DC_DOMAIN:-test}"
     volumes:
       - ..:/var/www/localhost/
       - spin_web-bundle:/usr/lib/bundle/
