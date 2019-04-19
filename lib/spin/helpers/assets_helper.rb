@@ -22,7 +22,7 @@ module Spin::Helpers::AssetsHelper
   #
   # @see Hanami::Helpers::LinkToHelper.link_to()
   def asset_url(path, path_only: false)
-    Spin::Core::Http::Url.new(path) do |url|
+    Spin::Core::Http::AssetUrl.new(path) do |url|
       url.path_only = path_only
       url.request = self.request
       url.query = { "t#{asset_mtime.to_f}" => nil }
