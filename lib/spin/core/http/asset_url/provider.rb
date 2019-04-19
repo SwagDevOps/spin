@@ -4,7 +4,8 @@ require_relative '../asset_url'
 
 # Represent a list of possible (assets serving) hosts.
 #
-# Give a forge request, to replace original request used by ``AssetUrl``
+# Give a forged request, to replace original request used by ``AssetUrl``.
+# Hosts are randomly used in request.
 class Spin::Core::Http::AssetUrl::Provider < Array
   autoload(:OpenStruct, 'ostruct')
 
