@@ -117,15 +117,16 @@ class Spin::Core::Config
     # Transform given ``Hash`` to ``OpenStruct`` recursively.
     #
     # @param [Hash] input
+    #
     # @return [OpenStruc]
     def to_recursive_ostruct(input, frozen: true)
-      input = input.to_h
+      OpenStruct.new.tap do |struct|
+        input.to_h.each_with_object({}) do |(key, val)|
+          val = val.is_a?(Hash) ? __send__(__callee__, val) : val
 
-      OpenStruct.new(input.each_with_object({}) do |(key, val), h|
-        h[key.to_sym] = val.is_a?(Hash) ? __send__(__callee__, val) : val
-      end).tap do |struct|
-        IceNine.deep_freeze(struct) if frozen
-      end
+          struct.public_send("#{key}=", val)
+        end
+      end.tap { |struct| IceNine.deep_freeze(struct) if frozen }
     end
   end
 end
