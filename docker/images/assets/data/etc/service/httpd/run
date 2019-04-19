@@ -6,6 +6,7 @@ Dir.chdir('/var/www/localhost') do
            '/var/www/localhost',
            '--chroot',
            '--no-listing',
+           '--no-server-id',
            '--port', '80',
            '--mimetypes', '/etc/mime.types',
            '--uid', ENV.fetch('VOLUME_UID'),
