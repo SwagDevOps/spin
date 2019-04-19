@@ -11,10 +11,8 @@ class Spin::Core::Http::AssetUrl < Spin::Core::Http::Url
   autoload(:Provider, "#{__dir__}/asset_url/provider")
 
   def initialize(fragment, **options)
-    options[:config]&.public_send('[]', 'assets.hosts').tap do |hosts|
-      if hosts and self.provider.nil?
-        self.provider = Provider.new(hosts)
-      end
+    hosts_from_config(options[:config]).tap do |hosts|
+      self.provider ||= Provider.new(hosts) if hosts and !hosts.empty?
     end
 
     super(fragment)
@@ -27,11 +25,23 @@ class Spin::Core::Http::AssetUrl < Spin::Core::Http::Url
     !self.request.nil?
   end
 
+  # @return [OpenStruct|Rack::Request]
   def request
-    self.provider.to_request || super
+    self.provider&.to_request || super
   end
 
   protected
 
   attr_accessor(:provider)
+
+  # @param [Spin::Core::Config] config
+  #
+  # @retuurn [Array<string>|nil]
+  def hosts_from_config(config)
+    Array.new(config&.public_send('[]', 'assets.hosts')).delete_if do |v|
+      v.to_s.empty?
+    end.freeze
+  rescue TTY::Config::ReadError
+    nil
+  end
 end
