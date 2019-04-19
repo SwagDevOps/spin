@@ -73,3 +73,31 @@ describe Spin::Core::Http::AssetUrl, :'spin/core/http/asset_url' do
     it { expect(subject.to_uri.scheme).to eq('http') }
   end
 end
+
+# query-string ------------------------------------------------------
+describe Spin::Core::Http::AssetUrl, :'spin/core/http/asset_url' do
+  let(:config) { {} }
+
+  let(:request) do
+    OpenStruct.new(host: 'example.org', scheme: 'http', port: 80)
+  end
+
+  let(:subject) do
+    Spin::Core::Http::AssetUrl.new('sample/1', config: config) do |url|
+      url.request = request
+      url.query = { 't42' => nil }
+    end
+  end
+
+  context '#to_s' do
+    it { expect(subject.to_s).to eq('http://example.org/sample/1?t42') }
+  end
+
+  context '#to_s' do
+    let(:config) do
+      { 'assets.hosts' => ['http://foo.bar/'] }
+    end
+
+    it { expect(subject.to_s).to eq('http://foo.bar/sample/1?t42') }
+  end
+end
