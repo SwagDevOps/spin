@@ -1,6 +1,7 @@
 /**
  * Layout styles
  * --------------------------------------------------------------- */
-@import "~reflex-grid/scss/reflex";
-@import "./layout/mdl";
+@import "~bulmaswatch/materia/variables";
+@import "~bulma/bulma";
+@import "~bulmaswatch/materia/overrides";
 
