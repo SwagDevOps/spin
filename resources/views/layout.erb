@@ -10,18 +10,12 @@
         <%= html.script(src: asset_url('/js/app.js')) %>
     </head>
     <body>
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-            <%= erb(:'layout/top-bar') %>
+        <%= erb(:'layout/top-bar') %>
+        <main id="main-column">
+            <%= erb(:'layout/flash') %>
 
-            <section class="android-content mdl-layout__content">
-                <main id="main-col">
-                    <%= erb(:'layout/flash') %>
-
-                    <%= yield %>
-                </main>
-
-                <%= erb(:'layout/footer') %>
-            </section>
-        </div>
+            <%= yield %>
+        </main>
+        <%= erb(:'layout/footer') %>
     </body>
 </html>
