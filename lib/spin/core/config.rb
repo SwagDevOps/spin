@@ -100,11 +100,9 @@ class Spin::Core::Config
   def load_file(filename)
     Loader.new(filename).tap do |loaded|
       self.paths.reverse_each do |path|
-        begin
-          loaded = loaded.merge(Loader.new(filename, path).to_h)
-        rescue TTY::Config::ReadError
-          next
-        end
+        loaded = loaded.merge(Loader.new(filename, path).to_h)
+      rescue TTY::Config::ReadError
+        next
       end
 
       return loaded
@@ -120,13 +118,17 @@ class Spin::Core::Config
     #
     # @return [OpenStruc]
     def to_recursive_ostruct(input, frozen: true)
-      OpenStruct.new.tap do |struct|
-        input.to_h.each_with_object({}) do |(key, val)|
-          val = val.is_a?(Hash) ? __send__(__callee__, val) : val
+      lambda do
+        OpenStruct.new.tap do |struct|
+          input.to_h.each_with_object({}) do |(key, val)|
+            val = val.is_a?(Hash) ? __send__(__callee__, val) : val
 
-          struct.public_send("#{key}=", val)
+            struct.public_send("#{key}=", val)
+          end
         end
-      end.tap { |struct| IceNine.deep_freeze(struct) if frozen }
+      rescue TTY::Config::ReadError
+        return OpenStruct.new
+      end.call.tap { |struct| IceNine.deep_freeze(struct) if frozen }
     end
   end
 end
