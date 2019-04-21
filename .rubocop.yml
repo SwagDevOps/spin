@@ -5,3 +5,5 @@ inherit_gem:
 GlobalVars:
   AllowedVariables:
     - $INJECTOR
+AllCops:
+  TargetRubyVersion: 2.5
