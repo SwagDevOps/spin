@@ -1,20 +1,13 @@
 # frozen_string_literal: true
 
 require_relative './base'
+require_relative '../authenticator'
 
-# Class for posts admin
+# Class for admin
 class WebApp::Controller::Admin < WebApp::Controller::Base
   autoload(:Pathname, 'pathname')
 
-  # @api private
-  BASE_URI = Pathname.new('/admin')
-
-  class << self
-    # @return [Pathname]
-    def base_uri
-      self::BASE_URI.clone
-    end
-  end
+  use WebApp::Authenticator
 
   # @formatter:off
   {
@@ -22,5 +15,5 @@ class WebApp::Controller::Admin < WebApp::Controller::Base
   }.each { |k, v| autoload(k, "#{__dir__}/admin/#{v}") }
   # @formatter:on
 
-  get(base_uri.to_s) { erb :protected }
+  get('/') { erb(:protected) }
 end
