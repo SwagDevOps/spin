@@ -30,6 +30,10 @@ do_restart() {
     do_start "$@"
 }
 
+do_scale() {
+   "${COMPOSE_BIN}" scale "$@"
+}
+
 do_exec() {
    "${COMPOSE_BIN}" exec "$@"
 }
