@@ -3,50 +3,60 @@
  * --------------------------------------------------------------- */
 @import "./layout/mdl/icons";
 // bulma ------------------------------------------------------------
+$bulmaswatch-import-font: false !default;
 @import "~bulmaswatch/materia/variables";
 @import "~bulma/bulma";
 @import "~bulmaswatch/materia/overrides";
+$roboto-npm-webfont-dir: '/fonts' !default;
+@import "~roboto-npm-webfont/full/style";
 // custom -----------------------------------------------------------
 
 header[id="top"] {
-  .navbar-item_global-search {
-    display: none;
+  .navbar {
+    & {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      background-color: white;
+      justify-content: space-around;
+      width: 100%;
+      border-bottom: 1px solid lightgray;
+    }
+
+    .navbar-item_global-search {
+      display: none;
+    }
+
+    .navbar-menu {
+      flex-grow: 0.5;
+      justify-content: center;
+    }
+
+    .navbar-menu .navbar-item {
+      flex-grow: 1;
+      justify-content: center;
+    }
+
+    .navbar-menu .navbar-item .control {
+      width: 50%;
+    }
   }
-}
-
-.navbar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 2;
-  background-color: white;
-  justify-content: space-around;
-  width: 100%;
-  border-bottom: 1px solid lightgray;
-}
-
-.navbar-menu {
-  flex-grow: 0.5;
-  justify-content: center;
-}
-
-.navbar-menu .navbar-item {
-  flex-grow: 1;
-  justify-content: center;
-}
-
-.navbar-menu .navbar-item .control {
-  width: 50%;
 }
 
 .content-listing {
   &.body-columns {
-    margin-top: 10vh;
+    & {
+      margin-top: 10vh;
+    }
+
+    // & > .column { }
   }
 
   .card {
     & {
-      margin-top: 5rem;
+      max-width: 820px;
+      margin: 2.5rem auto 0 auto;
     }
 
     .header {
@@ -89,7 +99,8 @@ header[id="top"] {
 }
 
 .footer {
-  margin-top: 10vh;
   padding: 2rem 1.5rem;
+  max-width: 820px;
+  margin: 10vh auto 0 auto;
 }
 
