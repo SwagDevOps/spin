@@ -35,10 +35,11 @@ bundle_setup = lambda do |pwd|
 
     # @formatter:off
     {
+      'BUNDLE_CLEAN' => 'true',
       'BUNDLE_JOBS' => `nproc`.chomp,
       'BUNDLE_IGNORE_MESSAGES' => 'true',
     }.tap do |env|
-      sh.call(env, 'bundle', 'install', '--clean')
+      sh.call(ENV.to_h.merge(env), 'bundle', 'install')
     end
     # @formatter:on
   end

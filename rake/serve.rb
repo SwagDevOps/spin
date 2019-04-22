@@ -18,16 +18,12 @@ storage = Pathname.new(env.call('storage', "#{Dir.pwd}/serve"))
 
 # @formatter:off
 engines = {
-  puma: lambda do
+  unicorn: lambda do
     [
-      'puma', '--port', env.call('port', 9393), '-R', 'config.ru',
-      '--log-requests', '--debug', '--prune-bundler',
-      '--state', storage.join('state.yml'),
-      '--redirect-stdout', storage.join('stdout.log'),
-      '--redirect-stderr', storage.join('stderr.log'),
-      '--environment', (ENV['APP_ENV'] || 'production')
+      'unicorn', '-c', "#{__FILE__.gsub(/\.rb$/, '')}/unicorn.rb",
+      '--env', (ENV['APP_ENV'] || 'production')
     ]
-  end,
+  end
 }
 # @formatter:on
 
@@ -51,14 +47,12 @@ runner = lambda do |command = nil|
 end
 
 fake_env = lambda do |environment, &block|
-  begin
-    backup = ENV.to_hash
-    ENV.replace(environment)
+  backup = ENV.to_hash
+  ENV.replace(environment)
 
-    block.call
-  ensure
-    ENV.replace(backup)
-  end
+  block.call
+ensure
+  ENV.replace(backup)
 end
 
 # task --------------------------------------------------------------
@@ -66,13 +60,11 @@ end
 desc 'Serve'
 task :serve, [:environment] do |task, args|
   main = lambda do
-    begin
-      runner.call(engines.fetch(:puma).call)
-    rescue Interrupt
-      task.reenable
-    else
-      task.reenable
-    end
+    runner.call(engines.fetch(:unicorn).call)
+  rescue Interrupt
+    task.reenable
+         else
+           task.reenable
   end
 
   FileUtils.mkdir_p(storage, verbose: true)
