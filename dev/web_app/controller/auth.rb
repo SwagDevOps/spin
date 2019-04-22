@@ -9,7 +9,7 @@ class WebApp::Controller::Auth < WebApp::Controller::Base
 
   class << self
     def urls
-      WebApp::Controller::Admin.base_uri.to_s.tap do |url|
+      '/admin'.to_s.tap do |url|
         # formatter:off
         return super.merge(
           protected: url,
