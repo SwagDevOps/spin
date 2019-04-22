@@ -41,10 +41,17 @@ require_relative '../controller'
 class WebApp::Controller::Base < WebApp::Base
   include WebApp::Core::Injectable
 
+  inject(:config)
+
+  # @return [Spin::Core::Config]
+  attr_reader :config
+
   # A new instance of Base.
   #
   # @param [WebApp::Controller|nil] app
-  def initialize(app = nil, **)
+  def initialize(app = nil, **options)
     super(app)
+
+    @config = options[:config]
   end
 end
