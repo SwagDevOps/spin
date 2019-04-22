@@ -59,13 +59,15 @@ end
 
 desc 'Serve'
 task :serve, [:environment] do |task, args|
+  # rubocop:disable Layout/ElseAlignment
   main = lambda do
     runner.call(engines.fetch(:unicorn).call)
   rescue Interrupt
     task.reenable
-         else
-           task.reenable
+  else
+    task.reenable
   end
+  # rubocop:enable Layout/ElseAlignment
 
   FileUtils.mkdir_p(storage, verbose: true)
   storage.join("#{task.name}.pid").tap do |pid_file|
