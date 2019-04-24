@@ -44,12 +44,13 @@ header[id="top"] {
   }
 }
 
+main.container {
+  margin-top: 10vh;
+}
+
 .content-listing {
   &.body-columns {
-    & {
-      margin-top: 10vh;
-    }
-
+    // & { }
     // & > .column { }
   }
 
