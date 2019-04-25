@@ -2,16 +2,14 @@
 # vim: ai ts=2 sts=2 et sw=2 ft=ruby
 
 Dir.chdir('/var/www/localhost') do
-  (ENV['serve_storage'] = '/var/serve').tap do |store_dir|
-    service(['bundle',
-             'exec',
-             'rake',
-             'serve',
-             'unicorn_port=80',
-             "unicorn_storage=#{store_dir}"],
-            user: :'www-data',
-            group: 'www-data').call
-  end
+  service(['bundle',
+           'exec',
+           'rake',
+           'serve',
+           'serve_port=80',
+           "serve_storage=/var/serve"],
+          user: :'www-data',
+          group: 'www-data').call
 end
 
 # Local Variables:

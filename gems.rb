@@ -32,8 +32,8 @@ group :development do
   gem 'yard', '~> 0.9'
   gem 'yard-coderay', '~> 0.1'
   # server -------------------------------
+  gem 'puma', '~> 3.12'
   gem 'rerun', '~> 0.13'
-  gem 'unicorn', '~> 5.5'
   # optional support ---------------------
   gem 'better_errors', '~> 2.5'
   gem 'binding_of_caller', '~> 0.8'

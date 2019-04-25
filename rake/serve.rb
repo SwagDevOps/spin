@@ -17,14 +17,27 @@ end
 storage = Pathname.new(env.call('storage', "#{Dir.pwd}/serve"))
 
 # @formatter:off
+# rubocop:disable Style/MultilineTernaryOperator
 engines = {
-  unicorn: lambda do
+  puma: lambda do
     [
-      'unicorn', '-c', "#{__FILE__.gsub(/\.rb$/, '')}/unicorn.rb",
-      '--env', (ENV['APP_ENV'] || 'production')
-    ]
-  end
+      'puma',
+      '--port', env.call('port', 9393),
+      '--restart-cmd', 'config.ru',
+      '--log-requests',
+      '--debug',
+      '--prune-bundler',
+      '--state', storage.join('state.yml'),
+      '--redirect-stdout', storage.join('stdout.log'),
+      '--redirect-stderr', storage.join('stderr.log'),
+      '--environment', (ENV['APP_ENV'] || 'production')
+    ] + (`nproc`.chomp.empty? ? [] : [
+      '--threads', -> { env.call('threads', `nproc`.chomp) },
+      '--workers', -> { env.call('workers', `nproc`.chomp) },
+    ])
+  end,
 }
+# rubocop:enable Style/MultilineTernaryOperator
 # @formatter:on
 
 # @see Rerun::Runner
@@ -37,7 +50,9 @@ runner = lambda do |command = nil|
     if opts[:cmd].is_a?(Array)
       autoload(:Shellwords, 'shellwords')
 
-      opts[:cmd] = Shellwords.join(opts[:cmd])
+      opts[:cmd] = Shellwords.join(opts[:cmd].map do |param|
+        param.is_a?(Proc) ? param.call : param
+      end)
     end
   end.tap do |options|
     return nil if options.nil? or options[:cmd].nil? or options[:cmd].empty?
@@ -61,7 +76,7 @@ desc 'Serve'
 task :serve, [:environment] do |task, args|
   # rubocop:disable Layout/ElseAlignment
   main = lambda do
-    runner.call(engines.fetch(:unicorn).call)
+    runner.call(engines.fetch(:puma).call)
   rescue Interrupt
     task.reenable
   else
