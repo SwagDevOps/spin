@@ -8,16 +8,19 @@
 # rake serve[environment] serve_port=80 serve_storage=/tmp/serve.$(id -u)
 # ```
 
+require 'yaml'
+
 env = lambda do |key, default = nil|
   Pathname.new(__FILE__).basename('.rb').tap do |prefix|
-    return ENV.fetch("#{prefix}_#{key}", default)
+    return default unless ENV.key?("#{prefix}_#{key}")
+
+    return YAML.safe_load(ENV.fetch("#{prefix}_#{key}"))
   end
 end
 
 storage = Pathname.new(env.call('storage', "#{Dir.pwd}/serve"))
 
 # @formatter:off
-# rubocop:disable Style/MultilineTernaryOperator
 engines = {
   puma: lambda do
     [
@@ -25,19 +28,18 @@ engines = {
       '--port', env.call('port', 9393),
       '--restart-cmd', 'config.ru',
       '--log-requests',
-      '--debug',
-      '--prune-bundler',
+      -> { env.call('log_requests', true) ? '--log-requests' : nil },
+      -> { env.call('debug', false) ? '--debug' : nil },
       '--state', storage.join('state.yml'),
       '--redirect-stdout', storage.join('stdout.log'),
       '--redirect-stderr', storage.join('stderr.log'),
-      '--environment', (ENV['APP_ENV'] || 'production')
-    ] + (`nproc`.chomp.empty? ? [] : [
+      '--environment', ENV.fetch('APP_ENV', 'production'),
+      '--preload',
       '--threads', -> { env.call('threads', `nproc`.chomp) },
-      '--workers', -> { env.call('workers', `nproc`.chomp) },
-    ])
+      '--workers', -> { env.call('workers', 2) },
+    ]
   end,
 }
-# rubocop:enable Style/MultilineTernaryOperator
 # @formatter:on
 
 # @see Rerun::Runner
@@ -52,7 +54,7 @@ runner = lambda do |command = nil|
 
       opts[:cmd] = Shellwords.join(opts[:cmd].map do |param|
         param.is_a?(Proc) ? param.call : param
-      end)
+      end.compact)
     end
   end.tap do |options|
     return nil if options.nil? or options[:cmd].nil? or options[:cmd].empty?
