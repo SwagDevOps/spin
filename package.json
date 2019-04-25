@@ -11,7 +11,7 @@
         "crypto-js": "~3.1",
         "dotenv": "~6.2",
         "ejs": "~2.6",
-        "jquery": "~3.3",
+        "jquery": "~3.4",
         "material-icons": "~0.3",
         "reflex-grid": "~2.0",
         "roboto-npm-webfont": "~1.0",
