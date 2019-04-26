@@ -7,7 +7,14 @@
 # rake serve[environment] # default uses APP_ENV
 # rake serve[environment] serve_port=80 serve_storage=/tmp/serve.$(id -u)
 # ```
-
+#
+# If your app is not thread safe, you will only be able to use workers.
+# Set your min and max threads to 1:
+#
+# ```
+# serve_threads=1:1
+# ```
+# @see https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#config
 require 'yaml'
 
 env = lambda do |key, default = nil|
