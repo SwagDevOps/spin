@@ -9,7 +9,7 @@ version: '3'
 #    --gateway 172.31.0.1 proxy
 # ```
 services:
-  proxy:
+  spin_proxy:
     image: traefik:1.7.10
     ports: ["80:80", "443:443", "8080:8080"]
     networks: [proxy]
