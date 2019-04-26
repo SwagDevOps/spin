@@ -15,6 +15,7 @@
 # serve_threads=1:1
 # ```
 # @see https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#config
+
 require 'yaml'
 
 env = lambda do |key, default = nil|
