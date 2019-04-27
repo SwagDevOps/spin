@@ -1,0 +1,50 @@
+.content-listing {
+  &.body-columns {
+    // & { }
+    // & > .column { }
+  }
+
+  .card {
+    & {
+      max-width: 820px;
+      margin: 2.5rem auto 0 auto;
+    }
+
+    .header {
+      padding: 5px 10px;
+    }
+
+    .card-footer {
+      & {
+        border-top: 1px solid lightgray;
+      }
+
+      .columns {
+        & {
+          width: 100%;
+        }
+
+        input[type="text"] {
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          padding-left: 1.5rem;
+        }
+
+        .column.tools {
+          & {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .button.is-text {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}

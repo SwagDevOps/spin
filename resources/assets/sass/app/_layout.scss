@@ -1,7 +1,7 @@
 /**
  * Layout styles
  * --------------------------------------------------------------- */
-@import "./layout/mdl/icons";
+
 // bulma ------------------------------------------------------------
 $bulmaswatch-import-font: false !default;
 @import "~bulmaswatch/materia/variables";
@@ -9,99 +9,13 @@ $bulmaswatch-import-font: false !default;
 @import "~bulmaswatch/materia/overrides";
 $roboto-npm-webfont-dir: '/fonts' !default;
 @import "~roboto-npm-webfont/full/style";
+
 // custom -----------------------------------------------------------
+@import "./layout/material-icons";
+@import "./layout/img";
 
-header[id="top"] {
-  .navbar {
-    & {
-      position: fixed;
-      left: 0;
-      top: 0;
-      z-index: 2;
-      background-color: white;
-      justify-content: space-around;
-      width: 100%;
-      border-bottom: 1px solid lightgray;
-    }
-
-    .navbar-item_global-search {
-      display: none;
-    }
-
-    .navbar-menu {
-      flex-grow: 0.5;
-      justify-content: center;
-    }
-
-    .navbar-menu .navbar-item {
-      flex-grow: 1;
-      justify-content: center;
-    }
-
-    .navbar-menu .navbar-item .control {
-      width: 50%;
-    }
-  }
-}
-
-main.container {
-  margin-top: 4.5rem;
-}
-
-.content-listing {
-  &.body-columns {
-    // & { }
-    // & > .column { }
-  }
-
-  .card {
-    & {
-      max-width: 820px;
-      margin: 2.5rem auto 0 auto;
-    }
-
-    .header {
-      padding: 5px 10px;
-    }
-
-    .card-footer {
-      & {
-        border-top: 1px solid lightgray;
-      }
-
-      .columns {
-        & {
-          width: 100%;
-        }
-
-        input[type="text"] {
-          border: none;
-          border-radius: 0;
-          box-shadow: none;
-          padding-left: 1.5rem;
-        }
-
-        .column.tools {
-          & {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-          }
-
-          .button.is-text {
-            text-decoration: none;
-          }
-        }
-      }
-    }
-  }
-}
-
-.footer {
-  padding: 2rem 1.5rem;
-  max-width: 820px;
-  margin: 10vh auto 0 auto;
-}
-
+@import "./layout/header";
+@import "./layout/main.container";
+@import "./layout/notifications";
+@import "./layout/content-listing";
+@import "./layout/footer";
