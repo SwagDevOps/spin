@@ -2,7 +2,7 @@
 
 import $ from 'jquery'
 import imageReflow from './layout/img_reflow'
-import alert from 'md-alerts'
+import { Bulma } from '../bulma'
 
 // expose jQuery to window ------------------------------------------
 if (typeof window !== 'undefined') {
@@ -10,9 +10,14 @@ if (typeof window !== 'undefined') {
   window.$ = $
 }
 
+const bulmaInstall = function () {
+  let bulma = new Bulma()
+
+  bulma
+    .handleNotifications()
+}
+
 export default function () {
-  $(function () {
-    alert()
-    imageReflow()
-  })
+  bulmaInstall()
+  imageReflow()
 }
