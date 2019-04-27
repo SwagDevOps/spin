@@ -1,0 +1,4 @@
+# should raise Psych::SyntaxError
+---
+service:
+  user:   %user%

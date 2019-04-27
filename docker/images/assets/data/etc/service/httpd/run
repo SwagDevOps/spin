@@ -1,0 +1,8 @@
+#!/usr/bin/env svrun
+# vim: ai ts=2 sts=2 et sw=2 ft=ruby
+
+service(['lighttpd', '-D', '-f', '/etc/lighttpd/lighttpd.conf']).call
+
+# Local Variables:
+# mode: ruby
+# End:

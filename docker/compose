@@ -1,0 +1,72 @@
+#!/usr/bin/env sh
+# vim: ft=sh
+
+# Samples of use:
+#
+# ```sh
+# ./compose restart
+# ./compose restart proxy
+# ```
+
+# Globals ------------------------------------------------------------
+export COMPOSE_BIN=$(which docker-compose)
+export PWD='.'
+readlink --version | grep -Eiq 'GNU coreutils' && {
+    PWD=$(dirname -- "$(readlink -f "$0")")
+}
+
+# Exposed functions --------------------------------------------------
+do_start() {
+    exec "${COMPOSE_BIN}" up -d --no-recreate --build "$@"
+}
+
+do_stop() {
+    "${COMPOSE_BIN}" stop "$@"
+    "${COMPOSE_BIN}" rm -fv "$@"
+}
+
+do_restart() {
+    do_stop "$@"
+    do_start "$@"
+}
+
+do_scale() {
+   "${COMPOSE_BIN}" scale "$@"
+}
+
+do_exec() {
+   "${COMPOSE_BIN}" exec "$@"
+}
+
+do_help() {
+    printf "Usage: %s {%s}\n" "${0}" "$(funcs)"
+}
+
+# Main functions -----------------------------------------------------
+funcs() {
+    cat "$0" | \
+        grep -E '^do_[a-z]+\(\)' | \
+        awk -Fdo_ '{print $2}' | awk -F\( '{print $1}' | \
+        sed ':a;N;$!ba;s/\n/|/g'
+}
+
+main() {
+    test -z "${COMPOSE_BIN}" && {
+        echo 'see: https://docs.docker.com/compose/install/' 1>&2
+        exit 95 # ENOTSUP
+    }
+
+    (test -n "$1" && echo "|$(funcs)|" | grep -Fq "|${1}|") || {
+        do_help 1>&2
+        exit 22 # EINVAL
+    }
+
+    set -eu
+    cd "$PWD"
+    f=$1
+    shift
+    "do_${f}" "$@"
+}
+
+# Execution ----------------------------------------------------------
+main "$@"

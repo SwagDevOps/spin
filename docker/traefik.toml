@@ -1,0 +1,18 @@
+debug = true
+logLevel = "INFO"
+defaultEntryPoints = ["https","http"]
+[web]
+# Port for the status/dashboard page
+address = ":8080"
+[entryPoints]
+[entryPoints.http]
+address = ":80"
+[entryPoints.https]
+address = ":443"
+[entryPoints.https.tls]
+[retry]
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+watch = true
+network = "proxy"
+exposedByDefault = false

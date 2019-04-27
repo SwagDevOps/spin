@@ -1,0 +1,28 @@
+<header id="top">
+    <div class="navbar is-inline-flex is-transparent">
+        <div class="navbar-brand">
+            <%= link_to('/', class: 'navbar-item') { 'Unicorn Agency' } %>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-item navbar-item_global-search">
+                <div class="control has-icons-left">
+                    <input name="global-search" id="global-search" class="input is-small" type="search" placeholder="search">
+                    <label for="global-search" class="icon is-left is-small">
+                        <%= html.span('class': 'icon material-icons') { 'search' } %>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-item is-flex-touch">
+            <a class="navbar-item">
+                <%= html.span('class': 'icon material-icons') { 'explore' } %>
+            </a>
+            <a class="navbar-item">
+                <%= html.span('class': 'icon material-icons') { 'favorite_border' } %>
+            </a>
+            <%= link_to(current_user ? '/logout' : '/login', class: 'navbar-item') do
+              html.span('class': 'icon material-icons') { 'person_outline' }
+            end %>
+        </div>
+    </div>
+</header>

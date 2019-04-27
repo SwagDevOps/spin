@@ -2,40 +2,24 @@
 
 $LOAD_PATH.unshift(__dir__)
 
-require 'sinatra/base'
-require 'dry/inflector'
 require 'dry/auto_inject'
+require 'dry/inflector'
 
 # Base class
-#
-# Sample of use:
-#
-#
-# ```ruby
-# # config.ru
-#
-# require 'spin'
-#
-# run(Spin.controller)
-# ```
 class Spin
   require_relative 'spin/bundled'
 
-  autoload(:Dotenv, 'dotenv')
   autoload(:Pathname, 'pathname')
+  autoload(:Concurrent, 'concurrent')
 
   # @formatter:off
   {
     VERSION: :version,
     Autoloadable: :autoloadable,
     Base: :base,
-    Config: :config,
-    ConfigReader: :config_reader,
-    Container: :container,
     Controller: :controller,
+    Core: :core,
     Helpers: :helpers,
-    Initializer: :initializer,
-    Setup: :setup,
     User: :user,
   }.each { |k, v| autoload(k, "#{__dir__}/spin/#{v}") }
   # @formatter:on
@@ -44,8 +28,9 @@ class Spin
   attr_reader :container
 
   def initialize
-    @container = self.class.const(:DI).container
-    raise 'Container must be set' if container.nil?
+    self.class.resolve(:DI)&.container.tap do |container|
+      @container = container
+    end
 
     setup!
   end
@@ -53,70 +38,25 @@ class Spin
   # @return [self]
   def setup!
     self.tap do
-      Dotenv.load
-      Setup.new(container).call
-      Setup.new(container, :base_class).call
-      Initializer.new(container).call
+      raise 'Container must be set' if container.nil?
 
-      container[:controller_class].__send__('config=', container[:config])
+      self.class.__send__(:build, :setup, container, :base_class).call
+      self.class.__send__(:build, :initializer, container).call
     end
-  end
-
-  # Use ``container`` to respond to missing nethods.
-  #
-  # @param [Symbol] method
-  # @param [Array] args
-  #
-  # @return [Mixed]
-  def method_missing(method, *args, &block)
-    respond_to_missing?(method) ? self.container[method.to_sym] : super
-  end
-
-  def respond_to_missing?(method, include_private = false)
-    container.key?(method.to_sym) || super(method, include_private)
   end
 
   class << self
-    def const(const_name)
-      const_name.to_s.gsub(/^::/, '').tap do |name|
-        return Object.const_get("::#{self.name}::#{name}")
+    def inherited(subclass)
+      super.tap do
+        $INJECTOR = -> { subclass.const_get(:DI) }
+
+        subclass.const_set(:Base, Class.new(self::Base))
       end
     end
 
-    # @return [Proc]
-    def container_builder
-      lambda do
-        self.const(:Container).new.tap do |c|
-          c.register(:paths, self.paths)
-          c.register(:entry_class, self)
-          c.register(:base_class, self.const(:Base))
-          c.register(:config, config_builder.call)
-          c.register(:controller_class, self.const(:Controller))
-        end
-      end
-    end
-
-    # @return [Proc]
-    def config_builder
-      lambda do
-        self.const(:Config).tap do |config_class|
-          config_class.__send__('paths=', self.paths)
-
-          return config_class.new
-        end
-      end
-    end
-
+    # @!parse DI = Dry::AutoInject(injector)
     def const_missing(name)
-      if name.to_sym == :DI
-        self.container_builder.call.tap do |container|
-          self.const_set(name, Dry::AutoInject(container))
-
-          return self.const_get(name)
-        end
-      end
-
-      super
+      name.to_sym == :DI ? injector : super
     end
 
     # Returns an array of the names of accessible constants.
@@ -127,9 +67,7 @@ class Spin
     end
 
     def const_defined?(sym, inherit = true)
-      const_missing(sym) if sym == :DI and !super
-
-      super
+      sym == :DI ? true : super
     end
 
     # Paths where ``setup`` file are resolved.
@@ -138,6 +76,71 @@ class Spin
     def paths
       [Pathname.new(Dir.pwd).freeze,
        Pathname.new(__FILE__.gsub(/\.rb$/, '')).freeze].freeze
+    end
+
+    def resolve(name)
+      Dry::Inflector.new.camelize(name).tap do |const_name|
+        return self.const(const_name)
+      end
+    end
+
+    protected
+
+    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize:
+
+    # Get an instance of container from a lambda.
+    #
+    # @return [Proc]
+    def container_builder
+      lambda do
+        resolve('core/container').new.tap do |c|
+          c.register(:entry_class, self)
+          c.register(:base_class, self.const(:Base))
+          c.register(:controller_class, self.const(:Controller))
+
+          c.register(:paths, self.paths)
+          c.register(:storage_path, Pathname.new(Dir.pwd).join('storage'))
+
+          c.register(:config, lambda do
+            self.resolve('core/config').new.tap do |conf|
+              conf.__send__(:paths=, paths.map { |path| path.join('config') })
+            end
+          end)
+
+          self.build(:setup, c).call
+        end.freeze
+      end
+    end
+
+    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+    # @see Spin::Core::Setup
+    # @see Spin::Core::Initializer
+    #
+    # @return [Spin::Core::Setup|Spin::Core::Initializer]
+    def build(type, *args)
+      self.resolve("core/#{type}").tap do |klass|
+        return klass.new(*args)
+      end
+    end
+
+    # @param [String|Symbol] const_name
+    # @return [Class]
+    def const(const_name)
+      const_name.to_s.gsub(/^::/, '').tap do |name|
+        return Object.const_get("::#{self.name}::#{name}")
+      end
+    end
+
+    # @return [Dry::AutoInject::Builder]
+    def injector
+      unless (@injectors ||= Concurrent::Hash.new).key?(self.name)
+        self.container_builder.call.tap do |container|
+          @injectors[self.name] = Dry::AutoInject(container)
+        end
+      end
+
+      @injectors[self.name]
     end
   end
 end

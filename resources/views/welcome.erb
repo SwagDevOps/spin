@@ -1,0 +1,88 @@
+<section class="content-listing columns body-columns">
+    <div class="column is-half is-offset-one-quarter">
+        <% (1..3).each do |j| %>
+            <div class="card">
+                <div class="header">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <%=
+                                    html.img(src: asset_url('/images/avatars/4.png'),
+                                             class: 'is-rounded animated fadeIn slower',
+                                             alt: 'Placeholder',
+                                             height: 48,
+                                             width: 48)
+                                %>
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">John Smith</p>
+                            <p class="subtitle is-6">@johnsmith</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-image">
+                    <% erb_cache('welcome:featured_image', expires: 120) do %>
+                        <figure class="image" data-updated_at="<%= Time.now %>">
+                            <%=
+                                image = '/images/unsplash/rawpixel-678089.jpg'
+                                size = image_size(image)
+
+                                html.img(src: asset_url(image),
+                                         class: 'animated fadeIn slower',
+                                         alt: nil,
+                                         height: "#{size.height}",
+                                         width: "#{size.width}")
+                            %>
+                        </figure>
+                    <% end %>
+                </div>
+                <div class="card-content">
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <div class="level-item has-text-centered">
+                                <a href="">
+                                    <i class="material-icons">favorite_border</i>
+                                </a>
+                            </div>
+                            <div class="level-item has-text-centered">
+                                <div>
+                                    <a href="">
+                                        <i class="material-icons">chat_bubble_outline</i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <article class="content">
+                        <p>
+                            <strong>32 Likes</strong>
+                        </p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+                        <a>@bulmaio</a>.
+                        <a href="#">#css</a>
+                        <a href="#">#responsive</a>
+                        <br>
+                        <time datetime="2018-1-1">11:09 PM - 1 Jan 2018</time>
+                    </article>
+                </div>
+                <footer class="card-footer">
+                    <div class="columns is-mobile">
+                        <div class="column is-11">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input is-medium" type="text" placeholder="Add a comment…">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-1 has-text-centered tools">
+                            <a class="button more is-text">
+                                <i class="material-icons">more_horiz</i>
+                            </a>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        <% end %>
+    </div>
+</section>

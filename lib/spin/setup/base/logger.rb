@@ -5,18 +5,20 @@ require 'fileutils'
 require 'logger'
 require 'sinatra/custom_logger'
 
-"log/#{self.settings.environment}.log".tap do |logfile|
-  File.dirname(logfile).tap { |logdir| FileUtils.mkdir_p(logdir) }
+container[:storage_path].join('log').tap do |logdir|
+  FileUtils.mkdir_p(logdir)
 
-  self.instance_eval do
-    helpers Sinatra::CustomLogger
+  logdir.join("#{self.settings.environment}.log").tap do |logfile|
+    self.instance_eval do
+      helpers Sinatra::CustomLogger
 
-    ::Logger.new(logfile).tap do |logger|
-      logger.level = ::Logger::DEBUG
+      ::Logger.new(logfile).tap do |logger|
+        logger.level = ::Logger::DEBUG if development?
 
-      configure { set(:logger, logger) }
+        configure { set(:logger, logger) }
+      end
     end
   end
 end
 
-# logger.info 'Some message' # STDOUT logger is used
+# logger.info 'Some message'

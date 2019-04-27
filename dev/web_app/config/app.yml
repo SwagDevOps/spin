@@ -1,0 +1,5 @@
+---
+routing:
+  '/': 'home'
+  '/admin': 'admin'
+  # '/admin/posts': 'admin/posts'

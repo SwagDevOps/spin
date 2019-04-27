@@ -1,0 +1,23 @@
+<% unless flash.empty? %>
+    <%
+        # Supported types:
+        #
+        # * primary
+        # * link
+        # * info
+        # * success
+        # * warning
+        # * danger
+    %>
+    <section id="notifications">
+        <% flash.each do |type, message| %>
+            <div class="notification is-<%= type %> animated slideInRight" role="alert">
+                <button class="delete" aria-hidden="true"></button>
+
+                <p>
+                    <%= h(message) %>
+                </p>
+            </div>
+        <% end %>
+    </section>
+<% end %>

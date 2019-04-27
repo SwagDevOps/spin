@@ -1,0 +1,48 @@
+# vim:ft=yaml:
+version: "3"
+
+services:
+  spin_web:
+    build: { context: images/web }
+    extra_hosts:
+      - "web.spin.${DC_DOMAIN:-test}:127.0.0.1"
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:web.spin.${DC_DOMAIN:-test}"
+    expose: ["80"]
+    networks: [default, proxy]
+    environment:
+      VOLUME_UID: ${UID:-1000}
+      VOLUME_GID: ${GID:-1000}
+      # specific -----------------------------------------------------
+      ASSETS_HOST: "http://assets.spin.${DC_DOMAIN:-test}"
+    volumes:
+      - ..:/var/www/localhost/
+      - spin_web-bundle:/usr/lib/bundle/
+  spin_assets:
+    build: { context: images/assets }
+    extra_hosts:
+      - "assets.spin.${DC_DOMAIN:-test}:127.0.0.1"
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:assets.spin.${DC_DOMAIN:-test}"
+      traefik.frontend.headers.customResponseHeaders: "Access-Control-Allow-Origin:*"
+    expose: ["80"]
+    networks: [proxy]
+    environment:
+      VOLUME_UID: ${UID:-1000}
+      VOLUME_GID: ${GID:-1000}
+    volumes:
+      - ../public:/var/www/localhost/
+  spin_db:
+    build: { context: images/postgres }
+    expose: ["5432"]
+volumes:
+  spin_web-bundle:
+
+networks:
+  proxy: { external: true }
+
+# Local Variables:
+# mode: yaml
+# End:

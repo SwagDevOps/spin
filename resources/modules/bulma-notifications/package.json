@@ -1,0 +1,7 @@
+{
+    "name": "bulma-notifications",
+    "main": "index.js",
+    "dependencies": {
+        "jquery": "*"
+    }
+}

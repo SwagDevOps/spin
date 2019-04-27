@@ -1,0 +1,22 @@
+# vim:ft=yaml:
+version: '3'
+
+# First create a network:
+#
+# ```
+# docker network create -d bridge \
+#    --subnet 172.31.0.0/16
+#    --gateway 172.31.0.1 proxy
+# ```
+services:
+  spin_proxy:
+    image: traefik:1.7.10
+    ports: ["80:80", "443:443", "8080:8080"]
+    networks: [proxy]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.toml:/traefik.toml
+
+# Local Variables:
+# mode: yaml
+# End:

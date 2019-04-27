@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
 
   # MUST follow the higher required_ruby_version
   # requires version >= 2.3.0 due to safe navigation operator &
-  s.required_ruby_version = ">= 2.3.0"
+  # reauired version >= 2.5.0 due to rescue/else/ensure inside do/end blocks
+  s.required_ruby_version = ">= 2.5"
   s.require_paths = ["lib"]
   s.bindir        = "bin"
   s.executables   = Dir.glob([s.bindir, "/*"].join)
@@ -33,10 +34,13 @@ Gem::Specification.new do |s|
    .push(*s.executables.map { |f| [s.bindir, f].join("/") })
 
   s.add_runtime_dependency("bcrypt", ["~> 3.1"])
+  s.add_runtime_dependency("concurrent-ruby", ["~> 1.0"])
   s.add_runtime_dependency("dry-auto_inject", [">= 0.6.0", "~> 0.6"])
   s.add_runtime_dependency("dry-container", ["~> 0.6"])
   s.add_runtime_dependency("ice_nine", ["~> 0.11"])
+  s.add_runtime_dependency("image_size", ["~> 2.0"])
   s.add_runtime_dependency("kamaze-version", ["~> 1.0"])
+  s.add_runtime_dependency("moneta", ["~> 1.0"])
   s.add_runtime_dependency("tty-config", ["~> 0.3"])
 end
 

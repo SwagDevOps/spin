@@ -9,16 +9,18 @@ class WebApp::Controller::Auth < WebApp::Controller::Base
 
   class << self
     def urls
-      super.merge(
-        protected: '/protected',
-        success_login: '/protected'
-      )
+      '/admin'.to_s.tap do |url|
+        # formatter:off
+        return super.merge(
+          protected: url,
+          success_login: url
+        )
+        # formatter:on
+      end
     end
   end
 
   authenticable!
 
-  get(urls.fetch(:protected)) { erb :protected }
-
-  before(/#{urls.fetch(:protected)}/) { authenticate! }
+  before(%r{#{urls.fetch(:protected)}(/.*)*}) { authenticate! }
 end

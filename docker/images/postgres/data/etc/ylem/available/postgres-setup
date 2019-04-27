@@ -1,0 +1,92 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# @see https://hub.docker.com/_/postgres
+# @see https://github.com/docker-library/postgres/blob/cc305ee1c59d93ac1808108edda6556b879374a4/10/docker-entrypoint.sh
+
+require 'securerandom'
+require 'tempfile'
+require 'open3'
+require 'pathname'
+require 'fileutils'
+# rubocop:disable Style/MixinUsage
+include(FileUtils::Verbose)
+# rubocop:enable Style/MixinUsage
+
+sh = lambda do |*args|
+  system(*args) || lambda do
+    raise args.inspect
+  end.call
+end
+
+psql = lambda do |stt, data_path = ENV.fetch('POSTGRES_DATAPATH')|
+  # @formatter:off
+  [
+    'sudo', '-u', 'postgres',
+    'postgres', '--single', '-D', data_path, '-j',
+  ].tap do |command|
+    _output, wait_thr = Open3.capture2(*command, stdin_data: stt)
+    unless wait_thr.success?
+      raise stt.inspect
+    end
+  end
+  # @formatter:on
+end
+
+# filesystem setup --------------------------------------------------
+filesystem_setup = lambda do |data_path|
+  # @formatter:off
+  {
+    data_path => false,
+    '/run/postgresql/' => true,
+    '/var/log/postgresql/' => true,
+  }.each do |path, chowned|
+    mkdir_p(path)
+    chown_R('postgres', 'postgres', path) if chowned
+  end
+  # @formatter:on
+end
+
+# database setup ----------------------------------------------------
+database_setup = lambda do |data_path, db_name, db_user, db_pass = null|
+  chown_R('postgres', 'postgres', data_path)
+
+  Tempfile.open('pwfile-') do |f|
+    f.write(db_pass.to_s.empty? ? SecureRandom.hex : db_pass)
+    f.close
+    chmod(0o644, f.path).fetch(0)
+  end.tap do |pwfile|
+    sh.call('sudo', '-u', 'postgres',
+            'initdb',
+            '-U', db_user,
+            '-D', data_path,
+            '--pwfile', pwfile)
+
+    psql.call("CREATE DATABASE #{db_name};", data_path)
+  end
+end
+
+# config setup ------------------------------------------------------
+config_setup = lambda do |data_path|
+  # config file (postgresql.conf) ------------------------------------
+  Pathname.new(data_path).join('postgresql.conf').open('a') do |f|
+    f.puts("include = '/etc/postgresql/postgresql.conf'\n")
+  end
+
+  # config file (pg_hba.conf) ----------------------------------------
+  Pathname.new(data_path).join('pg_hba.conf').open('a') do |f|
+    f.puts("host all all 0.0.0.0/0 md5\n")
+  end
+end
+
+# main process ------------------------------------------------------
+lambda do |data_path, db_name, db_user, db_pass = null|
+  filesystem_setup.call(data_path)
+  return false unless Dir.empty?(data_path)
+
+  database_setup.call(data_path, db_name, db_user, db_pass)
+  config_setup.call(data_path)
+end.call(ENV.fetch('POSTGRES_DATAPATH'),
+         ENV.fetch('POSTGRES_DATABASE'),
+         ENV.fetch('POSTGRES_USERNAME'),
+         ENV['POSTGRES_PASSWORD'])
