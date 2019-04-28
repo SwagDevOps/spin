@@ -1,4 +1,12 @@
+# Use
+
+```scss
 @import '~buefy/dist/buefy.css';
-@import '~spin-sass_base/scss/base';
 @import '~spin-md_editor/scss/md_editor';
-@import './app/layout';
+```
+
+```js
+import mde from 'spin-md_editor'
+
+mde()
+```
