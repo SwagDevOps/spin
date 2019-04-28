@@ -2,9 +2,11 @@
 
 /* Modules
  * -------------------------- */
-@import '~animate.css/animate';
+@import "~animate.css/animate";
 @import "~bulmaswatch/materia/variables";
 @import "~bulma/bulma";
 @import "~bulmaswatch/materia/overrides";
+@import "~bulma-divider/src/sass/index";
 @import "~roboto-npm-webfont/full/style";
-@import '~material-icons/iconfont/material-icons';
+@import "~material-icons/iconfont/material-icons";
+@import "~@mdi/font/scss/materialdesignicons";

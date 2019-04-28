@@ -2,8 +2,10 @@
     "name": "spin-sass_base",
     "version": "0.0.1",
     "dependencies": {
+        "@mdi/font": "~3.6",
         "animate.css": "~3.7",
         "bulma": "~0.7",
+        "bulma-divider": "~2.0",
         "bulmaswatch": "~0.7.2",
         "jquery": "*",
         "material-icons": "~0.3",
