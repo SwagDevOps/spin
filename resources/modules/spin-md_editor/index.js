@@ -38,8 +38,7 @@ const installEditor = function (id) {
     el: `#${id}`,
     data: {
       input: '',
-      activeTab: 0,
-      showBooks: false
+      activeTab: 0
     },
     mounted () {
       this.input = this.$refs.value.dataset.value
@@ -64,7 +63,7 @@ const installEditor = function (id) {
  */
 const installEditors = function (cname) {
   Array.from(document.getElementsByClassName(cname)).forEach(function (element) {
-    let id = `${cname}_${cuid()}`
+    let id = element.getAttribute('id') || cuid()
 
     element.setAttribute('id', id)
 
