@@ -18,6 +18,11 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@mdi/font@~3.6":
+  version "3.6.95"
+  resolved "https://registry.yarnpkg.com/@mdi/font/-/font-3.6.95.tgz#0bbde766ca2d94cfa0e469f25523b23d3112bdd3"
+  integrity sha512-wUbkF/RRCIh51TPzAL9qUeRSUFla9I3x1nGq62HkfWzIebRHbDY5HPaYCQuZO7398dWaLHTu4BwnBA58YbhfEA==
+
 "@types/q@^1.5.1":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
@@ -1237,6 +1242,13 @@ browserslist@^3.2.6:
     caniuse-lite "^1.0.30000844"
     electron-to-chromium "^1.3.47"
 
+buefy@~0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/buefy/-/buefy-0.7.5.tgz#d25fcbb69beeb898849b47b52be78dfd2849452f"
+  integrity sha512-p6yz4XKbfXZd4f9d5rLHXCZWl9Y+8bN7gTaFQ4VdLXh7bdo4WYkPYyFyUFE+fIXhx/VEzSh2TeCEYqn/e8xY8w==
+  dependencies:
+    bulma "0.7.4"
+
 buffer-alloc-unsafe@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/buffer-alloc-unsafe/-/buffer-alloc-unsafe-1.1.0.tgz#bd7dc26ae2972d0eda253be061dba992349c19f0"
@@ -1312,7 +1324,12 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
-bulma@~0.7:
+bulma-divider@~2.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/bulma-divider/-/bulma-divider-2.0.1.tgz#6ab81c939fafd4962e2e5432b2df07dfeb02f150"
+  integrity sha512-ooDFcAcOXC18urRMqRgah/8UuvU4N0Bpbs4HlSTxjxRW7usZluyBekEDBlQQ1VlYirVmvUpExs6S5pDSi92yDg==
+
+bulma@0.7.4, bulma@~0.7:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.7.4.tgz#7e74512e9118d9799021339e67e365ee0ac4f3f9"
   integrity sha512-krG2rP6eAX1WE0sf6O0SC/FUVSOBX4m1PBC2+GKLpb2pX0qanaDqcv9U2nu75egFrsHkI0zdWYuk/oGwoszVWg==
@@ -2165,6 +2182,11 @@ csso@~2.3.1:
   dependencies:
     clap "^1.0.9"
     source-map "^0.5.3"
+
+cuid@~2.1:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/cuid/-/cuid-2.1.6.tgz#dc3a20b5a7497d36d32c0bf8a2997524c9c796c4"
+  integrity sha512-ZFp7PS6cSYMJNch9fc3tyHdE4T8TDo3Y5qAxb0KSA9mpiYDo7z9ql1CznFuuzxea9STVIDy0tJWm2lYiX2ZU1Q==
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -7948,6 +7970,8 @@ spdy@^4.0.0:
 spin-md_editor@./resources/modules/spin-md_editor:
   version "0.0.1"
   dependencies:
+    buefy "~0.7.5"
+    cuid "~2.1"
     lodash "~4.17"
     marked "~0.6"
     vue "~2.6"
@@ -7960,8 +7984,10 @@ spin-notifications@./resources/modules/spin-notifications:
 spin-sass_base@./resources/modules/spin-sass_base:
   version "0.0.1"
   dependencies:
+    "@mdi/font" "~3.6"
     animate.css "~3.7"
     bulma "~0.7"
+    bulma-divider "~2.0"
     bulmaswatch "~0.7.2"
     jquery "*"
     material-icons "~0.3"
