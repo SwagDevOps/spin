@@ -1,0 +1,12 @@
+{
+    "name": "spin-sass_base",
+    "version": "0.0.1",
+    "dependencies": {
+        "animate.css": "~3.7",
+        "bulma": "~0.7",
+        "bulmaswatch": "~0.7.2",
+        "jquery": "*",
+        "material-icons": "~0.3",
+        "roboto-npm-webfont": "~1.0"
+    }
+}
