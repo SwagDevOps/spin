@@ -4,19 +4,15 @@
     "private": true,
     "homepage": "https://github.com/SwagDevOps/spin",
     "dependencies": {
-        "animate.css": "~3.7",
         "axios": "~0.18",
-        "bulma": "~0.7",
-        "bulmaswatch": "~0.7.2",
         "crypto-js": "~3.1",
         "dotenv": "~6.2",
         "ejs": "~2.6",
         "jquery": "~3.4",
-        "material-icons": "~0.3",
-        "reflex-grid": "~2.0",
-        "roboto-npm-webfont": "~1.0",
-        "sprintf-js": "~1.1",
-        "wowjs": "~1.1"
+        "spin-md_editor": "./resources/modules/spin-md_editor",
+        "spin-notifications": "./resources/modules/spin-notifications",
+        "spin-sass_base": "./resources/modules/spin-sass_base",
+        "sprintf-js": "~1.1"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^1.0",
