@@ -1,0 +1,10 @@
+{
+    "name": "spin-md_editor",
+    "version": "0.0.1",
+    "main": "index.js",
+    "dependencies": {
+        "lodash": "~4.17",
+        "marked": "~0.6",
+        "vue": "~2.6"
+    }
+}
