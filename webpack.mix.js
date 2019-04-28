@@ -76,6 +76,10 @@ const copiables = [
     .map(fp => [fp, paths.fonts]))
   .concat(glob(path.join(_paths.vendor, 'roboto-npm-webfont/full/fonts/*'))
     .map(fp => [fp, paths.fonts]))
+  .concat([[
+    path.join(_paths.vendor, '@mdi/font/fonts'),
+    path.join(paths.fonts)
+  ]])
 
 /**
  * Cleanables
