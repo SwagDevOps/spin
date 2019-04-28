@@ -1,6 +1,6 @@
 'use strict'
 
-import notificationClickHandler from 'bulma-notifications'
+import notificationClickHandler from 'spin-notifications'
 
 class Bulma {
   constructor () {
