@@ -1,14 +1,2 @@
-/* Variables
- * -------------------------- */
-$image-path: '/images/';
-
-/* Modules
- * -------------------------- */
-@import '~animate.css/animate';
-
-/* App
- * -------------------------- */
+@import '~spin-sass_base/scss/base';
 @import './app/layout';
-
-
-

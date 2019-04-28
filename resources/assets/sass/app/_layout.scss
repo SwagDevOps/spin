@@ -1,19 +1,7 @@
 /**
  * Layout styles
  * --------------------------------------------------------------- */
-
-// bulma ------------------------------------------------------------
-$bulmaswatch-import-font: false !default;
-@import "~bulmaswatch/materia/variables";
-@import "~bulma/bulma";
-@import "~bulmaswatch/materia/overrides";
-$roboto-npm-webfont-dir: '/fonts' !default;
-@import "~roboto-npm-webfont/full/style";
-
-// custom -----------------------------------------------------------
-@import "./layout/material-icons";
 @import "./layout/img";
-
 @import "./layout/header";
 @import "./layout/main.container";
 @import "./layout/notifications";
