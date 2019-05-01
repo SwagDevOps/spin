@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Generates mime types configuration for lighttpd.
+#
 # Sample of use:
 #
 # ```
@@ -14,35 +16,28 @@
 # )
 # ```
 #
+# @see https://redmine.lighttpd.net/projects/1/wiki/Docs_Configuration
 # @see https://github.com/mime-types/ruby-mime-types
 # @see https://github.com/arno/tools/blob/master/confmimetype.py
+class MimeTypesConfig
+  autoload(:ERB, 'erb')
+  autoload(:MIME, 'mime-types')
 
-require 'mime-types'
-require 'erb'
-require 'ostruct'
+  # @type [Hash{Symbol => MIME::Type::Columnar}]
+  attr_reader :mimetypes
 
-MIMETYPES_TEMPLATE = %(
-mimetype.assign = (
+  # @type [String]
+  attr_reader :charset
+
+  TEMPLATE = %(mimetype.assign = (
   <% mimetypes.each do |ext, mime| %>
-    <% if mime.encoding != 'base64' and mime.encoding != '7bit' %>
+    <% unless %w(base64 7bit).include?(mime.encoding.to_s) %>
       ".<%= ext %>" => "<%= mime.to_s %>; charset=<%= charset %>",
     <% else %>
       ".<%= ext %>" => "<%= mime.to_s %>",
     <% end %>
   <% end %>
-)
-)
-
-# Generates mime types configuration for lighttpd.
-#
-# @see https://github.com/mime-types/ruby-mime-types
-# @see https://github.com/arno/tools/blob/master/confmimetype.py
-class MimetypeExporter
-  # @type [Hash{String => MIME::Type::Columnar}]
-  attr_reader :mimetypes
-
-  # @type [String]
-  attr_reader :charset
+  ))
 
   # @param [String] charset
   def initialize(charset = 'utf-8')
@@ -53,29 +48,30 @@ class MimetypeExporter
   # @return [String]
   def render
     # @formatter:off
-    context = OpenStruct.new.tap do |c|
-      {
-        mimetypes: mimetypes.sort,
-        charset: self.charset,
-      }.each { |k, v| c.public_send("#{k}=", v) }
-    end.instance_eval { binding }
+    context = lambda do
+      Struct.new(:mimetypes, :charset).tap do |c|
+        return c.new(mimetypes.sort, self.charset)
+      end
+    end.call.instance_eval { binding }
 
-    ERB.new(MIMETYPES_TEMPLATE).result(context)
+    ERB.new(TEMPLATE).result(context)
        .lines.reject { |line| /^[ ]+$/ =~ line and line.strip.empty? }
        .join.strip + "\n"
     # @formatter:on
   end
 
+  alias_method 'to_s', 'render'
+
   protected
 
-  # @return [Hash{String => MIME::Type::Columnar}}]
+  # @return [Hash{Symbol => MIME::Type::Columnar}]
   def make_mimes
     # @formatter:off
     {}.tap do |mimetypes|
       MIME::Types.map.reject { |v| v.extensions.empty? }.tap do |r|
         r.map { |v| [v, v.extensions] }.to_h.each do |v, extensions|
-          extensions.map(&:downcase).reject { |s| s[0] == '@' }.each do |ext|
-            mimetypes[ext] = v unless mimetypes[ext]
+          extensions.reject { |s| s[0] == '@' }.map(&:downcase).each do |ext|
+            mimetypes[ext.to_sym] = v unless mimetypes[ext.to_sym]
           end
         end
       end
@@ -85,7 +81,7 @@ class MimetypeExporter
 end
 
 if __FILE__ == $PROGRAM_NAME
-  MimetypeExporter.new('utf-8').render.tap do |content|
+  MimeTypesConfig.new('utf-8').tap do |content|
     $stdout.write(content)
   end
 end
