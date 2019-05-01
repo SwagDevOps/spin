@@ -3,7 +3,10 @@
         <b-tab-item label="Edit" icon="file-document-edit-outline">
                 <textarea :value="input"
                           ref="value"
-                          data-value="<%= value %>"
+                          <% if defined?(name) %>
+                          name="<%= ha(name) %>"
+                          <% end %>
+                          data-value="<%= defined?(value) ? ha(value) : nil %>"
                           @input="update"></textarea>
         </b-tab-item>
 

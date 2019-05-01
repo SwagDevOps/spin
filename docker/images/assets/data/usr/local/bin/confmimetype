@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Sample of use:
+#
+# ```
+# # vim: set ft=conf foldmethod=marker et :
+#
+# include_shell "confmimetype"
+#
+# mimetype.assign += (
+#   ".css.map" => "application/json; charset=utf-8",
+#   ".js.map"  => "application/json; charset=utf-8",
+# )
+# ```
+#
+# @see https://github.com/mime-types/ruby-mime-types
+# @see https://github.com/arno/tools/blob/master/confmimetype.py
+
+require 'mime-types'
+require 'erb'
+require 'ostruct'
+
+MIMETYPES_TEMPLATE = %(
+mimetype.assign = (
+  <% mimetypes.each do |ext, mime| %>
+    <% if mime.encoding != 'base64' and mime.encoding != '7bit' %>
+      ".<%= ext %>" => "<%= mime.to_s %>; charset=<%= charset %>",
+    <% else %>
+      ".<%= ext %>" => "<%= mime.to_s %>",
+    <% end %>
+  <% end %>
+)
+)
+
+# Generates mime types configuration for lighttpd.
+#
+# @see https://github.com/mime-types/ruby-mime-types
+# @see https://github.com/arno/tools/blob/master/confmimetype.py
+class MimetypeExporter
+  # @type [Hash{String => MIME::Type::Columnar}]
+  attr_reader :mimetypes
+
+  # @type [String]
+  attr_reader :charset
+
+  # @param [String] charset
+  def initialize(charset = 'utf-8')
+    @charset = charset
+    @mimetypes = make_mimes
+  end
+
+  # @return [String]
+  def render
+    # @formatter:off
+    context = OpenStruct.new.tap do |c|
+      {
+        mimetypes: mimetypes.sort,
+        charset: self.charset,
+      }.each { |k, v| c.public_send("#{k}=", v) }
+    end.instance_eval { binding }
+
+    ERB.new(MIMETYPES_TEMPLATE).result(context)
+       .lines.reject { |line| /^[ ]+$/ =~ line and line.strip.empty? }
+       .join.strip + "\n"
+    # @formatter:on
+  end
+
+  protected
+
+  # @return [Hash{String => MIME::Type::Columnar}}]
+  def make_mimes
+    # @formatter:off
+    {}.tap do |mimetypes|
+      MIME::Types.map.reject { |v| v.extensions.empty? }.tap do |r|
+        r.map { |v| [v, v.extensions] }.to_h.each do |v, extensions|
+          extensions.map(&:downcase).reject { |s| s[0] == '@' }.each do |ext|
+            mimetypes[ext] = v unless mimetypes[ext]
+          end
+        end
+      end
+    end
+    # @formatter:on
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  MimetypeExporter.new('utf-8').render.tap do |content|
+    $stdout.write(content)
+  end
+end

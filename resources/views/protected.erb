@@ -15,5 +15,5 @@
 
     <div class="is-divider" data-content="editor"></div>
 
-    <%= erb(:'plugins/md_editor', locals: {value: '# Sample edition'}) %>
+    <%= raw(erb(:'plugins/md_editor', locals: {value: '# Sample edition', name: 'post[content]'})) %>
 </div>
