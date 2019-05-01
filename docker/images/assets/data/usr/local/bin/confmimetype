@@ -1,14 +1,27 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'pathname'
-require 'erb'
+# Sample of use:
+#
+# ```
+# # vim: set ft=conf foldmethod=marker et :
+#
+# include_shell "confmimetype"
+#
+# mimetype.assign += (
+#   ".css.map" => "application/json; charset=utf-8",
+#   ".js.map"  => "application/json; charset=utf-8",
+# )
+# ```
+#
+# @see https://github.com/mime-types/ruby-mime-types
+# @see https://github.com/arno/tools/blob/master/confmimetype.py
+
 require 'mime-types'
+require 'erb'
 require 'ostruct'
 
 MIMETYPES_TEMPLATE = %(
-# vim: set ft=conf foldmethod=marker et :
-
 mimetype.assign = (
   <% mimetypes.each do |ext, mime| %>
     <% if mime.encoding != 'base64' and mime.encoding != '7bit' %>
@@ -22,15 +35,7 @@ mimetype.assign = (
 
 # Generates mime types configuration for lighttpd.
 #
-# ```
-# ".svg" => "image/svg+xml",
-# ".html" => "text/html; charset=utf-8"
-# ```
-#
-# ```
-# mimetype.assign   += ( ".webapp" => "application/x-web-app-manifest+json" )
-# ```
-#
+# @see https://github.com/mime-types/ruby-mime-types
 # @see https://github.com/arno/tools/blob/master/confmimetype.py
 class MimetypeExporter
   # @type [Hash{String => MIME::Type::Columnar}]
@@ -50,7 +55,7 @@ class MimetypeExporter
     # @formatter:off
     context = OpenStruct.new.tap do |c|
       {
-        mimetypes: mimetypes,
+        mimetypes: mimetypes.sort,
         charset: self.charset,
       }.each { |k, v| c.public_send("#{k}=", v) }
     end.instance_eval { binding }
@@ -74,13 +79,13 @@ class MimetypeExporter
           end
         end
       end
-    end.sort
+    end
     # @formatter:on
   end
 end
 
-MimetypeExporter.new('utf-8').render.tap do |content|
-  Pathname.new(ARGV[0] || '/dev/stdout').tap do |output|
-    output.write(content)
+if __FILE__ == $PROGRAM_NAME
+  MimetypeExporter.new('utf-8').render.tap do |content|
+    $stdout.write(content)
   end
 end
