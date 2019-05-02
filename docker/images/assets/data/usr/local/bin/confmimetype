@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Generates mime types configuration for lighttpd.
+# Generate ``mimetype`` configuration for lighttpd.
 #
 # Sample of use:
 #
@@ -17,9 +17,10 @@
 # ```
 #
 # @see https://redmine.lighttpd.net/projects/1/wiki/Docs_Configuration
+# @see https://www.w3.org/International/articles/http-charset/index
 # @see https://github.com/mime-types/ruby-mime-types
 # @see https://github.com/arno/tools/blob/master/confmimetype.py
-class MimeTypesConfig
+class Confmimetype
   autoload(:ERB, 'erb')
   autoload(:MIME, 'mime-types')
 
@@ -39,10 +40,12 @@ class MimeTypesConfig
   <% end %>
   ))
 
+  private_constant :TEMPLATE
+
   # @param [String] charset
   def initialize(charset = 'utf-8')
     @charset = charset
-    @mimetypes = make_mimes
+    @mimetypes = make_mimes.sort.freeze
   end
 
   # @return [String]
@@ -50,7 +53,7 @@ class MimeTypesConfig
     # @formatter:off
     context = lambda do
       Struct.new(:mimetypes, :charset).tap do |c|
-        return c.new(mimetypes.sort, self.charset)
+        return c.new(self.mimetypes, self.charset)
       end
     end.call.instance_eval { binding }
 
@@ -60,7 +63,7 @@ class MimeTypesConfig
     # @formatter:on
   end
 
-  alias_method 'to_s', 'render'
+  alias to_s render
 
   protected
 
@@ -68,10 +71,12 @@ class MimeTypesConfig
   def make_mimes
     # @formatter:off
     {}.tap do |mimetypes|
-      MIME::Types.map.reject { |v| v.extensions.empty? }.tap do |r|
-        r.map { |v| [v, v.extensions] }.to_h.each do |v, extensions|
-          extensions.reject { |s| s[0] == '@' }.map(&:downcase).each do |ext|
-            mimetypes[ext.to_sym] = v unless mimetypes[ext.to_sym]
+      MIME::Types.map.reject { |mime| mime.extensions.empty? }.tap do |r|
+        r.map { |mime| [mime, mime.extensions] }.to_h.each do |mime, extensions|
+          extensions.reject! { |s| s =~ /^@/ }
+
+          extensions.map(&:downcase.to_sym).each do |ext|
+            mimetypes[ext] = mime unless mimetypes[ext]
           end
         end
       end
@@ -81,7 +86,7 @@ class MimeTypesConfig
 end
 
 if __FILE__ == $PROGRAM_NAME
-  MimeTypesConfig.new('utf-8').tap do |content|
+  Confmimetype.new('utf-8').tap do |content|
     $stdout.write(content)
   end
 end
