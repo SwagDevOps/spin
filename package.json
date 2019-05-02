@@ -12,6 +12,7 @@
         "spin-md_editor": "./resources/modules/spin-md_editor",
         "spin-notifications": "./resources/modules/spin-notifications",
         "spin-sass_base": "./resources/modules/spin-sass_base",
+        "spin-sass_typographic": "./resources/modules/spin-sass_typographic",
         "sprintf-js": "~1.1"
     },
     "devDependencies": {
