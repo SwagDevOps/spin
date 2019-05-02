@@ -9,6 +9,7 @@ class WebApp < Spin
   {
     Controller: :controller,
     Forms: :forms,
+    Lorem: :lorem,
     User: :user,
   }.each { |k, v| autoload k, "#{__dir__}/web_app/#{v}" }
   # @formatter:on
