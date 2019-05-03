@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'pathname'
+require 'fileutils'
+# rubocop:disable Style/MixinUsage
+include(FileUtils::Verbose)
+# rubocop:enable Style/MixinUsage
+
+sh = lambda do |*args|
+  system(*args) || lambda do
+    raise args.inspect
+  end.call
+end
+
+# bundle install ----------------------------------------------------
+bundle_setup = lambda do |pwd|
+  Dir.chdir(pwd) do
+    ['gems.rb', 'gems.locked'].map { |f| Pathname.new(f).file? }.tap do |res|
+      return false unless res == [true, true]
+    end
+
+    # @formatter:off
+    {
+      'BUNDLE_CLEAN' => 'true',
+      'BUNDLE_JOBS' => `nproc`.chomp,
+      'BUNDLE_IGNORE_MESSAGES' => 'true',
+    }.tap do |env|
+      sh.call(ENV.to_h.merge(env), 'bundle', 'install')
+    end
+    # @formatter:on
+  end
+end
+
+# main process ------------------------------------------------------
+lambda do
+  bundle_setup.call('/var/www/localhost')
+end.call
