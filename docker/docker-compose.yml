@@ -2,6 +2,23 @@
 version: "3"
 
 services:
+  spin_fcgi:
+    build: { context: images/fcgi }
+    extra_hosts:
+      - "fcgi.spin.${DC_DOMAIN:-test}:127.0.0.1"
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:fcgi.spin.${DC_DOMAIN:-test}"
+    expose: ["80"]
+    networks: [default, proxy]
+    environment:
+      VOLUME_UID: ${UID:-1000}
+      VOLUME_GID: ${GID:-1000}
+      # specific -----------------------------------------------------
+      ASSETS_HOST: "http://assets.spin.${DC_DOMAIN:-test}"
+    volumes:
+      - ..:/var/www/localhost/
+      - spin_web-bundle:/usr/lib/bundle/
   spin_web:
     build: { context: images/web }
     extra_hosts:
