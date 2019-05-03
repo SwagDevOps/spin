@@ -32,6 +32,7 @@ group :development do
   gem 'yard', '~> 0.9'
   gem 'yard-coderay', '~> 0.1'
   # server -------------------------------
+  gem 'fcgi', '~> 0.9'
   gem 'puma', '~> 3.12'
   gem 'rerun', '~> 0.13'
   # optional support ---------------------
