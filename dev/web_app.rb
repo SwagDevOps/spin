@@ -19,10 +19,17 @@ class WebApp < Spin
     #
     # @see Spin::Controller.run!()
     def run!(builder)
-      self.new.container[:controller_class].tap do |controller|
-        # @type []Spin::Controller} controller
-        return controller.run!(builder)
-      end
+      app.run!(builder)
+    end
+
+    # @param [Rack::Builder] builder
+    def mount!(builder)
+      app.mount!(builder)
+    end
+
+    # @return [Spin::Controller]
+    def app
+      self.new.container[:controller_class]
     end
 
     def paths
