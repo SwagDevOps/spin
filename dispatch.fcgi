@@ -7,19 +7,22 @@ require 'uri'
 require 'logger'
 require 'pathname'
 
-# Wrapper arond a Rack app to fix some environment.
+# Wrapper around a Rack app to fix some environment variables.
 #
 # Fix:
 #
+#  * SCRIPT_NAME
 #  * PATH_INFO
 #  * QUERY_STRING
 class Rack::AppWrapper
+  # @param [Rack::Builder] app
   def initialize(app)
     self.app = app
   end
 
   def call(env)
     URI(env.fetch('REQUEST_URI')).tap do |uri|
+      env['SCRIPT_NAME'] = '/'
       env['PATH_INFO'] = uri.path
       env['QUERY_STRING'] = uri.query
     end
