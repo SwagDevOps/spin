@@ -2,12 +2,12 @@
 
 $LOAD_PATH.unshift(__dir__)
 
-require 'dry/auto_inject'
-require 'dry/inflector'
-
 # Base class
 class Spin
   require_relative 'spin/bundled'
+
+  require 'dry/auto_inject'
+  require 'dry/inflector'
 
   autoload(:Pathname, 'pathname')
   autoload(:Concurrent, 'concurrent')

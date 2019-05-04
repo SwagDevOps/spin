@@ -1,0 +1,13 @@
+$theme: custom !default;
+
+@import "~unreset-css/unreset";
+@import "~gutenberg-web-type/src/style/gutenberg";
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+}
+
+p, pre {
+  width: 100%;
+  max-width: 100%;
+}

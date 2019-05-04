@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'pathname'
+require 'fileutils'
+# rubocop:disable Style/MixinUsage
+include(FileUtils::Verbose)
+# rubocop:enable Style/MixinUsage
+
+sh = lambda do |*args|
+  system(*args) || lambda do
+    raise args.inspect
+  end.call
+end
+
+# user/group creation -----------------------------------------------
+user_setup = lambda do |gid, uid|
+  ['www-data', 'lighttpd'].each do |name|
+    # @formatter:off
+    {
+      user: '/etc/passwd',
+      group: '/etc/group',
+    }.each do |type, file|
+      next unless Pathname.new(file).read =~ /^#{name}:/
+
+      sh.call("#{type}del", name)
+      # @formatter:on
+    end
+  end
+
+  sh.call('groupadd', '-f', '-g', gid, '--system', 'www-data')
+  sh.call('useradd', '-d', '/var/www',
+          '-g', gid,
+          '-u', uid,
+          '--no-create-home',
+          '--no-user-group',
+          '--system',
+          '--shell', `which nologin`.chomp,
+          'www-data')
+end
+
+# filesystem setup --------------------------------------------------
+filesystem_setup = lambda do |gid, uid|
+  ['/var/log/lighttpd',
+   '/var/run/lighttpd'].each do |log_dir|
+    mkdir_p(log_dir)
+    chown_R(uid, gid, log_dir)
+  end
+end
+
+# main process ------------------------------------------------------
+lambda do |gid, uid|
+  user_setup.call(gid, uid)
+  filesystem_setup.call(gid, uid)
+end.call(ENV.fetch('VOLUME_GID'), ENV.fetch('VOLUME_UID'))
