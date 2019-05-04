@@ -38,6 +38,8 @@ class Spin::Controller < Spin::Base
     end
 
     # @param [Rack::Builder] builder
+    #
+    # @return [self]
     def run!(builder)
       self.mount!(builder).tap do |app|
         return builder.run(app)
