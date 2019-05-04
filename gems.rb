@@ -16,6 +16,25 @@ group :default do
   gem 'tty-config', '~> 0.3'
 end
 
+group :fcgi do
+  gem 'fcgi', '~> 0.9'
+  gem 'rack', '~> 2.0.7'
+end
+
+group :web_app do
+  # sinatra ------------------------------
+  gem 'sinatra-contrib', '= 2.0.5'
+  gem 'sinatra-flash', '~> 0.3'
+  # optional support ---------------------
+  gem 'better_errors', '~> 2.5'
+  gem 'binding_of_caller', '~> 0.8'
+  gem 'dotenv', '~> 2.6'
+  gem 'erubi', '~> 1.8'
+  gem 'hanami-helpers', '~> 1.3'
+  gem 'rack_csrf', '~> 2.6'
+  gem 'warden', '~> 1.2'
+end
+
 group :development do
   gem 'kamaze-project', '~> 1.0', '>= 1.0.3'
   gem 'listen', '~> 3.1'
@@ -32,20 +51,8 @@ group :development do
   gem 'yard', '~> 0.9'
   gem 'yard-coderay', '~> 0.1'
   # server -------------------------------
-  gem 'fcgi', '~> 0.9'
   gem 'puma', '~> 3.12'
   gem 'rerun', '~> 0.13'
-  # optional support ---------------------
-  gem 'better_errors', '~> 2.5'
-  gem 'binding_of_caller', '~> 0.8'
-  gem 'dotenv', '~> 2.6'
-  gem 'erubi', '~> 1.8'
-  gem 'hanami-helpers', '~> 1.3'
-  gem 'rack_csrf', '~> 2.6'
-  gem 'warden', '~> 1.2'
-  # sinatra ------------------------------
-  gem 'sinatra-contrib', '= 2.0.5'
-  gem 'sinatra-flash', '~> 0.3'
 end
 
 group :test do
