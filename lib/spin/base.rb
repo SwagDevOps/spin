@@ -15,6 +15,12 @@ class Spin::Base < Sinatra::Base
   # @type [Spin::Core::Config]
   @config = nil
 
+  def call(env)
+    env['SCRIPT_NAME'] = ''
+
+    super(env)
+  end
+
   class << self
     protected
 
