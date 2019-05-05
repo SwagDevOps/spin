@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<% # @formatter:off %>
+<html lang="en">
+<%=
+html do
+  head { title('404 Not Found') }
+  body do
+    h1('Not Found')
+    p("The requested URL #{env['REQUEST_URI']} was not found on this server.")
+  end
+end
+%>
+</html>
