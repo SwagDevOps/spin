@@ -7,13 +7,12 @@ require 'pathname'
 
 # ``Rack::Builder`` fixing some environment variables.
 #
-# Fix: ``SCRIPT_NAME``, ``PATH_INFO`` and ``QUERY_STRING``
+# Fix: ``PATH_INFO`` and ``QUERY_STRING``
 class Rack::FastCGI < Rack::Builder
   autoload(:URI, 'uri')
 
   def call(env)
     URI(env.fetch('REQUEST_URI')).tap do |uri|
-      env['SCRIPT_NAME'] = '/'
       env['PATH_INFO'] = uri.path
       env['QUERY_STRING'] = uri.query
     end
