@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<% # @formatter:off %>
+<html lang="en">
+<%=
+html do
+  head { title('403 Forbidden') }
+  body do
+    h1('Forbidden')
+    p("You don't have permission to access #{env['REQUEST_URI']} on this server.")
+  end
+end
+%>
+</html>
