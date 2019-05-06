@@ -8,12 +8,11 @@
         "crypto-js": "~3.1",
         "dotenv": "~6.2",
         "ejs": "~2.6",
-        "jquery": "~3.4",
         "spin-md_editor": "./resources/modules/spin-md_editor",
         "spin-notifications": "./resources/modules/spin-notifications",
+        "spin-img_reflow": "./resources/modules/spin-img_reflow",
         "spin-sass_base": "./resources/modules/spin-sass_base",
-        "spin-sass_typographic": "./resources/modules/spin-sass_typographic",
-        "sprintf-js": "~1.1"
+        "spin-sass_typographic": "./resources/modules/spin-sass_typographic"
     },
     "devDependencies": {
         "clean-webpack-plugin": "^1.0",
