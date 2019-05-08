@@ -36,7 +36,7 @@ class Spin::Core::Http::AssetUrl < Spin::Core::Http::Url
 
   # @param [Spin::Core::Config] config
   #
-  # @retuurn [Array<string>|nil]
+  # @return [Array<string>|nil]
   def hosts_from_config(config)
     Array.new(config&.public_send('[]', 'assets.hosts') || []).delete_if do |v|
       v.to_s.empty?
