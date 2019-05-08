@@ -1,10 +1,8 @@
 'use strict'
 
 import Vue from 'vue'
-import Tabs from 'buefy/dist/components/tabs'
-
 import cuid from 'cuid'
-import Editor from './editor.vue'
+import Editor from './editor'
 
 /**
  * Class used to recognize markdown editors.
@@ -20,8 +18,6 @@ const cname = 'is-md_editor'
  * @returns {Vue | CombinedVueInstance<Vue, object, object, object, Record<never, any>>}
  */
 const _vue = function (c) {
-  Vue.use(Tabs)
-
   let vue = (c) => new Vue(c)
 
   return vue(c)
