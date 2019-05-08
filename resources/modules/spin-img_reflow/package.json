@@ -1,0 +1,9 @@
+{
+    "name": "spin-img_reflow",
+    "version": "0.0.1",
+    "main": "index.js",
+    "dependencies": {
+        "jquery": "~3.4",
+        "sprintf-js": "~1.1"
+    }
+}

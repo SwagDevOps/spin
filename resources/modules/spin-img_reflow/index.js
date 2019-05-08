@@ -4,6 +4,11 @@ import $ from 'jquery'
 import { sprintf } from 'sprintf-js'
 
 /**
+ * @type {string}
+ */
+const stylePattern = '<div style="padding-bottom: %s%%">'
+
+/**
  * Calculate aspect ratio.
  *
  * @param {number} height
@@ -14,11 +19,6 @@ import { sprintf } from 'sprintf-js'
 let calc = function (height, width) {
   return height / width * 100
 }
-
-/**
- * @type {string}
- */
-const stylePattern = '<div style="padding-bottom: %s%%">'
 
 /**
  * Apply aspect ratio.
