@@ -2,7 +2,7 @@
 
 import Vue from 'vue'
 import cuid from 'cuid'
-import Editor from './editor'
+import MdEditor from './editor'
 
 /**
  * Class used to recognize markdown editors.
@@ -29,7 +29,7 @@ const _vue = function (c) {
  * @param {String} id
  */
 const installEditor = function (id) {
-  Vue.component('md-editor', Editor)
+  Vue.component('MdEditor', MdEditor)
 
   _vue({ el: `#${id}` })
 }
