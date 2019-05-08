@@ -19,16 +19,16 @@ class WebApp < Spin
     #
     # @see Spin::Controller.run!()
     def run!(builder)
-      app.run!(builder)
+      controller.run!(builder)
     end
 
     # @param [Rack::Builder] builder
     def mount!(builder)
-      app.mount!(builder)
+      controller.mount!(builder)
     end
 
     # @return [Spin::Controller]
-    def app
+    def controller
       self.new.container[:controller_class]
     end
 
