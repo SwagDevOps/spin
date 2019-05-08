@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spin'
+require_relative '../spin'
 require 'dry/inflector'
 
 # Base controller
@@ -17,21 +17,25 @@ class Spin::Controller < Spin::Base
   # @type [Spin::Core::Config]
   @config = nil
 
-  set :routes, @routes
-
   class << self
+    # Get routing as seen during mount.
+    #
+    # @return [Hash{String => Class}]
+    def routing
+      # @formatter:off
+      config['app.routing']
+        .to_h.map { |path, name| [path, resolve(name)] }.to_h.freeze
+      # @formatter:on
+    end
+
     # Mount controllers.
     #
     # @param [Rack::Builder] builder
     #
     # @return [self]
     def mount!(builder)
-      Dry::Inflector.new.tap do |inf|
-        config['app.routing'].to_h.to_a.each do |path, name|
-          name = "#{self}::#{inf.camelize(name)}" unless name =~ /^[A-Z]/
-
-          builder.map(path.to_s) { run Object.const_get(name) }
-        end
+      routing.map do |path, controller|
+        builder.map(path.to_s) { run(controller) }
       end
 
       self
@@ -58,6 +62,19 @@ class Spin::Controller < Spin::Base
       # rubocop:disable Style/NilComparison
       @config || (injector == nil ? nil : injector.container[:config])
       # rubocop:enable Style/NilComparison
+    end
+
+    # Resolve class by name relatively to current controller.
+    #
+    # @param [String] name
+    #
+    # @return [Class]
+    def resolve(name)
+      unless name =~ /^([A-Z]|::[A-Z])/
+        name = "#{self}::#{Dry::Inflector.new.camelize(name)}"
+      end
+
+      Object.const_get(name)
     end
   end
 end

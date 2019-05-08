@@ -1,10 +1,6 @@
 @import "~bulma/sass/utilities/initial-variables";
 
 .is-md_editor {
-  & {
-    // border: 1px solid red;
-  }
-
   .tabs {
     & {
       margin-bottom: 0;
@@ -20,6 +16,7 @@
       textarea, .is-preview {
         width: 100%;
         min-width: 100%;
+        max-width:100%;
         min-height: 20vh;
 
         padding: 1rem;
