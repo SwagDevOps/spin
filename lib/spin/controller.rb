@@ -22,7 +22,10 @@ class Spin::Controller < Spin::Base
     #
     # @return [Hash{String => Class}]
     def routing
-      config['app.routing'].to_h.map { |path, name| [path, resolve(name)] }.to_h
+      # @formatter:off
+      config['app.routing']
+        .to_h.map { |path, name| [path, resolve(name)] }.to_h.freeze
+      # @formatter:on
     end
 
     # Mount controllers.
@@ -56,7 +59,9 @@ class Spin::Controller < Spin::Base
     #
     # @return [Spin::Core::Config|nil]
     def config
-      @config || (injector.nil? ? nil : injector.container[:config])
+      # rubocop:disable Style/NilComparison
+      @config || (injector == nil ? nil : injector.container[:config])
+      # rubocop:enable Style/NilComparison
     end
 
     # Resolve class by name relatively to current controller.
