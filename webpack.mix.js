@@ -6,6 +6,7 @@ const Mix = require('webpack-mix')
 const glob = require('simple-glob')
 const sprintf = require('sprintf-js').sprintf
 const Clean = require('clean-webpack-plugin')
+const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
 const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots || [])
   .concat(['node_modules'])
@@ -107,6 +108,11 @@ const config = {
   },
   plugins: [
     new Clean(cleanables, { verbose: true }),
+    new ExtraWatchWebpackPlugin({
+      files: [
+        'resources/modules/**/*.vue'
+      ]
+    }),
     new VersionFile({
       packageFile: path.join(__dirname, 'package.json'),
       template: path.join(_paths.source, 'version.ejs'),
