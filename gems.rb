@@ -40,6 +40,7 @@ group :development do
   gem 'listen', '~> 3.1'
   gem 'rubocop', '~> 0.61'
   gem 'sys-proc', '~> 1.1', '>= 1.1.2'
+  gem 'tty-table', '~> 0.10'
   gem 'tux', '~> 0.3'
   # repl ---------------------------------
   gem 'interesting_methods', '~> 0.1'
