@@ -9,3 +9,9 @@ p, pre {
   width: 100%;
   max-width: 100%;
 }
+
+pre code {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
