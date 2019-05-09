@@ -2,7 +2,7 @@
 
 import Vue from 'vue'
 import cuid from 'cuid'
-import MdEditor from './editor'
+import MdEditor from './editor.vue'
 
 /**
  * Class used to recognize markdown editors.
