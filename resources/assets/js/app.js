@@ -1,13 +1,13 @@
 'use strict'
 
 import Navigo from 'navigo'
-import layout from './app/layout'
+import { Layout } from './app/layout'
 import mde from 'spin-md_editor'
 
 const router = new Navigo(null, false, '#')
 
 router
-  .on(() => layout())
+  .on(() => Layout.install())
   .on({
     '/pages/editor': () => mde()
   })
