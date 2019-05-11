@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="<%= ha(ENV.fetch('APP_LOCALE', 'en')) %>" xmlns="http://www.w3.org/1999/html">
     <head>
         <%= html.meta(charset: 'utf-8') %>
         <%= html.base(href: env['PATH_INFO'].gsub(%r{/*$}, '') + '/') %>
