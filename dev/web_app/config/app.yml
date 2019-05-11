@@ -1,4 +1,5 @@
 ---
+locale: "<%= ENV.fetch('APP_LOCALE', 'en') %>"
 routing:
   '/': 'home'
   '/admin': 'admin'
