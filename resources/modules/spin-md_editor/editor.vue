@@ -1,4 +1,4 @@
-<script src="./script/editor.js"></script>
+<script src="./editor.js"></script>
 
 <template id="editor">
     <section class="is-md_editor">

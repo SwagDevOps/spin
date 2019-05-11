@@ -1,7 +1,14 @@
 'use strict'
 
-import layout from './app/layout'
+import Navigo from 'navigo'
+import { Layout } from './app/layout'
 import mde from 'spin-md_editor'
 
-layout()
-mde()
+const router = new Navigo(null, false, '#')
+
+router
+  .on(() => Layout.install())
+  .on({
+    '/pages/editor': () => mde()
+  })
+  .resolve()

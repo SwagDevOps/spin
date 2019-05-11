@@ -6,8 +6,8 @@
     "dependencies": {
         "axios": "~0.18",
         "crypto-js": "~3.1",
-        "dotenv": "~6.2",
         "ejs": "~2.6",
+        "navigo": "~7.1",
         "spin-img_reflow": "./resources/modules/spin-img_reflow",
         "spin-md_editor": "./resources/modules/spin-md_editor",
         "spin-notifications": "./resources/modules/spin-notifications",
@@ -16,6 +16,7 @@
     },
     "devDependencies": {
         "clean-webpack-plugin": "~1.0",
+        "ejs": "~2.6",
         "eslint": "^5.9.0",
         "eslint-config-standard": "^12.0.0",
         "eslint-plugin-import": "^2.14.0",
@@ -25,6 +26,7 @@
         "extra-watch-webpack-plugin": "~1.0",
         "imports-loader": "~0.8.0",
         "simple-glob": "~0.2",
+        "sprintf-js": "~1.1",
         "webpack-cli": "~3.1.2",
         "webpack-mix": "~2.0.2",
         "webpack-version-file-plugin": "~0.3.3"

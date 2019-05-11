@@ -109,9 +109,7 @@ const config = {
   plugins: [
     new Clean(cleanables, { verbose: true }),
     new ExtraWatchWebpackPlugin({
-      files: [
-        'resources/modules/**/*.vue'
-      ]
+      files: moduleRoots.map(path => sprintf('%s/**/*.vue', path))
     }),
     new VersionFile({
       packageFile: path.join(__dirname, 'package.json'),
