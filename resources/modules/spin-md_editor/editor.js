@@ -11,23 +11,27 @@ export default {
   template: '#editor',
   data: function () {
     return {
-      name: '',
-      input: '',
       activeTab: 0
     }
   },
-  mounted: function () {
-    this.input = this.$el.attributes.value.value
-    this.name = this.$el.attributes.name.value
+  props: {
+    value: {
+      type: String,
+      required: false
+    },
+    name: {
+      type: String,
+      required: true
+    }
   },
   computed: {
     preview: function () {
-      return marked(this.input, { sanitize: true })
+      return marked(this.value, { sanitize: true })
     }
   },
   methods: {
     update: _.debounce(function (e) {
-      this.input = e.target.value
+      this.value = e.target.value
     }, 300)
   }
 }
