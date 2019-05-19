@@ -1,0 +1,55 @@
+/**
+ * Sass spacing helper
+ *
+ * With Bulma naming style.
+ *
+ * @see https://gist.github.com/VictorOtavio/e0576b755a49ef3682354091c6911dcb
+ */
+
+$spacing_size_unit: rem !default;
+$spacing_margin_key: "has-margin" !default;
+$spacing_padding_key: "has-padding" !default;
+$spacing_separator: "-" !default;
+$spacing_sizes: (
+                ("none", 0),
+                ("xxs", 0.125),
+                ("xs", 0.25),
+                ("sm", 0.5),
+                ("md", 1),
+                ("lg", 2),
+                ("xl", 4),
+                ("xxl", 8)
+) !default;
+$spacing_positions: (
+                ("top", "top"),
+                ("right", "right"),
+                ("bottom", "bottom"),
+                ("left", "left")
+) !default;
+
+@function sizeValue($key, $value) {
+  @return if($key == "none", 0, $value + $spacing_size_unit);
+}
+
+@each $size in $spacing_sizes {
+  $key: nth($size, 1);
+  $value: nth($size, 2);
+
+  .#{$spacing_margin_key}#{$spacing_separator}#{$key} {
+    margin: sizeValue($key, $value);
+  }
+  .#{$spacing_padding_key}#{$spacing_separator}#{$key} {
+    padding: sizeValue($key, $value);
+  }
+  @each $position in $spacing_positions {
+    $pos_key: nth($position, 1);
+    $pos_value: nth($position, 2);
+
+    .#{$spacing_margin_key}#{$spacing_separator}#{$pos_key}#{$spacing_separator}#{$key} {
+      margin-#{$pos_value}: sizeValue($key, $value);
+    }
+    .#{$spacing_padding_key}#{$spacing_separator}#{$pos_key}#{$spacing_separator}#{$key} {
+      padding-#{$pos_value}: sizeValue($key, $value);
+    }
+  }
+}
