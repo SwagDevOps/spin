@@ -1,6 +1,7 @@
 'use strict'
 
 import Vue from 'vue'
+import Buefy from 'buefy'
 import MdEditor from 'spin-md_editor/plugin'
 
 import imageReflow from 'spin-img_reflow'
@@ -30,6 +31,7 @@ class Layout {
    * @returns {this}
    */
   install () {
+    Vue.use(Buefy)
     Vue.use(MdEditor)
 
     return this
