@@ -6,11 +6,11 @@
  * @see https://gist.github.com/VictorOtavio/e0576b755a49ef3682354091c6911dcb
  */
 
-$spacing_size_unit: rem !default;
-$spacing_margin_key: "has-margin" !default;
-$spacing_padding_key: "has-padding" !default;
-$spacing_separator: "-" !default;
-$spacing_sizes: (
+$spacing-size-unit: rem !default;
+$spacing-margin-key: "has-margin" !default;
+$spacing-padding-key: "has-padding" !default;
+$spacing-separator: "-" !default;
+$spacing-sizes: (
                 ("none", 0),
                 ("xxs", 0.125),
                 ("xs", 0.25),
@@ -20,7 +20,7 @@ $spacing_sizes: (
                 ("xl", 4),
                 ("xxl", 8)
 ) !default;
-$spacing_positions: (
+$spacing-positions: (
                 ("top", "top"),
                 ("right", "right"),
                 ("bottom", "bottom"),
@@ -28,27 +28,27 @@ $spacing_positions: (
 ) !default;
 
 @function sizeValue($key, $value) {
-  @return if($key == "none", 0, $value + $spacing_size_unit);
+  @return if($key == "none", 0, $value + $spacing-size-unit);
 }
 
-@each $size in $spacing_sizes {
+@each $size in $spacing-sizes {
   $key: nth($size, 1);
   $value: nth($size, 2);
 
-  .#{$spacing_margin_key}#{$spacing_separator}#{$key} {
+  .#{$spacing-margin-key}#{$spacing-separator}#{$key} {
     margin: sizeValue($key, $value);
   }
-  .#{$spacing_padding_key}#{$spacing_separator}#{$key} {
+  .#{$spacing-padding-key}#{$spacing-separator}#{$key} {
     padding: sizeValue($key, $value);
   }
-  @each $position in $spacing_positions {
+  @each $position in $spacing-positions {
     $pos_key: nth($position, 1);
     $pos_value: nth($position, 2);
 
-    .#{$spacing_margin_key}#{$spacing_separator}#{$pos_key}#{$spacing_separator}#{$key} {
+    .#{$spacing-margin-key}#{$spacing-separator}#{$pos_key}#{$spacing-separator}#{$key} {
       margin-#{$pos_value}: sizeValue($key, $value);
     }
-    .#{$spacing_padding_key}#{$spacing_separator}#{$pos_key}#{$spacing_separator}#{$key} {
+    .#{$spacing-padding-key}#{$spacing-separator}#{$pos_key}#{$spacing-separator}#{$key} {
       padding-#{$pos_value}: sizeValue($key, $value);
     }
   }
