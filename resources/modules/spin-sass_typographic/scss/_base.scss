@@ -1,0 +1,17 @@
+@import "~unreset-css/unreset";
+@import "./base/gutenberg";
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+}
+
+p, pre {
+  width: 100%;
+  max-width: 100%;
+}
+
+pre code {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}

@@ -4,9 +4,10 @@
 
 const Mix = require('webpack-mix')
 const glob = require('simple-glob')
+const sprintf = require('sprintf-js').sprintf
 const Clean = require('clean-webpack-plugin')
+const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
-
 const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots || [])
   .concat(['node_modules'])
   .map(fp => path.join(__dirname, fp) + '/')
@@ -25,43 +26,71 @@ const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots |
 const mix = function () {
   let mix = Mix.webpackConfig(config)
 
-  mix.js(path.join(sourcePath, 'js/app.js'), paths.js)
-  mix.sass(path.join(sourcePath, 'sass/app.scss'), paths.css, {
+  copiables.forEach(copiable => mix.copy(copiable[0], copiable[1], false))
+
+  mix.js(path.join(_paths.source, 'js/app.js'), paths.js)
+  mix.sass(path.join(_paths.source, 'sass/app.scss'), paths.css, {
     sourceComments: !mix.config.production,
     includePaths: moduleRoots
-  })
-
-  copiables.forEach(function (i) {
-    mix.copy(i[0], i[1], false)
   })
 
   mix.sourceMaps()
 }
 
-const sourcePath = path.join(__dirname, 'resources/assets')
-
-const publicPath = path.join(__dirname, 'public')
-
-const paths = {
-  js: path.join(publicPath, 'js'),
-  css: path.join(publicPath, 'css'),
-  fonts: path.join(publicPath, 'fonts'),
-  images: path.join(publicPath, 'images')
+/**
+ * Internal paths
+ *
+ * @private
+ * @type {{public: (string), source: (string), vendor: (string)}}
+ */
+const _paths = {
+  vendor: path.join(__dirname, 'node_modules'),
+  source: path.join(__dirname, 'resources/assets'),
+  public: path.join(__dirname, 'public')
 }
 
-const copiables = [
-  [path.join(sourcePath, 'images/favicon.png'), path.join(publicPath, 'favicon.ico')],
-  [path.join(sourcePath, 'images'), paths.images],
-  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.eot', paths.fonts],
-  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.svg', paths.fonts],
-  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.ttf', paths.fonts],
-  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.woff', paths.fonts],
-  ['node_modules/material-icons/iconfont/MaterialIcons-Regular.woff2', paths.fonts]
-]
+/**
+ * Public paths
+ *
+ * @type {{css: (string), images: (string), fonts: (string), root, js: (string)}}
+ */
+const paths = {
+  root: _paths.public,
+  js: path.join(_paths.public, 'js'),
+  css: path.join(_paths.public, 'css'),
+  fonts: path.join(_paths.public, 'fonts'),
+  images: path.join(_paths.public, 'images')
+}
 
+/**
+ * Copiables
+ *
+ * @type {*[]}
+ */
+const copiables = [
+  [path.join(_paths.source, 'images/favicon.png'), path.join(paths.root, 'favicon.ico')],
+  [path.join(_paths.source, 'images'), paths.images]
+]
+// specific ---------------------------------------------------------
+  .concat(glob(['eot', 'svg', 'ttf', 'woff', 'woff2']
+    .map(ext => sprintf(path.join(_paths.vendor, 'material-icons/iconfont/*.%s'), ext)))
+    .map(fp => [fp, paths.fonts]))
+  .concat(glob(path.join(_paths.vendor, 'roboto-npm-webfont/full/fonts/*'))
+    .map(fp => [fp, paths.fonts]))
+  .concat([[
+    path.join(_paths.vendor, '@mdi/font/fonts'),
+    path.join(paths.fonts)
+  ]])
+
+/**
+ * Cleanables
+ *
+ * @type {*[]}
+ */
 let cleanables = [
   path.join(paths.css, '*.map'),
-  path.join(paths.js, '*.map')
+  path.join(paths.js, '*.map'),
+  path.join(paths.root, 'version.json')
 ]
   .map(fp => glob(fp))
   .reduce((acc, val) => acc.concat(val), [])
@@ -69,6 +98,9 @@ let cleanables = [
   .filter((x, i, a) => a.indexOf(x) === i)
   .sort(function (a, b) { return a.localeCompare(b) })
 
+/**
+ * @type {{devtool: *, node: {fs: string}, resolve: {modules: string[]}, plugins: *[]}}
+ */
 const config = {
   devtool: process.env.NODE_ENV !== 'production' ? 'source-map' : false,
   resolve: {
@@ -76,10 +108,13 @@ const config = {
   },
   plugins: [
     new Clean(cleanables, { verbose: true }),
+    new ExtraWatchWebpackPlugin({
+      files: moduleRoots.map(path => sprintf('%s/**/*.vue', path))
+    }),
     new VersionFile({
       packageFile: path.join(__dirname, 'package.json'),
-      template: path.join(sourcePath, 'version.ejs'),
-      outputFile: path.join(publicPath, 'version.json')
+      template: path.join(_paths.source, 'version.ejs'),
+      outputFile: path.join(paths.root, 'version.json')
     })
   ],
   node: {
@@ -87,4 +122,7 @@ const config = {
   }
 }
 
+/*
+ * Execution --------------------------------------------------------
+ */
 mix()

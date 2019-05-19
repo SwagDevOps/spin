@@ -1,39 +1,79 @@
 'use strict'
 
-import $ from 'jquery'
-import imageReflow from './layout/img_reflow'
-import mdl from 'encapsulated-mdl'
-import alert from 'md-alerts'
+import Vue from 'vue'
+import MdEditor from 'spin-md_editor/plugin'
 
-// expose jQuery to window ------------------------------------------
-if (typeof window !== 'undefined') {
-  window.jQuery = $
-  window.$ = $
-}
-
-export default function () {
-  $(function () {
-    upgradeDom()
-    alert()
-    imageReflow()
-  })
-}
-
-let upgradeDom = function () {
-  upgradeJsElements()
-
-  mdl.componentHandler.upgradeDom()
-}
+import imageReflow from 'spin-img_reflow'
+import notificationClickHandler from 'spin-notifications'
 
 /**
- * @see https://github.com/google/material-design-lite/issues/246
+ * Install layout.
+ *
+ * Sample of use:
+ *
+ * ```
+ * import { Layout } from './app/layout'
+ *
+ * Layout.install()
+ * ```
  */
-let upgradeJsElements = function () {
-  ['textfield', 'button'].forEach(function (type) {
-    $('.mdl-' + type).each(function () {
-      let $element = $(this)
+class Layout {
+  constructor () {
+    this.selectors = {
+      app: '#app',
+      notification_container: '#notifications',
+      notification_delete: '.notification .delete'
+    }
+  }
 
-      $element.addClass('mdl-js-' + type)
-    })
-  })
+  /**
+   * @returns {this}
+   */
+  install () {
+    Vue.use(MdEditor)
+
+    return this
+      ._vue({ el: this.selectors.app })
+      .handleNotifications()
+      .imageReflow()
+  }
+
+  static install () {
+    return (new this()).install()
+  }
+
+  _vue (c) {
+    let vue = (c) => new Vue(c)
+
+    window.addEventListener('DOMContentLoaded', () => vue(c))
+
+    return this
+  }
+
+  /**
+   * @returns {this}
+   */
+  imageReflow () {
+    imageReflow()
+
+    return this
+  }
+
+  /**
+   * @returns {this}
+   *
+   * @see https://bulma.io/documentation/elements/notification/
+   */
+  handleNotifications () {
+    let container = this.selectors.notification_container
+    let trigger = this.selectors.notification_container
+      ? `${this.selectors.notification_container} ${this.selectors.notification_delete}`
+      : this.selectors.notification_delete
+
+    notificationClickHandler(trigger, container)
+
+    return this
+  }
 }
+
+export { Layout }

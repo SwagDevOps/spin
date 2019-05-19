@@ -1,14 +1,6 @@
-/* Variables
- * -------------------------- */
-$image-path: '/images/';
+@import "~buefy/dist/buefy.css";
+@import "~spin-sass_base/scss/base";
+@import "~spin-sass_typographic/scss/is-typographic";
+@import "~spin-md_editor/scss/md_editor";
 
-/* Modules
- * -------------------------- */
-@import '~animate.css/animate';
-
-/* App
- * -------------------------- */
-@import 'app/layout';
-
-
-
+@import "./app/layout";

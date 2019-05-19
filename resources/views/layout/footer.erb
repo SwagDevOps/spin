@@ -1,15 +1,18 @@
-<footer id="page-footer" class="mdl-mini-footer">
-    <div class="mdl-mini-footer__left-section">
-        <div class="mdl-logo">
-            &copy;
-            <%= Spin::VERSION.date.split('-')[0] %>
-            -
-            <%= Spin::VERSION.authors.join(', ') %>
-        </div>
-
-        <ul class="mdl-mini-footer__link-list">
-            <li><a href="#">Contacts</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-        </ul>
+<section class="columns body-columns">
+    <div class="column is-half is-offset-one-quarter">
+        <footer class="footer">
+            <div class="container is-fluid">
+                <div class="content has-text-centered">
+                    <p>
+                        <strong>Spin</strong> by
+                        <a href="https://github.com/SwagDevOps"><%= Spin::VERSION.authors.join(', ') %></a>.
+                        The source code is licensed
+                        <a href="https://opensource.org/licenses/gpl-3.0.html">GNU General Public License</a>.
+                        The website content is licensed
+                        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+                    </p>
+                </div>
+            </div>
+        </footer>
     </div>
-</footer>
+</section>

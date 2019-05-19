@@ -1,6 +1,10 @@
 /**
  * Layout styles
  * --------------------------------------------------------------- */
-@import "~reflex-grid/scss/reflex";
-@import "./layout/mdl";
-
+@import "./layout/img";
+@import "./layout/header";
+@import "./layout/main.container";
+@import "./layout/notifications";
+@import "./layout/content-listing";
+@import "./layout/footer";
+@import "./layout/login-box";

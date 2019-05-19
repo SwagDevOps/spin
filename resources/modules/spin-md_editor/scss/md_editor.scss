@@ -1,0 +1,29 @@
+@import "~bulma/sass/utilities/initial-variables";
+
+.is-md_editor {
+  .tabs {
+    & {
+      margin-bottom: 0;
+    }
+  }
+
+  .tab-content {
+    & {
+      padding: 0;
+    }
+
+    .tab-item {
+      textarea, .is-preview {
+        width: 100%;
+        min-width: 100%;
+        max-width:100%;
+        min-height: 20vh;
+
+        padding: 1rem;
+        border-width: 0 1px 1px 1px;
+        border-style: solid;
+        border-color: $grey-lighter;
+      }
+    }
+  }
+}
