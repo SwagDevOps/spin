@@ -9,6 +9,7 @@ module Spin::Helpers
     ErbCacheHelper: :erb_cache_helper,
     PageTitleHelper: :page_title_helper,
     UrlHelper: :url_helper,
+    ViewEvalHelper: :view_eval_helper
   }.each { |k, v| autoload(k, "#{__dir__}/helpers/#{v}") }
 
   def self.included(base)
@@ -17,6 +18,7 @@ module Spin::Helpers
       include AssetsHelper
       include PageTitleHelper
       include ErbCacheHelper
+      include ViewEvalHelper
     end
   end
 end

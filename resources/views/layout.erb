@@ -15,13 +15,15 @@
         <%= html.link(href: asset_url('/css/app.css'), rel: 'stylesheet') %>
         <%= html.script(src: asset_url('/js/app.js')) %>
     </head>
-    <body id="app">
-        <%= erb(:'layout/top-bar') %>
-        <main class="container" id="main-column">
-            <%= erb(:'layout/notifications') %>
+    <body>
+        <div id="app">
+            <%= erb(:'layout/top-bar') %>
+            <main class="container" id="main-column">
+                <%= erb(:'layout/notifications') %>
 
-            <%= yield %>
-        </main>
-        <%= erb(:'layout/footer') %>
+                <%= yield %>
+            </main>
+            <%= erb(:'layout/footer') %>
+        </div>
     </body>
 </html>

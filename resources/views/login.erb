@@ -1,20 +1,3 @@
-<%
-    self.page_title = 'Login Page'
-%>
+<% self.page_title = 'Login Page' %>
 
-<div class="grid">
-    <div class="col-md-12">
-        <section class="mdl-card mdl-shadow--4dp">
-            <header class="mdl-card__title">
-                <h2 class="mdl-card__title-text">
-                    Authentication
-                </h2>
-            </header>
-
-            <%= WebApp::Forms::Login.new(self).tap do |form|
-              form.attributes = { class: 'mdl-card__supporting-text' }
-              form.pack('login')
-            end %>
-        </section>
-    </div>
-</div>
+<%= view_eval('login/form') %>
