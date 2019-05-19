@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength
-html.section(class: 'container has-text-centered', id: 'login') do
+html.section(class: 'container has-text-centered', id: 'login-box') do
   div(class: 'column is-4 is-offset-4') do
     h3(class: 'title has-text-grey') { 'Login' }
     p(class: 'subtitle has-text-grey') { 'Please login to proceed.' }
@@ -37,12 +37,14 @@ html.section(class: 'container has-text-centered', id: 'login') do
     end
   end
 
-  ul do
-    [['Sign Up', '#'],
-     ['Forgot Password', '#'],
-     ['Need Help?', '#']].each do |label, url|
-      li do
-        a(ref: url) { label.to_s }
+  footer do
+    ul do
+      [['Sign Up', '#'],
+       ['Forgot Password', '#'],
+       ['Need Help?', '#']].each do |label, url|
+        li do
+          a(ref: url) { label.to_s }
+        end
       end
     end
   end
