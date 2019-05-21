@@ -1,13 +1,12 @@
 'use strict'
 
-import Navigo from 'navigo'
 import { Layout } from './app/layout'
+import { Appifier } from './app/appifier'
+import Buefy from 'buefy'
+import MdEditor from 'spin-md_editor/plugin'
 
-const router = new Navigo(null, false, '#')
+(new Appifier({
+  plugins: [Buefy, MdEditor]
+})).appify()
 
-router
-  .on(() => Layout.install())
-  // .on({
-  //   '/pages/editor': () => mde()
-  // })
-  .resolve()
+Layout.install()
