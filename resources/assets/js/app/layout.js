@@ -1,8 +1,6 @@
 'use strict'
 
 import Vue from 'vue'
-import Buefy from 'buefy'
-import MdEditor from 'spin-md_editor/plugin'
 
 import imageReflow from 'spin-img_reflow'
 import notificationClickHandler from 'spin-notifications'
@@ -21,7 +19,6 @@ import notificationClickHandler from 'spin-notifications'
 class Layout {
   constructor () {
     this.selectors = {
-      app: '#app',
       notification_container: '#notifications',
       notification_delete: '.notification .delete'
     }
@@ -31,25 +28,13 @@ class Layout {
    * @returns {this}
    */
   install () {
-    Vue.use(Buefy)
-    Vue.use(MdEditor)
-
     return this
-      ._vue({ el: this.selectors.app })
       .handleNotifications()
       .imageReflow()
   }
 
   static install () {
     return (new this()).install()
-  }
-
-  _vue (c) {
-    let vue = (c) => new Vue(c)
-
-    window.addEventListener('DOMContentLoaded', () => vue(c))
-
-    return this
   }
 
   /**
