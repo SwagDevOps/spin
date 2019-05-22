@@ -1,7 +1,5 @@
 'use strict'
 
-import Vue from 'vue'
-
 import imageReflow from 'spin-img_reflow'
 import notificationClickHandler from 'spin-notifications'
 
