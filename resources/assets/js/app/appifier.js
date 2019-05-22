@@ -3,14 +3,26 @@
 import Vue from 'vue'
 
 /**
- * Install layout.
+ * Install Vue app.
  *
  * Sample of use:
  *
  * ```
- * import { Layout } from './app/layout'
+ * import { Appifier } from './app/appifier'
+ * import Buefy from 'buefy'
+ * import VueLazyload from 'vue-lazyload'
  *
- * Layout.install()
+ * (new Appifier({
+ *   plugins: [
+ *     Buefy,
+ *     [VueLazyload, {
+ *       preLoad: 1.3,
+ *       error: 'dist/error.png',
+ *       loading: 'dist/loading.gif',
+ *       attempt: 1
+ *    }]
+ *   ]
+ * })).appify()
  * ```
  */
 class Appifier {
