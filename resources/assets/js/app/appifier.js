@@ -47,7 +47,6 @@ class Appifier {
   /**
    * Install a Vue app on given id.
    *
-   * @param {String} id
    * @returns {Appifier}
    */
   _apply () {
@@ -56,7 +55,12 @@ class Appifier {
       el: `#${id}`
     })
 
-    this.config.plugins.forEach((plugin) => Vue.use(plugin))
+    this.config.plugins.forEach(function (plugin) {
+      plugin = Array.isArray(plugin) ? plugin : [plugin]
+
+      Vue.use(...plugin)
+    })
+
     Object.entries(this.config.components).forEach(function (i) {
       Vue.component(i[0], i[1])
     })
