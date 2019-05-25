@@ -4958,7 +4958,7 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
-jquery@*, jquery@~3.4:
+jquery@*:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
@@ -7979,12 +7979,6 @@ spdy@^4.0.0:
     http-deceiver "^1.2.7"
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
-
-spin-img_reflow@./resources/modules/spin-img_reflow:
-  version "0.0.1"
-  dependencies:
-    jquery "~3.4"
-    sprintf-js "~1.1"
 
 spin-md_editor@./resources/modules/spin-md_editor:
   version "0.0.1"
