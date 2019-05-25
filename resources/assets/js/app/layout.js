@@ -1,8 +1,5 @@
 'use strict'
 
-import Vue from 'vue'
-
-import imageReflow from 'spin-img_reflow'
 import notificationClickHandler from 'spin-notifications'
 
 /**
@@ -28,22 +25,11 @@ class Layout {
    * @returns {this}
    */
   install () {
-    return this
-      .handleNotifications()
-      .imageReflow()
+    return this.handleNotifications()
   }
 
   static install () {
     return (new this()).install()
-  }
-
-  /**
-   * @returns {this}
-   */
-  imageReflow () {
-    imageReflow()
-
-    return this
   }
 
   /**

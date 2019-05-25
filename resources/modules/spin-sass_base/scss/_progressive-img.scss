@@ -1,0 +1,11 @@
+.progressive-image {
+  &, img.progressive-image-main {
+    background-color: $white-ter;
+  }
+}
+
+.is-rounded .progressive-image {
+  &, img.progressive-image-main {
+    border-radius: 50%;
+  }
+}

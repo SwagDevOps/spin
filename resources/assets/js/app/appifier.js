@@ -3,14 +3,26 @@
 import Vue from 'vue'
 
 /**
- * Install layout.
+ * Install Vue app.
  *
  * Sample of use:
  *
  * ```
- * import { Layout } from './app/layout'
+ * import { Appifier } from './app/appifier'
+ * import Buefy from 'buefy'
+ * import VueLazyload from 'vue-lazyload'
  *
- * Layout.install()
+ * (new Appifier({
+ *   plugins: [
+ *     Buefy,
+ *     [VueLazyload, {
+ *       preLoad: 1.3,
+ *       error: 'dist/error.png',
+ *       loading: 'dist/loading.gif',
+ *       attempt: 1
+ *    }]
+ *   ]
+ * })).appify()
  * ```
  */
 class Appifier {
@@ -47,7 +59,6 @@ class Appifier {
   /**
    * Install a Vue app on given id.
    *
-   * @param {String} id
    * @returns {Appifier}
    */
   _apply () {
@@ -56,7 +67,12 @@ class Appifier {
       el: `#${id}`
     })
 
-    this.config.plugins.forEach((plugin) => Vue.use(plugin))
+    this.config.plugins.forEach(function (plugin) {
+      plugin = Array.isArray(plugin) ? plugin : [plugin]
+
+      Vue.use(...plugin)
+    })
+
     Object.entries(this.config.components).forEach(function (i) {
       Vue.component(i[0], i[1])
     })
