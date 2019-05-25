@@ -5,15 +5,7 @@
                 <div class="header">
                     <div class="media">
                         <div class="media-left">
-                            <figure class="image is-48x48">
-                                <%=
-                                    html.img(src: asset_url('/images/avatars/4.png'),
-                                             class: 'is-rounded animated fadeIn slower',
-                                             alt: 'Placeholder',
-                                             height: 48,
-                                             width: 48)
-                                %>
-                            </figure>
+                            <%= view_eval('welcome/avatar', image: '/images/avatars/4.png') %>
                         </div>
                         <div class="media-content">
                             <p class="title is-4">John Smith</p>
@@ -21,33 +13,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-image">
-                    <% erb_cache('welcome:featured_image', expires: 120) do %>
-                        <figure class="image" data-updated_at="<%= Time.now %>">
-                            <%=
-                                image = '/images/unsplash/rawpixel-678089.jpg'
-                                size = image_size(image)
-
-                                html.img(src: asset_url(image),
-                                         class: 'animated fadeIn slower',
-                                         alt: nil,
-                                         height: "#{size.height}",
-                                         width: "#{size.width}")
-                            %>
-                        </figure>
-                    <% end %>
-                </div>
+                <% erb_cache("welcome:featured_image:#{j}", expires: 120) do %>
+                    <%= view_eval('welcome/card_image', image: '/images/unsplash/rawpixel-678089.jpg') %>
+                <% end %>
                 <div class="card-content">
                     <div class="level is-mobile">
                         <div class="level-left">
                             <div class="level-item has-text-centered">
-                                <a href="">
+                                <a href="#">
                                     <i class="material-icons">favorite_border</i>
                                 </a>
                             </div>
                             <div class="level-item has-text-centered">
                                 <div>
-                                    <a href="">
+                                    <a href="#">
                                         <i class="material-icons">chat_bubble_outline</i>
                                     </a>
                                 </div>
