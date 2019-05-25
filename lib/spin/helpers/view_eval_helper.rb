@@ -5,7 +5,6 @@ require_relative '../helpers'
 # Erb include helper
 module Spin::Helpers::ViewEvalHelper
   autoload(:Pathname, 'pathname')
-  autoload(:YAML, 'yaml')
 
   protected
 
@@ -34,9 +33,9 @@ module Spin::Helpers::ViewEvalHelper
   def view_eval_vars(variables = {})
     return [] if variables.empty?
 
-    ["autoload(:YAML, 'yaml')", nil].tap do |lines|
+    ['# frozen_string_literal: true'].tap do |lines|
       variables.each do |k, v|
-        lines.push("#{k} = YAML.load(#{YAML.dump(v).inspect})")
+        lines.push("#{k} = Marshal.load(#{Marshal.dump(v).inspect})")
       end
     end
   end
