@@ -1,13 +1,8 @@
 .content-listing {
-  &.body-columns {
-    // & { }
-    // & > .column { }
-  }
-
   .card {
     & {
       max-width: 820px;
-      margin: 2.5rem auto 0 auto;
+      margin: 0 auto 2.5rem auto;
     }
 
     .header {

@@ -1,4 +1,4 @@
-<% unless flash.empty? %>
+<section id="notifications">
     <%
         # Supported types:
         #
@@ -9,15 +9,13 @@
         # * warning
         # * danger
     %>
-    <section id="notifications">
-        <% flash.each do |type, message| %>
-            <div class="notification is-<%= type %> animated slideInRight" role="alert">
-                <button class="delete" aria-hidden="true"></button>
+    <% flash.each do |type, message| %>
+        <%= html.tag('b-notification',
+                     role: 'alert',
+                     class: 'animated slideInRight',
+                     type: "is-#{type}",
+                     'aria-close-label': 'Close notification') { h(message) }
+        %>
+    <% end %>
+</section>
 
-                <p>
-                    <%= h(message) %>
-                </p>
-            </div>
-        <% end %>
-    </section>
-<% end %>
