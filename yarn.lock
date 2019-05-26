@@ -7989,11 +7989,6 @@ spin-md_editor@./resources/modules/spin-md_editor:
     marked "~0.6"
     vue "~2.6"
 
-spin-notifications@./resources/modules/spin-notifications:
-  version "0.0.1"
-  dependencies:
-    jquery "*"
-
 spin-sass_base@./resources/modules/spin-sass_base:
   version "0.0.1"
   dependencies:
