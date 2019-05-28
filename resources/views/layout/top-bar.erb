@@ -15,14 +15,23 @@
         </div>
         <div class="navbar-item is-flex-touch">
             <a class="navbar-item">
-                <%= html.span('class': 'icon material-icons') { 'explore' } %>
+                <%= html.span('class': 'icon mdi mdi-compass mdi-24px') %>
             </a>
             <a class="navbar-item">
-                <%= html.span('class': 'icon material-icons') { 'favorite_border' } %>
+                <%= html.span('class': 'icon mdi mdi-heart-outline mdi-24px') %>
             </a>
-            <%= link_to(current_user ? '/logout' : '/login', class: 'navbar-item') do
-              html.span('class': 'icon material-icons') { 'person_outline' }
-            end %>
+
+            <% if current_user %>
+                <%= link_to('/logout', class: 'navbar-item') do
+                  html.span('class': 'icon mdi mdi-logout-variant mdi-24px')
+                end %>
+            <% end %>
+
+            <% unless current_user %>
+                <%= link_to('/login', class: 'navbar-item') do
+                  html.span('class': 'icon mdi mdi-account-outline mdi-24px')
+                end %>
+            <% end %>
         </div>
     </div>
 </header>
