@@ -13,16 +13,6 @@
                 </div>
             </div>
         </div>
-        <div class="navbar-item is-flex-touch">
-            <a class="navbar-item">
-                <%= html.span('class': 'icon material-icons') { 'explore' } %>
-            </a>
-            <a class="navbar-item">
-                <%= html.span('class': 'icon material-icons') { 'favorite_border' } %>
-            </a>
-            <%= link_to(current_user ? '/logout' : '/login', class: 'navbar-item') do
-              html.span('class': 'icon material-icons') { 'person_outline' }
-            end %>
-        </div>
+        <%= view_eval('layout/header/navbar') %>
     </div>
 </header>
