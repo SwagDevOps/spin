@@ -13,25 +13,6 @@
                 </div>
             </div>
         </div>
-        <div class="navbar-item is-flex-touch">
-            <a class="navbar-item">
-                <%= html.span('class': 'icon mdi mdi-compass mdi-24px') %>
-            </a>
-            <a class="navbar-item">
-                <%= html.span('class': 'icon mdi mdi-heart-outline mdi-24px') %>
-            </a>
-
-            <% if current_user %>
-                <%= link_to('/logout', class: 'navbar-item') do
-                  html.span('class': 'icon mdi mdi-logout-variant mdi-24px')
-                end %>
-            <% end %>
-
-            <% unless current_user %>
-                <%= link_to('/login', class: 'navbar-item') do
-                  html.span('class': 'icon mdi mdi-account-outline mdi-24px')
-                end %>
-            <% end %>
-        </div>
+        <%= view_eval('layout/header/navbar') %>
     </div>
 </header>
