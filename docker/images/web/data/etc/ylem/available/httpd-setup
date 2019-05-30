@@ -26,25 +26,6 @@ user_setup = lambda do |gid, uid|
           'www-data')
 end
 
-# bundle install ----------------------------------------------------
-bundle_setup = lambda do |pwd|
-  Dir.chdir(pwd) do
-    ['gems.rb', 'gems.locked'].map { |f| Pathname.new(f).file? }.tap do |res|
-      return false unless res == [true, true]
-    end
-
-    # @formatter:off
-    {
-      'BUNDLE_CLEAN' => 'true',
-      'BUNDLE_JOBS' => `nproc`.chomp,
-      'BUNDLE_IGNORE_MESSAGES' => 'true',
-    }.tap do |env|
-      sh.call(ENV.to_h.merge(env), 'bundle', 'install')
-    end
-    # @formatter:on
-  end
-end
-
 # filesystem setup --------------------------------------------------
 filesystem_setup = lambda do |gid, uid|
   mkdir_p('/var/www/localhost')
@@ -67,5 +48,4 @@ end
 lambda do |gid, uid|
   user_setup.call(gid, uid)
   filesystem_setup.call(gid, uid)
-  bundle_setup.call('/var/www/localhost')
 end.call(ENV.fetch('VOLUME_GID'), ENV.fetch('VOLUME_UID'))
