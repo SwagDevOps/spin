@@ -14,8 +14,9 @@ RUN gem install bundler \
     && apk add --no-cache sudo \
        build-base ruby-dev \
        alpine-sdk libc6-compat \
-       g++ make libcurl openssl-dev sqlite-dev cmake \
+       g++ make libcurl libressl-dev cmake \
        libatomic linux-headers \
+       fcgi-dev postgresql-dev \
     && mkdir -p "${BUNDLE_CACHE_PATH}" \
     && setcap cap_net_bind_service=+ep /usr/bin/ruby
 

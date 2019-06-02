@@ -18,20 +18,29 @@ html.section(class: 'container has-text-centered', id: 'login-box') do
 
         [{ name: 'login[username]',
            type: 'text',
+           icon: 'account',
            placeholder: 'Your Username',
            autofocus: true },
          { name: 'login[password]',
            type: 'password',
+           icon: 'textbox-password',
+           'password-reveal': true,
            placeholder: 'Your Password' }].each do |v|
-          div(class: 'field') do
-            p(class: 'control') do
-              input(v.merge(class: 'input is-large', required: true))
+          div(class: 'control') do
+            tag('b-field') do
+              tag('b-input', v.merge(size: 'is-medium',
+                                     required: true,
+                                     'use-html5-validation': false))
             end
           end
         end
 
-        button(class: 'button is-block is-info is-large is-fullwidth') do
-          'Login'
+        div(class: 'control has-padding-top-lg') do
+          div(class: :field) do
+            button(class: 'button is-block is-info is-medium is-fullwidth') do
+              'Login'
+            end
+          end
         end
       end
     end

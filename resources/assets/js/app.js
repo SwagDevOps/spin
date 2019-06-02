@@ -1,13 +1,17 @@
 'use strict'
 
-import Navigo from 'navigo'
-import { Layout } from './app/layout'
+import { Appifier } from './app/appifier'
+import Buefy from 'buefy'
+import MdEditor from 'spin-md_editor/plugin'
+import VueProgressiveImage from 'vue-progressive-image'
 
-const router = new Navigo(null, false, '#')
-
-router
-  .on(() => Layout.install())
-  // .on({
-  //   '/pages/editor': () => mde()
-  // })
-  .resolve()
+(new Appifier({
+  plugins: [
+    [Buefy],
+    [MdEditor],
+    [VueProgressiveImage, {
+      cache: false,
+      blur: 30
+    }]
+  ]
+})).appify()
