@@ -54,6 +54,7 @@ services:
   spin_db:
     build: { context: images/postgres }
     expose: ["5432"]
+    networks: [default]
 volumes:
   spin_web-bundle:
 
