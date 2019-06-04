@@ -1,6 +1,7 @@
 'use strict'
 
 import Vue from 'vue'
+import Vuex from 'vuex'
 
 /**
  * Install Vue app.
@@ -30,11 +31,16 @@ class Appifier {
    * @param {Object} config
    */
   constructor (config = {}) {
+    Vue.use(Vuex)
     this._defaults = {
       id: 'app',
       plugins: [],
-      components: {}
+      components: {},
+      store: new Vuex.Store({
+        state: {}
+      })
     }
+
     this._config = Object.assign({}, this._defaults)
 
     Object.assign(this._config, config)
