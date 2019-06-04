@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "main": "index.js",
     "dependencies": {
-        "buefy": "~0.7.5",
+        "buefy": "~0.7",
         "cuid": "~2.1",
         "lodash": "~4.17",
         "marked": "~0.6",
