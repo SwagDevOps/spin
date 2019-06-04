@@ -7,7 +7,6 @@
         "bulma": "~0.7",
         "bulma-divider": "~2.0",
         "bulmaswatch": "~0.7.2",
-        "jquery": "*",
         "material-icons": "~0.3",
         "roboto-npm-webfont": "~1.0"
     }
