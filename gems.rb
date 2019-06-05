@@ -33,6 +33,9 @@ group :web_app do
   gem 'hanami-helpers', '~> 1.3'
   gem 'rack_csrf', '~> 2.6'
   gem 'warden', '~> 1.2'
+  # database -----------------------------
+  gem 'pg', '~> 1.1'
+  gem 'rom', '~> 5.0'
 end
 
 group :development do
