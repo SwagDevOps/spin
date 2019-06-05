@@ -187,7 +187,7 @@ GEM
       pastel (~> 0.7.2)
       strings (~> 0.1.0)
       tty-screen (~> 0.6.4)
-    tty-which (0.4.0)
+    tty-which (0.4.1)
     tux (0.3.0)
       ripl (>= 0.3.5)
       ripl-multi_line (>= 0.2.4)
