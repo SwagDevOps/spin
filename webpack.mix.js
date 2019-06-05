@@ -2,7 +2,7 @@
 
 /* global process, require, path, __dirname */
 
-const Mix = require('webpack-mix')
+const Mix = require('laravel-mix')
 const glob = require('simple-glob')
 const sprintf = require('sprintf-js').sprintf
 const Clean = require('clean-webpack-plugin')

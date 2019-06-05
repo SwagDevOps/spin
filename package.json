@@ -11,6 +11,7 @@
         "vuex": "~3.1"
     },
     "devDependencies": {
+        "babel-plugin-module-resolver": "~3.2",
         "clean-webpack-plugin": "~1.0",
         "ejs": "~2.6",
         "eslint": "^5.9.0",
@@ -21,10 +22,14 @@
         "eslint-plugin-standard": "~4.0",
         "extra-watch-webpack-plugin": "~1.0",
         "imports-loader": "~0.8.0",
+        "laravel-mix": "*",
+        "resolve-url-loader": "2.3.1",
+        "sass": "^1.20.3",
+        "sass-loader": "7.*",
         "simple-glob": "~0.2",
         "sprintf-js": "~1.1",
+        "vue-template-compiler": "^2.6.10",
         "webpack-cli": "~3.1.2",
-        "webpack-mix": "~2.0.2",
         "webpack-version-file-plugin": "~0.3.3"
     },
     "moduleRoots": [
