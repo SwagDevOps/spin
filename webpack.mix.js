@@ -89,8 +89,7 @@ const copiables = [
  */
 let cleanables = [
   path.join(paths.css, '*.map'),
-  path.join(paths.js, '*.map'),
-  path.join(paths.root, 'version.json')
+  path.join(paths.js, '*.map')
 ]
   .map(fp => glob(fp))
   .reduce((acc, val) => acc.concat(val), [])
@@ -115,6 +114,7 @@ const config = {
       files: moduleRoots.map(path => sprintf('%s/**/*.vue', path))
     }),
     new VersionFile({
+      verbose: true,
       packageFile: path.join(__dirname, 'package.json'),
       template: path.join(_paths.source, 'version.ejs'),
       outputFile: path.join(paths.root, 'version.json')
