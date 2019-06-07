@@ -5,7 +5,7 @@
 const Mix = require('laravel-mix')
 const glob = require('simple-glob')
 const sprintf = require('sprintf-js').sprintf
-const Clean = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
 const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots || [])
@@ -107,7 +107,10 @@ const config = {
     modules: moduleRoots
   },
   plugins: [
-    new Clean(cleanables, { verbose: true }),
+    new CleanWebpackPlugin({
+      verbose: true,
+      cleanOnceBeforeBuildPatterns: cleanables
+    }),
     new ExtraWatchWebpackPlugin({
       files: moduleRoots.map(path => sprintf('%s/**/*.vue', path))
     }),
