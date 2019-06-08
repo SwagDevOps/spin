@@ -4,7 +4,7 @@ require 'shellwords'
 require 'fileutils'
 
 webpack = 'node_modules/webpack/bin/webpack.js'
-config  = 'node_modules/webpack-mix/setup/webpack.config.js'
+config  = 'node_modules/laravel-mix/setup/webpack.config.js'
 command = [webpack, '--progress', '--hide-modules', '--config', config]
 
 handler = lambda do |task, args, cmd = command|
