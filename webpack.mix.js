@@ -2,10 +2,10 @@
 
 /* global process, require, path, __dirname */
 
-const Mix = require('webpack-mix')
+const Mix = require('laravel-mix')
 const glob = require('simple-glob')
 const sprintf = require('sprintf-js').sprintf
-const Clean = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
 const VersionFile = require('webpack-version-file-plugin')
 const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots || [])
@@ -89,8 +89,7 @@ const copiables = [
  */
 let cleanables = [
   path.join(paths.css, '*.map'),
-  path.join(paths.js, '*.map'),
-  path.join(paths.root, 'version.json')
+  path.join(paths.js, '*.map')
 ]
   .map(fp => glob(fp))
   .reduce((acc, val) => acc.concat(val), [])
@@ -107,11 +106,15 @@ const config = {
     modules: moduleRoots
   },
   plugins: [
-    new Clean(cleanables, { verbose: true }),
+    new CleanWebpackPlugin({
+      verbose: true,
+      cleanOnceBeforeBuildPatterns: cleanables
+    }),
     new ExtraWatchWebpackPlugin({
       files: moduleRoots.map(path => sprintf('%s/**/*.vue', path))
     }),
     new VersionFile({
+      verbose: true,
       packageFile: path.join(__dirname, 'package.json'),
       template: path.join(_paths.source, 'version.ejs'),
       outputFile: path.join(paths.root, 'version.json')
