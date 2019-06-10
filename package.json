@@ -1,7 +1,8 @@
 {
-    "name": "spin-webpack-mix",
+    "name": "spin-assets",
     "version": "0.0.1",
     "private": true,
+    "description": "Assets package for spin web project",
     "homepage": "https://github.com/SwagDevOps/spin",
     "dependencies": {
         "spin-md_editor": "./resources/modules/spin-md_editor",
