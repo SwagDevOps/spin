@@ -1,5 +1,5 @@
 {
-    "name": "spin-assets",
+    "name": "spin-webpack-mix",
     "version": "0.0.1",
     "private": true,
     "homepage": "https://github.com/SwagDevOps/spin",
@@ -11,26 +11,13 @@
         "vuex": "~3.1"
     },
     "devDependencies": {
-        "babel-plugin-module-resolver": "~3.2",
-        "clean-webpack-plugin": "~3.0",
-        "ejs": "~2.6",
+        "@swagdevops/webpack-mixer": "SwagDevOps/webpack-mixer#develop",
         "eslint": "~5.9",
         "eslint-config-standard": "~12.0",
         "eslint-plugin-import": "~2.17",
         "eslint-plugin-node": "~8.0",
         "eslint-plugin-promise": "~4.1",
-        "eslint-plugin-standard": "~4.0",
-        "extra-watch-webpack-plugin": "~1.0",
-        "imports-loader": "~0.8",
-        "laravel-mix": "~4.0",
-        "node-sass": "~4.12",
-        "resolve-url-loader": "~2.3",
-        "sass-loader": "~7.0",
-        "simple-glob": "~0.2",
-        "sprintf-js": "~1.1",
-        "vue-template-compiler": "~2.6",
-        "webpack-cli": "~3.1",
-        "webpack-version-file-plugin": "~0.3"
+        "eslint-plugin-standard": "~4.0"
     },
     "moduleRoots": [
         "./resources/modules",
