@@ -4,7 +4,12 @@
 
 const { Mixer } = require('@swagdevops/webpack-mixer')
 
-let m = new Mixer()
+const mixer = new Mixer()
+
+/**
+ * @type {*}
+ */
+const paths = mixer.paths
 
 // Configuration ----------------------------------------------------
 
@@ -14,29 +19,29 @@ let m = new Mixer()
  * @type {*[]}
  */
 const copiables = [
-  [m.paths.source.join('images/favicon.png'), m.paths.public.join('favicon.ico')],
-  [m.paths.source.join('images'), m.paths.public.join('images')]
+  [paths.source.join('images/favicon.png'), paths.public.join('favicon.ico')],
+  [paths.source.join('images'), paths.public.join('images')]
 ]
   .concat(['eot', 'svg', 'ttf', 'woff', 'woff2']
-    .map(ext => m.paths.vendor.join('material-icons/iconfont/*.%s').format(ext).glob())
+    .map(ext => paths.vendor.join('material-icons/iconfont/*.%s').format(ext).glob())
     .reduce((acc, val) => acc.concat(val), []) // flat()
-    .map(fp => [fp, m.paths.public.join('fonts')])
+    .map(fp => [fp, paths.public.join('fonts')])
   )
-  .concat(m.paths.vendor.join('roboto-npm-webfont/full/fonts/*')
+  .concat(paths.vendor.join('roboto-npm-webfont/full/fonts/*')
     .glob()
-    .map(fp => [fp, m.paths.public.join('fonts')]))
-  .concat(m.paths.vendor.join('@mdi/font/fonts/*')
+    .map(fp => [fp, paths.public.join('fonts')]))
+  .concat(paths.vendor.join('@mdi/font/fonts/*')
     .glob()
-    .map(fp => [fp, m.paths.public.join('fonts')]))
+    .map(fp => [fp, paths.public.join('fonts')]))
 
 /**
  * Cleanables
  *
  * @type {Path[]}
  */ // @formatter:off
-let cleanables = ([
-  m.paths.public.join('css/*.map'),
-  m.paths.public.join('js/*.map')
+const cleanables = ([
+  paths.public.join('css/*.map'),
+  paths.public.join('js/*.map')
 ]
   .map(fp => fp.glob())
   .reduce((acc, val) => acc.concat(val), [])
@@ -48,7 +53,7 @@ let cleanables = ([
 
 // Execution --------------------------------------------------------
 
-m.configure({
+mixer.configure({
   copiables: copiables,
   cleanables: cleanables,
   webpack: {
