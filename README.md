@@ -5,7 +5,7 @@ bundle install --path vendor/bundle --clean
 ```
 
 ```
-yarn install
+rake package:install
 ```
 
 ## Compile assets and start server

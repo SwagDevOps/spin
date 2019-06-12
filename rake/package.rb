@@ -25,7 +25,7 @@ end
 
 desc 'Install package(s)'
 task :'package:install' do |task|
-  ['yarn', 'install'].tap do |command|
+  ['npm', 'install'].tap do |command|
     handler.call(task, command)
   end
 end
