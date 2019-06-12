@@ -5,10 +5,6 @@
 const { Mixer } = require('@swagdevops/webpack-mixer')
 
 const mixer = new Mixer()
-
-/**
- * @type {*}
- */
 const paths = mixer.paths
 
 // Configuration ----------------------------------------------------
@@ -22,16 +18,14 @@ const copiables = [
   [paths.source.join('images/favicon.png'), paths.public.join('favicon.ico')],
   [paths.source.join('images'), paths.public.join('images')]
 ]
-  .concat(['eot', 'svg', 'ttf', 'woff', 'woff2']
-    .map(ext => paths.vendor.join('material-icons/iconfont/*.%s').format(ext).glob())
+  .concat(['*.eot', '*.svg', '*.ttf', '*.woff', '*.woff2']
+    .map(pattern => paths.vendor.join('material-icons/iconfont').glob(pattern))
     .reduce((acc, val) => acc.concat(val), []) // flat()
     .map(fp => [fp, paths.public.join('fonts')])
   )
-  .concat(paths.vendor.join('roboto-npm-webfont/full/fonts/*')
-    .glob()
+  .concat(paths.vendor.join('roboto-npm-webfont/full/fonts').glob('*')
     .map(fp => [fp, paths.public.join('fonts')]))
-  .concat(paths.vendor.join('@mdi/font/fonts/*')
-    .glob()
+  .concat(paths.vendor.join('@mdi/font/fonts').glob('*')
     .map(fp => [fp, paths.public.join('fonts')]))
 
 /**
@@ -40,16 +34,13 @@ const copiables = [
  * @type {Path[]}
  */ // @formatter:off
 const cleanables = ([
-  paths.public.join('css/*.map'),
-  paths.public.join('js/*.map')
+  paths.public.join('css').glob('*.map'),
+  paths.public.join('js').glob('*.map')
 ]
-  .map(fp => fp.glob())
-  .reduce((acc, val) => acc.concat(val), [])
+  .reduce((acc, val) => acc.concat(val), []) // flat
   // @formatter:on
 )
   .concat(copiables.map(x => x[1]))
-  .filter((x, i, a) => a.indexOf(x) === i)
-  .sort(function (a, b) { return a.localeCompare(b) })
 
 // Execution --------------------------------------------------------
 
