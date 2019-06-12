@@ -1,66 +1,13 @@
 'use strict'
 
-/* global process, require, path, __dirname */
+/* global process, require, __dirname */
 
-const Mix = require('laravel-mix')
-const glob = require('simple-glob')
-const sprintf = require('sprintf-js').sprintf
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const ExtraWatchWebpackPlugin = require('extra-watch-webpack-plugin')
-const VersionFile = require('webpack-version-file-plugin')
-const moduleRoots = (require(path.join(__dirname, 'package.json')).moduleRoots || [])
-  .concat(['node_modules'])
-  .map(fp => path.join(__dirname, fp) + '/')
-  .filter((x, i, a) => a.indexOf(x) === i)
+const { Mixer } = require('@swagdevops/webpack-mixer')
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
-const mix = function () {
-  let mix = Mix.webpackConfig(config)
+const mixer = new Mixer()
+const paths = mixer.paths
 
-  copiables.forEach(copiable => mix.copy(copiable[0], copiable[1], false))
-
-  mix.js(path.join(_paths.source, 'js/app.js'), paths.js)
-  mix.sass(path.join(_paths.source, 'sass/app.scss'), paths.css, {
-    sourceComments: !mix.config.production,
-    includePaths: moduleRoots
-  })
-
-  mix.sourceMaps()
-}
-
-/**
- * Internal paths
- *
- * @private
- * @type {{public: (string), source: (string), vendor: (string)}}
- */
-const _paths = {
-  vendor: path.join(__dirname, 'node_modules'),
-  source: path.join(__dirname, 'resources/assets'),
-  public: path.join(__dirname, 'public')
-}
-
-/**
- * Public paths
- *
- * @type {{css: (string), images: (string), fonts: (string), root, js: (string)}}
- */
-const paths = {
-  root: _paths.public,
-  js: path.join(_paths.public, 'js'),
-  css: path.join(_paths.public, 'css'),
-  fonts: path.join(_paths.public, 'fonts'),
-  images: path.join(_paths.public, 'images')
-}
+// Configuration ----------------------------------------------------
 
 /**
  * Copiables
@@ -68,64 +15,41 @@ const paths = {
  * @type {*[]}
  */
 const copiables = [
-  [path.join(_paths.source, 'images/favicon.png'), path.join(paths.root, 'favicon.ico')],
-  [path.join(_paths.source, 'images'), paths.images]
+  [paths.source.join('images/favicon.png'), paths.public.join('favicon.ico')],
+  [paths.source.join('images'), paths.public.join('images')]
 ]
-// specific ---------------------------------------------------------
-  .concat(glob(['eot', 'svg', 'ttf', 'woff', 'woff2']
-    .map(ext => sprintf(path.join(_paths.vendor, 'material-icons/iconfont/*.%s'), ext)))
-    .map(fp => [fp, paths.fonts]))
-  .concat(glob(path.join(_paths.vendor, 'roboto-npm-webfont/full/fonts/*'))
-    .map(fp => [fp, paths.fonts]))
-  .concat([[
-    path.join(_paths.vendor, '@mdi/font/fonts'),
-    path.join(paths.fonts)
-  ]])
+  .concat(['*.eot', '*.svg', '*.ttf', '*.woff', '*.woff2']
+    .map(pattern => paths.vendor.join('material-icons/iconfont').glob(pattern))
+    .reduce((acc, val) => acc.concat(val), []) // flat()
+    .map(fp => [fp, paths.public.join('fonts')])
+  )
+  .concat(paths.vendor.join('roboto-npm-webfont/full/fonts').glob('*')
+    .map(fp => [fp, paths.public.join('fonts')]))
+  .concat(paths.vendor.join('@mdi/font/fonts').glob('*')
+    .map(fp => [fp, paths.public.join('fonts')]))
 
 /**
  * Cleanables
  *
- * @type {*[]}
- */
-let cleanables = [
-  path.join(paths.css, '*.map'),
-  path.join(paths.js, '*.map')
+ * @type {Path[]}
+ */ // @formatter:off
+const cleanables = ([
+  paths.public.join('css').glob('*.map'),
+  paths.public.join('js').glob('*.map')
 ]
-  .map(fp => glob(fp))
-  .reduce((acc, val) => acc.concat(val), [])
+  .reduce((acc, val) => acc.concat(val), []) // flat
+  // @formatter:on
+)
   .concat(copiables.map(x => x[1]))
-  .filter((x, i, a) => a.indexOf(x) === i)
-  .sort(function (a, b) { return a.localeCompare(b) })
 
-/**
- * @type {{devtool: *, node: {fs: string}, resolve: {modules: string[]}, plugins: *[]}}
- */
-const config = {
-  devtool: process.env.NODE_ENV !== 'production' ? 'source-map' : false,
-  resolve: {
-    modules: moduleRoots
-  },
-  plugins: [
-    new CleanWebpackPlugin({
-      verbose: true,
-      cleanOnceBeforeBuildPatterns: cleanables
-    }),
-    new ExtraWatchWebpackPlugin({
-      files: moduleRoots.map(path => sprintf('%s/**/*.vue', path))
-    }),
-    new VersionFile({
-      verbose: true,
-      packageFile: path.join(__dirname, 'package.json'),
-      template: path.join(_paths.source, 'version.ejs'),
-      outputFile: path.join(paths.root, 'version.json')
-    })
-  ],
-  node: {
-    fs: 'empty'
+// Execution --------------------------------------------------------
+
+mixer.configure({
+  copiables: copiables,
+  cleanables: cleanables,
+  webpack: {
+    node: {
+      fs: 'empty'
+    }
   }
-}
-
-/*
- * Execution --------------------------------------------------------
- */
-mix()
+}).run()
