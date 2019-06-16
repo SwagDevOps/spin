@@ -5,11 +5,17 @@ bundle install --path vendor/bundle --clean
 ```
 
 ```
-yarn install
+rake package:install
 ```
 
-## Compile assets and start server
+## Compile assets
 
 ```
-bundle exec rake assets serve
+bundle exec rake assets
+```
+
+## Start Docker stack
+
+```
+docker/compose start
 ```
