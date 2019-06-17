@@ -1,9 +1,7 @@
 'use strict'
 
-/* global process, require, __dirname */
-
+/* global require */
 const { Mixer } = require('@swagdevops/webpack-mixer')
-
 const mixer = new Mixer()
 const paths = mixer.paths
 
@@ -21,11 +19,9 @@ const copiables = [
   .concat(paths.vendor.join('@mdi/font/fonts').glob('*')
     .map(fp => [fp, paths.public.join('fonts')]))
 
-const cleanables = [
-  paths.public.join('css').glob('*.map'),
-  paths.public.join('js').glob('*.map')
-]
-  .reduce((acc, val) => acc.concat(val), []) // flat
+const cleanables = []
+  .concat(paths.public.join('css').glob('*.map'))
+  .concat(paths.public.join('js').glob('*.map'))
   .concat(copiables.map(x => x[1]))
 
 // Execution --------------------------------------------------------
