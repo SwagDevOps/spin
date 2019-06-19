@@ -22,7 +22,6 @@ const copiables = [
 const cleanables = []
   .concat(paths.public.join('css').glob('*.map'))
   .concat(paths.public.join('js').glob('*.map'))
-  .concat(copiables.map(x => x[1]))
 
 // Execution --------------------------------------------------------
 
