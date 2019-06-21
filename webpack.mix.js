@@ -9,7 +9,7 @@ const paths = mixer.paths
 
 const copiables = [
   [paths.source.join('images/favicon.png'), paths.public.join('favicon.ico')],
-  [paths.source.join('images/**/*'), paths.public.join('images')]
+  [paths.source.join('images'), paths.public.join('images')]
 ]
   .concat(paths.vendor.join('material-icons/iconfont').glob([
     '*.eot', '*.svg', '*.ttf', '*.woff', '*.woff2'
