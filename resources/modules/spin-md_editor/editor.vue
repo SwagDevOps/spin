@@ -7,7 +7,7 @@
                 <textarea :name="name" :value="value" @input="update"></textarea>
             </b-tab-item>
             <b-tab-item label="Preview" icon="eye">
-                <div v-html="preview" class="is-preview is-typographic"></div>
+                <div v-html="preview" class="is-preview content"></div>
             </b-tab-item>
         </b-tabs>
     </section>
