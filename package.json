@@ -11,7 +11,7 @@
         "vuex": "~3.1"
     },
     "devDependencies": {
-        "@swagdevops/webpack-mixer": "github:SwagDevOps/webpack-mixer#v0.0.3",
+        "@swagdevops/webpack-mixer": "github:SwagDevOps/webpack-mixer#v0.0.4",
         "eslint": "~5.9",
         "eslint-config-standard": "~12.0",
         "eslint-plugin-import": "~2.17",
