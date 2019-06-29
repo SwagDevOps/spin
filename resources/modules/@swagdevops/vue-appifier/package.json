@@ -1,0 +1,12 @@
+{
+    "name": "@swagdevops/vue-appifier",
+    "version": "0.0.1",
+    "main": "src/index.js",
+    "files": [
+        "src"
+    ],
+    "dependencies": {
+        "vue": "~2.6",
+        "vuex": "~3.1"
+    }
+}
