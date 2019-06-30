@@ -1,7 +1,11 @@
 {
     "name": "spin-md_editor",
     "version": "0.0.1",
-    "main": "index.js",
+    "main": "src/index.js",
+    "files": [
+        "scss",
+        "src"
+    ],
     "dependencies": {
         "buefy": "~0.7",
         "cuid": "~2.1",
