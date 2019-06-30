@@ -1,9 +1,10 @@
 'use strict'
 
-import { Appifier } from './app/appifier'
 import Buefy from 'buefy'
-import MdEditor from 'spin-md_editor/plugin'
 import VueProgressiveImage from 'vue-progressive-image'
+
+import { Appifier } from '@swagdevops/vue-appifier'
+import { MdEditor } from 'spin-md_editor'
 
 (new Appifier({
   plugins: [
