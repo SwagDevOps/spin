@@ -1,6 +1,6 @@
 'use strict'
 
-/* global require */
+/* global require, process */
 const { Mixer } = require('@swagdevops/webpack-mixer')
 const mixer = new Mixer()
 const paths = mixer.paths
@@ -29,8 +29,6 @@ mixer.configure({
   copiables,
   cleanables,
   webpack: {
-    node: {
-      fs: 'empty'
-    }
+    node: process.platform === 'darwin' ? {} : { fs: 'empty' }
   }
 }).run()
