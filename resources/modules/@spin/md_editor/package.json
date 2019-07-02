@@ -1,5 +1,5 @@
 {
-    "name": "spin-md_editor",
+    "name": "@spin/md_editor",
     "version": "0.0.1",
     "main": "src/index.js",
     "files": [

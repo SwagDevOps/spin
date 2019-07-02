@@ -1,5 +1,5 @@
 {
-    "name": "spin-sass_base",
+    "name": "@spin/sass_base",
     "version": "0.0.1",
     "dependencies": {
         "@mdi/font": "~3.6",
