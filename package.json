@@ -5,10 +5,8 @@
     "description": "Assets package for spin web project",
     "homepage": "https://github.com/SwagDevOps/spin",
     "dependencies": {
-        "@spin/md_editor": "./resources/modules/@spin/md_editor",
-        "@spin/sass_base": "./resources/modules/@spin/sass_base",
-        "@swagdevops/vue-appifier": "./resources/modules/@swagdevops/vue-appifier",
-        "vue-progressive-image": "~3.2"
+        "@spin/app": "./resources/modules/@spin/app",
+        "@swagdevops/vue-appifier": "./resources/modules/@swagdevops/vue-appifier"
     },
     "devDependencies": {
         "@swagdevops/webpack-mixer": "github:SwagDevOps/webpack-mixer#v0.0.4",
