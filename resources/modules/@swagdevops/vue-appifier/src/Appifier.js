@@ -9,7 +9,7 @@ import Vuex from 'vuex'
  * Sample of use:
  *
  * ```
- * import { Appifier } from './app/appifier'
+ * import { Appifier } from '@swagdevops/vue-appifier'
  * import Buefy from 'buefy'
  * import VueLazyload from 'vue-lazyload'
  *
@@ -59,7 +59,7 @@ class Appifier {
    * @returns {Appifier}
    */
   appify () {
-    return this._apply()
+    return this.apply()
   }
 
   /**
@@ -67,7 +67,7 @@ class Appifier {
    *
    * @returns {Appifier}
    */
-  _apply () {
+  apply () {
     let event = 'DOMContentLoaded'
     let vue = (id) => new Vue({
       el: `#${id}`
