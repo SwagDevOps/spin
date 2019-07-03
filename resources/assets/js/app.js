@@ -1,17 +1,5 @@
 'use strict'
 
-import { Appifier } from './app/appifier'
-import Buefy from 'buefy'
-import MdEditor from 'spin-md_editor/plugin'
-import VueProgressiveImage from 'vue-progressive-image'
+import { app } from '@spin/app'
 
-(new Appifier({
-  plugins: [
-    [Buefy],
-    [MdEditor],
-    [VueProgressiveImage, {
-      cache: false,
-      blur: 30
-    }]
-  ]
-})).appify()
+app()
